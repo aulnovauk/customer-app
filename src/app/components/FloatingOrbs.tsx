@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import { useMemo } from "react";
+import { DEFAULT_ORB_COLORS } from "../constants/animationColors";
 
 interface FloatingOrbsProps {
   count?: number;
@@ -9,7 +10,7 @@ interface FloatingOrbsProps {
 
 export function FloatingOrbs({
   count = 8,
-  colors = ["#FFE8F5", "#FFE8D5", "#E0F0FF", "#FFF0E0", "#F5E8FF"],
+  colors = DEFAULT_ORB_COLORS,
   intensity = "medium",
 }: FloatingOrbsProps) {
   const opacityMap = {

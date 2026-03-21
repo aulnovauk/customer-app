@@ -81,25 +81,25 @@ export function Bookings() {
       confirmed: {
         label: "Confirmed",
         icon: CheckCircle,
-        bg: "#10B981",
+        bg: "var(--color-success)",
         shadow: "0 2px 8px rgba(16, 185, 129, 0.3)",
       },
       pending: {
         label: "Pending",
         icon: AlertCircle,
-        bg: "#F59E0B",
+        bg: "var(--color-warning)",
         shadow: "0 2px 8px rgba(245, 158, 11, 0.3)",
       },
       cancelled: {
         label: "Cancelled",
         icon: XCircle,
-        bg: "#EF4444",
+        bg: "var(--color-error)",
         shadow: "0 2px 8px rgba(239, 68, 68, 0.3)",
       },
       completed: {
         label: "Completed",
         icon: CheckCircle,
-        bg: "#6366F1",
+        bg: "var(--icon-indigo)",
         shadow: "0 2px 8px rgba(99, 102, 241, 0.3)",
       },
     };
@@ -426,7 +426,7 @@ export function Bookings() {
                               whileTap={{ scale: 0.95 }}
                               className="px-4 py-2.5 rounded-xl text-xs font-bold text-white transition-all"
                               style={{
-                                background: 'linear-gradient(135deg, #E85A8B 0%, #F186AC 100%)',
+                                background: 'var(--gradient-brand-button)',
                                 boxShadow: '0 4px 12px rgba(232, 90, 139, 0.3)',
                               }}
                             >

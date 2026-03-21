@@ -106,7 +106,7 @@ export function CartDrawer({
                   <div
                     className="w-12 h-12 rounded-2xl flex items-center justify-center"
                     style={{
-                      background: "linear-gradient(135deg, #E85A8B 0%, #F186AC 100%)",
+                      background: "var(--gradient-brand-button)",
                       boxShadow: "0 4px 16px rgba(232, 90, 139, 0.3)",
                     }}
                   >
@@ -267,8 +267,8 @@ export function CartDrawer({
                                   onClick={() => updateQuantity(item.product.id, 1)}
                                   className="w-6 h-6 rounded-full flex items-center justify-center"
                                   style={{
-                                    background: "linear-gradient(135deg, #E85A8B 0%, #F186AC 100%)",
-                                    color: "#FFFFFF",
+                                    background: "var(--gradient-brand-button)",
+                                    color: "var(--text-inverse)",
                                     boxShadow: "0 2px 8px rgba(232, 90, 139, 0.3)",
                                   }}
                                 >
@@ -293,7 +293,7 @@ export function CartDrawer({
                             border: "1px solid rgba(239, 68, 68, 0.15)",
                           }}
                         >
-                          <Trash2 className="w-3.5 h-3.5" style={{ color: "#EF4444" }} strokeWidth={2} />
+                          <Trash2 className="w-3.5 h-3.5" style={{ color: "var(--color-error)" }} strokeWidth={2} />
                         </motion.button>
                       </motion.div>
                     ))}
@@ -375,7 +375,7 @@ export function CartDrawer({
                     <span 
                       className="text-3xl font-black"
                       style={{ 
-                        background: "linear-gradient(135deg, #E85A8B 0%, #F186AC 100%)",
+                        background: "var(--gradient-brand-button)",
                         WebkitBackgroundClip: "text",
                         WebkitTextFillColor: "transparent",
                         backgroundClip: "text",
@@ -385,7 +385,7 @@ export function CartDrawer({
                     </span>
                     <ChevronRight 
                       className="w-5 h-5" 
-                      style={{ color: "#E85A8B" }} 
+                      style={{ color: "var(--brand-primary-500)" }} 
                       strokeWidth={2.5} 
                     />
                   </div>

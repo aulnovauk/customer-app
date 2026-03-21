@@ -38,7 +38,7 @@ export function BrandIntro() {
     <motion.div
       className="h-screen relative overflow-hidden flex items-center justify-center"
       style={{
-        background: 'linear-gradient(135deg, #A855F7 0%, #D946A0 50%, #E85A8B 100%)',
+        background: 'var(--gradient-brand-purple)',
       }}
       initial={{ opacity: 0 }}
       animate={{ opacity: isExiting ? 0 : 1 }}
@@ -64,7 +64,7 @@ export function BrandIntro() {
       {/* Floating orbs */}
       <motion.div
         className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-20 blur-3xl"
-        style={{ background: '#FFFFFF' }}
+        style={{ background: 'var(--text-inverse)' }}
         animate={{
           scale: [1, 1.3, 1],
           x: [0, 50, 0],
@@ -79,7 +79,7 @@ export function BrandIntro() {
       />
       <motion.div
         className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full opacity-20 blur-3xl"
-        style={{ background: '#FFFFFF' }}
+        style={{ background: 'var(--text-inverse)' }}
         animate={{
           scale: [1, 1.4, 1],
           x: [0, -60, 0],

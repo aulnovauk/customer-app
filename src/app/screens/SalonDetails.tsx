@@ -1,6 +1,6 @@
 import { ArrowLeft, Star, MapPin, Clock, Heart, Share2, Check, ChevronRight, Phone, Crown, Sparkles, Users, MessageCircle, Award, Zap, Gift, Shield, BadgeCheck, Scissors, Palette } from "lucide-react";
 import { useNavigate, useParams, useSearchParams } from "react-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "motion/react";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 
@@ -182,12 +182,12 @@ const memberships = [
     price: "₹6,299",
     period: "/month",
     benefits: ["30% off all services", "Concierge booking", "4 free services monthly", "Private stylist access", "Premium gift box quarterly"],
-    color: "from-amber-400 via-amber-500 to-orange-500",
+    color: "var(--gradient-gold)",
     icon: Shield,
   },
 ];
 
-const reviews = [
+const reviewsData = [
   {
     id: 1,
     name: "Kavya Reddy",
@@ -223,7 +223,16 @@ const reviews = [
   },
 ];
 
-type TabType = "services" | "packages" | "membership" | "team" | "reviews" | "about";
+type TabId = "services" | "packages" | "membership" | "team" | "reviews" | "about";
+
+const TABS: { id: TabId; label: string; icon: typeof Scissors }[] = [
+  { id: "services", label: "Services", icon: Scissors },
+  { id: "packages", label: "Packages", icon: Sparkles },
+  { id: "membership", label: "Membership", icon: Crown },
+  { id: "team", label: "Team", icon: Users },
+  { id: "reviews", label: "Reviews", icon: MessageCircle },
+  { id: "about", label: "About", icon: MapPin },
+];
 
 export function SalonDetails() {
   const navigate = useNavigate();
@@ -231,46 +240,76 @@ export function SalonDetails() {
   const [searchParams] = useSearchParams();
   const [isFavorite, setIsFavorite] = useState(false);
   const [activePhotoIndex, setActivePhotoIndex] = useState(0);
-  const [activeTab, setActiveTab] = useState<"services" | "packages" | "membership" | "team" | "reviews" | "about">("services");
+  const [activeTab, setActiveTab] = useState<TabId>("services");
   const [activeServiceCategory, setActiveServiceCategory] = useState(1);
   const [selectedServices, setSelectedServices] = useState<Set<string>>(new Set());
   const [selectedServiceDetails, setSelectedServiceDetails] = useState<Array<{name: string, duration: string, price: string}>>([]);
+  const [isUserScrolling, setIsUserScrolling] = useState(false);
+  const [showStickyHeader, setShowStickyHeader] = useState(false);
 
-  const toggleServiceSelection = (serviceName: string) => {
-    const newSelected = new Set(selectedServices);
-    if (newSelected.has(serviceName)) {
-      newSelected.delete(serviceName);
-      setSelectedServiceDetails(prev => prev.filter(s => s.name !== serviceName));
-    } else {
-      newSelected.add(serviceName);
-      // Find the service details
-      const serviceDetail = services.flatMap(s => s.items).find(item => item.name === serviceName);
-      if (serviceDetail) {
-        setSelectedServiceDetails(prev => [...prev, serviceDetail]);
+  const salonInfoEndRef = useRef<HTMLDivElement>(null);
+
+  const sectionRefs = useRef<Record<TabId, HTMLDivElement | null>>({
+    services: null,
+    packages: null,
+    membership: null,
+    team: null,
+    reviews: null,
+    about: null,
+  });
+
+  const tabBarRef = useRef<HTMLDivElement>(null);
+  const tabButtonRefs = useRef<Record<TabId, HTMLButtonElement | null>>({
+    services: null,
+    packages: null,
+    membership: null,
+    team: null,
+    reviews: null,
+    about: null,
+  });
+  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const toggleServiceSelection = useCallback((serviceName: string) => {
+    setSelectedServices(prev => {
+      const newSelected = new Set(prev);
+      if (newSelected.has(serviceName)) {
+        newSelected.delete(serviceName);
+        setSelectedServiceDetails(prevDetails => prevDetails.filter(s => s.name !== serviceName));
+      } else {
+        newSelected.add(serviceName);
+        const serviceDetail = services.flatMap(s => s.items).find(item => item.name === serviceName);
+        if (serviceDetail) {
+          setSelectedServiceDetails(prevDetails => [...prevDetails, serviceDetail]);
+        }
       }
-    }
-    setSelectedServices(newSelected);
-  };
+      return newSelected;
+    });
+  }, []);
 
-  // Handle URL params for pre-selected service
   useEffect(() => {
     const serviceParam = searchParams.get("service");
-    const tabParam = searchParams.get("tab");
-    
-    if (tabParam === "services") {
-      setActiveTab("services");
+    const tabParam = searchParams.get("tab") as TabId | null;
+
+    if (tabParam && TABS.some(t => t.id === tabParam)) {
+      setActiveTab(tabParam);
+      requestAnimationFrame(() => {
+        const section = sectionRefs.current[tabParam];
+        if (section) {
+          const stickyBarHeight = 80;
+          const y = section.getBoundingClientRect().top + window.scrollY - stickyBarHeight;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+      });
     }
-    
+
     if (serviceParam) {
-      // Find which category contains this service
       const categoryWithService = services.find((category) =>
         category.items.some((item) => item.name === serviceParam)
       );
-      
+
       if (categoryWithService) {
         setActiveServiceCategory(categoryWithService.id);
         setSelectedServices(new Set([serviceParam]));
-        // Find the service details
         const serviceDetail = categoryWithService.items.find(item => item.name === serviceParam);
         if (serviceDetail) {
           setSelectedServiceDetails([serviceDetail]);
@@ -279,12 +318,123 @@ export function SalonDetails() {
     }
   }, [searchParams]);
 
+  const scrollActiveTabIntoView = useCallback((tabId: TabId) => {
+    const tabButton = tabButtonRefs.current[tabId];
+    const container = tabBarRef.current?.querySelector('.overflow-x-auto');
+    if (tabButton && container) {
+      const containerRect = container.getBoundingClientRect();
+      const buttonRect = tabButton.getBoundingClientRect();
+      const scrollLeft = container.scrollLeft + (buttonRect.left - containerRect.left) - (containerRect.width / 2) + (buttonRect.width / 2);
+      container.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+    }
+  }, []);
+
+  useEffect(() => {
+    const stickyOffset = 90;
+    let rafId: number | null = null;
+
+    const computeActiveSection = () => {
+      if (isUserScrolling) return;
+
+      const tabIds = TABS.map(t => t.id);
+      let closest: TabId = "services";
+      let closestDist = Infinity;
+
+      for (const tabId of tabIds) {
+        const el = sectionRefs.current[tabId];
+        if (!el) continue;
+        const top = el.getBoundingClientRect().top - stickyOffset;
+        if (top <= 10 && Math.abs(top) < closestDist) {
+          closestDist = Math.abs(top);
+          closest = tabId;
+        }
+      }
+
+      setActiveTab(prev => {
+        if (prev !== closest) {
+          scrollActiveTabIntoView(closest);
+          return closest;
+        }
+        return prev;
+      });
+    };
+
+    const handleScroll = () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(computeActiveSection);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+  }, [isUserScrolling, scrollActiveTabIntoView]);
+
+  useEffect(() => {
+    const sentinel = salonInfoEndRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) {
+          setShowStickyHeader(true);
+        } else {
+          const sentinelRect = sentinel.getBoundingClientRect();
+          if (sentinelRect.top >= 0) {
+            setShowStickyHeader(false);
+          }
+        }
+      },
+      { threshold: 0, rootMargin: '-60px 0px 0px 0px' }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, []);
+
+  const handleTabClick = useCallback((tabId: TabId) => {
+    setIsUserScrolling(true);
+    setActiveTab(tabId);
+    scrollActiveTabIntoView(tabId);
+
+    const section = sectionRefs.current[tabId];
+    if (section) {
+      const stickyBarHeight = 90;
+      const y = section.getBoundingClientRect().top + window.scrollY - stickyBarHeight;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+
+    const unlockOnScrollEnd = () => {
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+      scrollTimeoutRef.current = setTimeout(() => {
+        setIsUserScrolling(false);
+        window.removeEventListener('scroll', unlockOnScrollEnd);
+      }, 150);
+    };
+
+    window.addEventListener('scroll', unlockOnScrollEnd, { passive: true });
+
+    if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+    scrollTimeoutRef.current = setTimeout(() => {
+      setIsUserScrolling(false);
+      window.removeEventListener('scroll', unlockOnScrollEnd);
+    }, 2000);
+  }, [scrollActiveTabIntoView]);
+
+  const setSectionRef = useCallback((tabId: TabId) => (el: HTMLDivElement | null) => {
+    sectionRefs.current[tabId] = el;
+  }, []);
+
+  const setTabButtonRef = useCallback((tabId: TabId) => (el: HTMLButtonElement | null) => {
+    tabButtonRefs.current[tabId] = el;
+  }, []);
+
   return (
     <div className="min-h-screen pb-32 transition-colors duration-300" style={{ backgroundColor: 'var(--background)' }}>
       <div className="max-w-[390px] mx-auto">
         {/* Hero Image Gallery */}
         <div className="relative h-80 bg-gray-900 overflow-hidden">
-          {/* Image with zoom effect */}
           <motion.div
             key={activePhotoIndex}
             initial={{ scale: 1.1, opacity: 0 }}
@@ -299,10 +449,8 @@ export function SalonDetails() {
             />
           </motion.div>
 
-          {/* Dark gradient overlay at bottom for text readability */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
 
-          {/* Header buttons - Glassmorphism */}
           <div className="absolute top-12 left-0 right-0 px-5 flex items-center justify-between z-10">
             <motion.button
               whileTap={{ scale: 0.95 }}
@@ -316,7 +464,7 @@ export function SalonDetails() {
             >
               <ArrowLeft className="w-5 h-5 text-white drop-shadow-lg" strokeWidth={2.5} />
             </motion.button>
-            
+
             <div className="flex gap-2">
               <motion.button
                 whileTap={{ scale: 0.95 }}
@@ -329,17 +477,17 @@ export function SalonDetails() {
               >
                 <Share2 className="w-5 h-5 text-white drop-shadow-lg" strokeWidth={2.5} />
               </motion.button>
-              
+
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsFavorite(!isFavorite)}
                 className="w-11 h-11 rounded-full flex items-center justify-center backdrop-blur-xl relative overflow-hidden"
                 style={{
-                  backgroundColor: isFavorite 
-                    ? 'rgba(251, 113, 133, 0.9)' 
+                  backgroundColor: isFavorite
+                    ? 'rgba(251, 113, 133, 0.9)'
                     : 'rgba(255, 255, 255, 0.25)',
-                  border: isFavorite 
-                    ? '1px solid rgba(251, 113, 133, 1)' 
+                  border: isFavorite
+                    ? '1px solid rgba(251, 113, 133, 1)'
                     : '1px solid rgba(255, 255, 255, 0.3)',
                   boxShadow: isFavorite
                     ? '0 8px 32px rgba(251, 113, 133, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.5)'
@@ -357,8 +505,7 @@ export function SalonDetails() {
                     strokeWidth={2.5}
                   />
                 </motion.div>
-                
-                {/* Heart particles effect when favorited */}
+
                 {isFavorite && (
                   <>
                     <motion.div
@@ -383,7 +530,6 @@ export function SalonDetails() {
             </div>
           </div>
 
-          {/* Modern image indicator - Pill with blur background */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -395,7 +541,6 @@ export function SalonDetails() {
               boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
             }}
           >
-            {/* Dots indicator */}
             <div className="flex gap-1.5">
               {salonData.images.map((_, index) => (
                 <motion.button
@@ -405,8 +550,8 @@ export function SalonDetails() {
                   style={{
                     width: index === activePhotoIndex ? '24px' : '6px',
                     height: '6px',
-                    backgroundColor: index === activePhotoIndex 
-                      ? 'rgba(255, 255, 255, 0.95)' 
+                    backgroundColor: index === activePhotoIndex
+                      ? 'rgba(255, 255, 255, 0.95)'
                       : 'rgba(255, 255, 255, 0.4)',
                   }}
                   animate={{
@@ -416,15 +561,12 @@ export function SalonDetails() {
                 />
               ))}
             </div>
-            
-            {/* Counter text */}
             <div className="h-4 w-px bg-white/30 mx-1" />
             <span className="text-white text-xs font-bold tracking-wide drop-shadow-lg">
               {activePhotoIndex + 1}/{salonData.images.length}
             </span>
           </motion.div>
 
-          {/* Swipe hint on first image */}
           {activePhotoIndex === 0 && (
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -442,25 +584,23 @@ export function SalonDetails() {
           )}
         </div>
 
-        {/* Salon Info Section - Below Image */}
-        <div 
+        {/* Salon Info Section */}
+        <div
           className="px-6 pt-7 pb-6 transition-colors duration-300"
-          style={{ 
+          style={{
             backgroundColor: 'var(--background)',
             boxShadow: '0 4px 20px rgba(0, 0, 0, 0.04)'
           }}
         >
-          {/* Title */}
           <h1 className="text-3xl font-black mb-3 leading-tight" style={{ color: 'var(--foreground)' }}>
             {salonData.name}
           </h1>
-          
-          {/* Rating Badge */}
+
           <div className="flex items-center gap-3 mb-4">
-            <motion.div 
+            <motion.div
               className="flex items-center gap-2 px-4 py-2.5 rounded-2xl shadow-sm"
               style={{
-                background: 'linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%)',
+                background: 'var(--gradient-warm-subtle)',
                 border: '1px solid rgba(251, 191, 36, 0.3)',
               }}
               whileHover={{ scale: 1.02 }}
@@ -476,24 +616,23 @@ export function SalonDetails() {
               </span>
             </motion.div>
 
-            {/* Open Status Chip */}
-            <motion.div 
+            <motion.div
               className="px-3.5 py-2 rounded-full shadow-sm flex items-center gap-2"
               style={{
-                background: salonData.openNow 
-                  ? 'linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%)'
-                  : 'linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%)',
-                border: salonData.openNow 
+                background: salonData.openNow
+                  ? 'var(--gradient-success-subtle)'
+                  : 'var(--gradient-error-subtle)',
+                border: salonData.openNow
                   ? '1px solid rgba(16, 185, 129, 0.3)'
                   : '1px solid rgba(239, 68, 68, 0.3)',
               }}
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.2 }}
             >
-              <motion.div 
+              <motion.div
                 className="w-2 h-2 rounded-full"
                 style={{
-                  backgroundColor: salonData.openNow ? '#10B981' : '#EF4444',
+                  backgroundColor: salonData.openNow ? 'var(--color-success)' : 'var(--color-error)',
                 }}
                 animate={{
                   scale: salonData.openNow ? [1, 1.2, 1] : 1,
@@ -505,10 +644,10 @@ export function SalonDetails() {
                   ease: "easeInOut"
                 }}
               />
-              <span 
+              <span
                 className="text-xs font-black tracking-wide"
                 style={{
-                  color: salonData.openNow ? '#065F46' : '#991B1B'
+                  color: salonData.openNow ? 'var(--color-success-text)' : 'var(--color-error-text)'
                 }}
               >
                 {salonData.openNow ? 'OPEN NOW' : 'CLOSED'}
@@ -516,7 +655,6 @@ export function SalonDetails() {
             </motion.div>
           </div>
 
-          {/* Hours */}
           <div className="flex items-center gap-2 mb-4">
             <Clock className="w-4 h-4" style={{ color: 'var(--muted-foreground)' }} strokeWidth={2} />
             <span className="text-sm font-medium" style={{ color: 'var(--muted-foreground)' }}>
@@ -524,7 +662,6 @@ export function SalonDetails() {
             </span>
           </div>
 
-          {/* Location and Distance */}
           <div className="flex items-start gap-2.5">
             <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: 'var(--muted-foreground)' }} strokeWidth={2} />
             <div className="flex-1">
@@ -536,109 +673,90 @@ export function SalonDetails() {
               </p>
             </div>
           </div>
+          <div ref={salonInfoEndRef} />
         </div>
 
-        {/* Tab Navigation */}
-        <div 
-          className="sticky top-0 z-30 backdrop-blur-xl transition-colors duration-300"
-          style={{ 
-            backgroundColor: 'var(--background-glass)',
-            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)'
+        {/* ═══════════════════════════════════════════════════ */}
+        {/* STICKY HEADER — hidden initially, slides in on scroll (Fresha-style) */}
+        {/* ═══════════════════════════════════════════════════ */}
+        <div
+          ref={tabBarRef}
+          className="sticky top-0 z-30 transition-all duration-300"
+          style={{
+            transform: showStickyHeader ? 'translateY(0)' : 'translateY(-100%)',
+            opacity: showStickyHeader ? 1 : 0,
+            pointerEvents: showStickyHeader ? 'auto' : 'none',
           }}
         >
-          <div className="px-5 py-4">
-            {/* Segmented Control Container */}
-            <div 
-              className="relative rounded-2xl p-1.5 shadow-inner transition-colors duration-300"
-              style={{
-                backgroundColor: 'var(--muted)',
-                border: '1px solid var(--border-light)'
-              }}
-            >
+          <div
+            className="backdrop-blur-xl transition-colors duration-300"
+            style={{
+              backgroundColor: 'var(--background-glass)',
+              boxShadow: showStickyHeader ? '0 4px 20px rgba(0, 0, 0, 0.08)' : 'none',
+            }}
+          >
+            <div className="px-5 pt-3 pb-1 flex items-center gap-3">
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={() => navigate(-1)}
+                className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
+                style={{
+                  backgroundColor: 'var(--muted)',
+                  border: '1px solid var(--border-light)',
+                }}
+              >
+                <ArrowLeft className="w-4 h-4" style={{ color: 'var(--foreground)' }} strokeWidth={2.5} />
+              </motion.button>
+
+              <h2
+                className="flex-1 text-base font-black truncate"
+                style={{ color: 'var(--foreground)' }}
+              >
+                {salonData.name}
+              </h2>
+
+              <div className="flex gap-1.5 flex-shrink-0">
+                <button
+                  className="w-9 h-9 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: 'var(--muted)', border: '1px solid var(--border-light)' }}
+                >
+                  <Share2 className="w-4 h-4" style={{ color: 'var(--foreground)' }} strokeWidth={2} />
+                </button>
+                <button
+                  onClick={() => setIsFavorite(!isFavorite)}
+                  className="w-9 h-9 rounded-full flex items-center justify-center"
+                  style={{
+                    backgroundColor: isFavorite ? 'rgba(251, 113, 133, 0.15)' : 'var(--muted)',
+                    border: isFavorite ? '1px solid rgba(251, 113, 133, 0.3)' : '1px solid var(--border-light)',
+                  }}
+                >
+                  <Heart
+                    className={`w-4 h-4 ${isFavorite ? "fill-rose-500 text-rose-500" : ""}`}
+                    style={!isFavorite ? { color: 'var(--foreground)' } : undefined}
+                    strokeWidth={2}
+                  />
+                </button>
+              </div>
+            </div>
+
+            <div className="px-5 pb-3 pt-1">
               <div className="flex overflow-x-auto scrollbar-hide gap-1 relative">
-                {([
-                  { id: "services", label: "Services", icon: Scissors },
-                  { id: "packages", label: "Packages", icon: Sparkles },
-                  { id: "membership", label: "Membership", icon: Crown },
-                  { id: "team", label: "Team", icon: Users },
-                  { id: "reviews", label: "Reviews", icon: MessageCircle },
-                  { id: "about", label: "About", icon: MapPin },
-                ] as const).map((tab, index) => {
-                  const Icon = tab.icon;
+                {TABS.map((tab) => {
                   const isActive = activeTab === tab.id;
 
                   return (
-                    <motion.button
+                    <button
                       key={tab.id}
-                      onClick={() => setActiveTab(tab.id)}
-                      className="relative px-4 py-2.5 rounded-xl flex-shrink-0 flex items-center gap-2 transition-all duration-300 z-10"
+                      ref={setTabButtonRef(tab.id)}
+                      onClick={() => handleTabClick(tab.id)}
+                      className="relative px-3.5 py-2 flex-shrink-0 text-sm font-bold whitespace-nowrap transition-all duration-200"
                       style={{
-                        color: isActive ? 'white' : 'var(--muted-foreground)',
+                        color: isActive ? 'var(--primary)' : 'var(--muted-foreground)',
+                        borderBottom: isActive ? '2px solid var(--primary)' : '2px solid transparent',
                       }}
-                      whileTap={{ scale: 0.97 }}
                     >
-                      {/* Active Background */}
-                      {isActive && (
-                        <motion.div
-                          layoutId="activeTab"
-                          className="absolute inset-0 rounded-xl shadow-lg"
-                          style={{
-                            background: 'var(--gradient-primary)',
-                          }}
-                          transition={{
-                            type: "spring",
-                            stiffness: 380,
-                            damping: 30,
-                          }}
-                        />
-                      )}
-
-                      {/* Icon */}
-                      <motion.div
-                        className="relative z-10"
-                        animate={{
-                          scale: isActive ? 1.1 : 1,
-                          rotate: isActive ? [0, -5, 5, 0] : 0,
-                        }}
-                        transition={{ duration: 0.4 }}
-                      >
-                        <Icon 
-                          className="w-4 h-4" 
-                          strokeWidth={isActive ? 2.5 : 2}
-                        />
-                      </motion.div>
-
-                      {/* Label */}
-                      <motion.span
-                        className="text-sm font-bold whitespace-nowrap relative z-10"
-                        animate={{
-                          scale: isActive ? 1.02 : 1,
-                        }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        {tab.label}
-                      </motion.span>
-
-                      {/* Active indicator glow */}
-                      {isActive && (
-                        <motion.div
-                          className="absolute inset-0 rounded-xl"
-                          style={{
-                            background: 'var(--gradient-primary)',
-                            opacity: 0.3,
-                          }}
-                          animate={{
-                            scale: [1, 1.05, 1],
-                            opacity: [0.3, 0.15, 0.3],
-                          }}
-                          transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                          }}
-                        />
-                      )}
-                    </motion.button>
+                      {tab.label}
+                    </button>
                   );
                 })}
               </div>
@@ -646,584 +764,561 @@ export function SalonDetails() {
           </div>
         </div>
 
-        {/* Tab Content */}
+        {/* ═══════════════════════════════════════════════════ */}
+        {/* ALL SECTIONS — rendered continuously for scroll-spy */}
+        {/* ═══════════════════════════════════════════════════ */}
         <div className="px-5 pt-6">
-          {/* Services Tab */}
-          {activeTab === "services" && (
-            <div>
-              {/* Category Filter */}
-              <div className="mb-5">
-                <div className="flex overflow-x-auto scrollbar-hide gap-2 pb-1">
-                  {services.map((service) => {
-                    const isActive = activeServiceCategory === service.id;
-                    return (
-                      <button
-                        key={service.id}
-                        onClick={() => setActiveServiceCategory(service.id)}
-                        className={`px-5 py-2.5 rounded-full border-2 flex-shrink-0 transition-all text-sm font-bold shadow-md`}
-                        style={
-                          isActive
-                            ? {
-                                borderColor: 'var(--primary)',
-                                backgroundColor: 'var(--primary-subtle)',
-                                color: 'var(--primary)',
-                              }
-                            : {
-                                backgroundColor: 'var(--card)',
-                                borderColor: 'var(--border)',
-                                color: 'var(--foreground)',
-                              }
-                        }
-                      >
-                        {service.category}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
 
-              {/* Service Items List */}
-              <div className="space-y-3 pb-6">
-                {services
-                  .find((s) => s.id === activeServiceCategory)
-                  ?.items.map((item, idx) => (
-                    <div
-                      key={idx}
-                      className="flex items-center justify-between py-4 px-5 rounded-2xl border shadow-sm transition-colors duration-300"
-                      style={{ 
-                        backgroundColor: 'var(--card)',
-                        borderColor: 'var(--border-light)' 
-                      }}
-                    >
-                      <div className="flex-1">
-                        <h3 className="font-bold text-base mb-1" style={{ color: 'var(--foreground)' }}>{item.name}</h3>
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm" style={{ color: 'var(--muted-foreground)' }}>{item.duration}</span>
-                        </div>
-                        <p className="font-black text-lg mt-2" style={{ color: 'var(--foreground)' }}>{item.price}</p>
-                      </div>
-                      <button
-                        onClick={() => toggleServiceSelection(item.name)}
-                        className={`flex-shrink-0 text-sm font-bold px-6 py-2.5 rounded-full border-2 transition-all shadow-sm`}
-                        style={
-                          selectedServices.has(item.name)
-                            ? {
-                                borderColor: 'var(--primary)',
-                                backgroundColor: 'var(--primary-subtle)',
-                                color: 'var(--primary)',
-                              }
-                            : { backgroundColor: 'var(--card)', color: 'var(--foreground)', borderColor: 'var(--foreground)' }
-                        }
-                      >
-                        {selectedServices.has(item.name) ? "Added" : "Add"}
-                      </button>
-                    </div>
-                  ))}
-
-                {/* See All Button */}
-                <button 
-                  className="w-full py-4 rounded-2xl border-2 font-bold text-sm transition-colors duration-300"
-                  style={{ 
-                    backgroundColor: 'var(--card)',
-                    borderColor: 'var(--border)',
-                    color: 'var(--foreground)' 
-                  }}
-                >
-                  See all
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Packages Tab */}
-          {activeTab === "packages" && (
-            <div>
-              <div className="mb-6">
-                <div className="flex items-center gap-2 mb-2">
-                  <div 
-                    className="w-10 h-10 rounded-2xl flex items-center justify-center"
-                    style={{ background: 'var(--gradient-primary)' }}
-                  >
-                    <Sparkles className="w-5 h-5 text-white" />
-                  </div>
-                  <h2 className="text-2xl font-black" style={{ color: 'var(--foreground)' }}>Service Packages</h2>
-                </div>
-                <p className="text-sm ml-12" style={{ color: 'var(--text-secondary)' }}>Bundle & save on premium services</p>
-              </div>
-
-              <div className="space-y-4 pb-6">
-                {packages.map((pkg) => {
-                  const Icon = pkg.icon;
+          {/* ──── SERVICES SECTION ──── */}
+          <div ref={setSectionRef("services")} id="services" className="scroll-mt-24 pb-8">
+            <div className="mb-5">
+              <div className="flex overflow-x-auto scrollbar-hide gap-2 pb-1">
+                {services.map((service) => {
+                  const isCatActive = activeServiceCategory === service.id;
                   return (
-                    <div
-                      key={pkg.id}
-                      className="relative p-6 rounded-3xl overflow-hidden"
-                      style={{
-                        background: pkg.popular
-                          ? 'linear-gradient(to bottom right, rgba(244, 114, 182, 0.1), rgba(236, 72, 153, 0.1), rgba(168, 85, 247, 0.1))'
-                          : 'var(--background-elevated)',
-                        border: pkg.popular ? '2px solid rgba(244, 114, 182, 0.3)' : '2px solid var(--border-light)',
-                        boxShadow: 'var(--elevation-2)',
-                      }}
+                    <button
+                      key={service.id}
+                      onClick={() => setActiveServiceCategory(service.id)}
+                      className="px-5 py-2.5 rounded-full border-2 flex-shrink-0 transition-all text-sm font-bold shadow-md"
+                      style={
+                        isCatActive
+                          ? {
+                              borderColor: 'var(--primary)',
+                              backgroundColor: 'var(--primary-subtle)',
+                              color: 'var(--primary)',
+                            }
+                          : {
+                              backgroundColor: 'var(--card)',
+                              borderColor: 'var(--border)',
+                              color: 'var(--foreground)',
+                            }
+                      }
                     >
-                      {pkg.popular && (
-                        <div className="absolute -top-2 -right-2">
-                          <div 
-                            className="text-white text-[10px] font-black px-3 py-1.5 rounded-full flex items-center gap-1"
-                            style={{ 
-                              background: 'var(--gradient-primary)',
-                              boxShadow: 'var(--elevation-3)'
-                            }}
-                          >
-                            <Zap className="w-3 h-3 fill-white" />
-                            MOST POPULAR
-                          </div>
-                        </div>
-                      )}
-
-                      <div className="flex items-start gap-4 mb-4">
-                        <div
-                          className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg flex-shrink-0"
-                          style={{ 
-                            background: pkg.popular ? 'var(--gradient-primary)' : 'var(--foreground)'
-                          }}
-                        >
-                          <Icon className="w-7 h-7 text-white" />
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="font-black text-lg mb-1" style={{ color: 'var(--foreground)' }}>{pkg.name}</h3>
-                          <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{pkg.description}</p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-end gap-2 mb-5">
-                        <span
-                          className="text-4xl font-black"
-                          style={{ 
-                            color: pkg.popular ? 'var(--primary)' : 'var(--foreground)'
-                          }}
-                        >
-                          {pkg.price}
-                        </span>
-                        <span className="text-base line-through pb-1.5" style={{ color: 'var(--text-tertiary)' }}>{pkg.originalPrice}</span>
-                        <div className="flex-1" />
-                        <div 
-                          className="text-white text-xs font-black px-3 py-1.5 rounded-full shadow-lg"
-                          style={{ background: 'var(--accent-success)' }}
-                        >
-                          {pkg.savings}
-                        </div>
-                      </div>
-
-                      <div className="space-y-2.5 mb-5">
-                        {pkg.services.map((service, idx) => (
-                          <div key={idx} className="flex items-center gap-2.5">
-                            <div
-                              className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
-                              style={{ 
-                                background: pkg.popular ? 'var(--gradient-primary)' : 'var(--foreground)'
-                              }}
-                            >
-                              <Check className="w-3 h-3 text-white" strokeWidth={3} />
-                            </div>
-                            <span className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{service}</span>
-                          </div>
-                        ))}
-                      </div>
-
-                      <button
-                        onClick={() => navigate(`/booking/${id}`)}
-                        className="w-full py-3.5 rounded-2xl font-bold text-sm transition-all shadow-lg flex items-center justify-center gap-2 text-white"
-                        style={{ 
-                          background: pkg.popular ? 'var(--gradient-primary)' : 'var(--foreground)',
-                          boxShadow: 'var(--elevation-2)'
-                        }}
-                      >
-                        Book Package
-                        <ChevronRight className="w-4 h-4" />
-                      </button>
-                    </div>
+                      {service.category}
+                    </button>
                   );
                 })}
               </div>
             </div>
-          )}
 
-          {/* Membership Tab */}
-          {activeTab === "membership" && (
-            <div>
-              <div className="mb-6">
-                <div className="flex items-center gap-2 mb-2">
-                  <div 
-                    className="w-10 h-10 rounded-2xl flex items-center justify-center"
-                    style={{ background: 'var(--gradient-accent)' }}
-                  >
-                    <Crown className="w-5 h-5 text-white" />
-                  </div>
-                  <h2 className="text-2xl font-black" style={{ color: 'var(--foreground)' }}>Membership Plans</h2>
-                </div>
-                <p className="text-sm ml-12" style={{ color: 'var(--text-secondary)' }}>Exclusive perks & VIP treatment</p>
-              </div>
-
-              <div className="space-y-4 pb-6">
-                {memberships.map((membership) => {
-                  const Icon = membership.icon;
-                  return (
-                    <div
-                      key={membership.id}
-                      className="relative p-6 rounded-3xl overflow-hidden"
-                      style={{
-                        background: 'var(--background-elevated)',
-                        border: '2px solid var(--border-light)',
-                        boxShadow: 'var(--elevation-2)',
-                      }}
-                    >
-                      <div 
-                        className="absolute inset-0 opacity-5"
-                        style={{ background: membership.color }}
-                      />
-
-                      {membership.popular && (
-                        <div 
-                          className="absolute top-0 left-0 right-0 h-1"
-                          style={{ background: membership.color }}
-                        />
-                      )}
-
-                      <div className="relative">
-                        <div className="flex items-start justify-between mb-5">
-                          <div className="flex-1">
-                            <h3 className="font-black text-lg mb-2" style={{ color: 'var(--foreground)' }}>{membership.name}</h3>
-                            <div className="flex items-baseline gap-1">
-                              <span
-                                className="text-4xl font-black"
-                                style={{ color: 'var(--primary)' }}
-                              >
-                                {membership.price}
-                              </span>
-                              <span className="text-sm font-medium" style={{ color: 'var(--text-tertiary)' }}>{membership.period}</span>
-                            </div>
-                            {membership.popular && (
-                              <div 
-                                className="inline-flex items-center gap-1 text-[10px] font-black px-2.5 py-1 rounded-full mt-2"
-                                style={{ 
-                                  backgroundColor: 'var(--primary-subtle)',
-                                  color: 'var(--primary)'
-                                }}
-                              >
-                                <Zap className="w-3 h-3" style={{ fill: 'var(--primary)' }} />
-                                BEST VALUE
-                              </div>
-                            )}
-                          </div>
-                          <div
-                            className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg"
-                            style={{ background: membership.color }}
-                          >
-                            <Icon className="w-8 h-8 text-white" />
-                          </div>
-                        </div>
-
-                        <div className="space-y-2.5 mb-5">
-                          {membership.benefits.map((benefit, idx) => (
-                            <div key={idx} className="flex items-center gap-2.5">
-                              <div
-                                className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm"
-                                style={{ background: membership.color }}
-                              >
-                                <Check className="w-3 h-3 text-white" strokeWidth={3} />
-                              </div>
-                              <span className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{benefit}</span>
-                            </div>
-                          ))}
-                        </div>
-
-                        <button
-                          className="w-full text-white py-3.5 rounded-2xl font-bold text-sm shadow-lg flex items-center justify-center gap-2"
-                          style={{ background: membership.color }}
-                        >
-                          Join Now
-                          <ChevronRight className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-
-          {/* Team Tab */}
-          {activeTab === "team" && (
-            <div>
-              <div className="mb-6">
-                <div className="flex items-center gap-2 mb-2">
-                  <div 
-                    className="w-10 h-10 rounded-2xl flex items-center justify-center"
-                    style={{ background: 'var(--gradient-cool)' }}
-                  >
-                    <Users className="w-5 h-5 text-white" />
-                  </div>
-                  <h2 className="text-2xl font-black" style={{ color: 'var(--foreground)' }}>Our Team</h2>
-                </div>
-                <p className="text-sm ml-12" style={{ color: 'var(--text-secondary)' }}>Award-winning beauty professionals</p>
-              </div>
-
-              <div className="space-y-4 pb-6">
-                {stylists.map((stylist) => (
+            <div className="space-y-3">
+              {services
+                .find((s) => s.id === activeServiceCategory)
+                ?.items.map((item, idx) => (
                   <div
-                    key={stylist.id}
-                    className="flex items-center gap-4 p-4 rounded-3xl"
+                    key={idx}
+                    className="flex items-center justify-between py-4 px-5 rounded-2xl border shadow-sm transition-colors duration-300"
                     style={{
-                      background: 'var(--background-elevated)',
-                      border: '1px solid var(--border-light)',
+                      backgroundColor: 'var(--card)',
+                      borderColor: 'var(--border-light)'
+                    }}
+                  >
+                    <div className="flex-1">
+                      <h3 className="font-bold text-base mb-1" style={{ color: 'var(--foreground)' }}>{item.name}</h3>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm" style={{ color: 'var(--muted-foreground)' }}>{item.duration}</span>
+                      </div>
+                      <p className="font-black text-lg mt-2" style={{ color: 'var(--foreground)' }}>{item.price}</p>
+                    </div>
+                    <button
+                      onClick={() => toggleServiceSelection(item.name)}
+                      className="flex-shrink-0 text-sm font-bold px-6 py-2.5 rounded-full border-2 transition-all shadow-sm"
+                      style={
+                        selectedServices.has(item.name)
+                          ? {
+                              borderColor: 'var(--primary)',
+                              backgroundColor: 'var(--primary-subtle)',
+                              color: 'var(--primary)',
+                            }
+                          : { backgroundColor: 'var(--card)', color: 'var(--foreground)', borderColor: 'var(--foreground)' }
+                      }
+                    >
+                      {selectedServices.has(item.name) ? "Added" : "Add"}
+                    </button>
+                  </div>
+                ))}
+            </div>
+          </div>
+
+          {/* ──── PACKAGES SECTION ──── */}
+          <div ref={setSectionRef("packages")} id="packages" className="scroll-mt-24 pb-8">
+            <div className="mb-6">
+              <div className="flex items-center gap-2 mb-2">
+                <div
+                  className="w-10 h-10 rounded-2xl flex items-center justify-center"
+                  style={{ background: 'var(--gradient-primary)' }}
+                >
+                  <Sparkles className="w-5 h-5 text-white" />
+                </div>
+                <h2 className="text-2xl font-black" style={{ color: 'var(--foreground)' }}>Service Packages</h2>
+              </div>
+              <p className="text-sm ml-12" style={{ color: 'var(--text-secondary)' }}>Bundle & save on premium services</p>
+            </div>
+
+            <div className="space-y-4">
+              {packages.map((pkg) => {
+                const Icon = pkg.icon;
+                return (
+                  <div
+                    key={pkg.id}
+                    className="relative p-6 rounded-3xl overflow-hidden"
+                    style={{
+                      background: pkg.popular
+                        ? 'linear-gradient(to bottom right, rgba(244, 114, 182, 0.1), rgba(236, 72, 153, 0.1), rgba(168, 85, 247, 0.1))'
+                        : 'var(--background-elevated)',
+                      border: pkg.popular ? '2px solid rgba(244, 114, 182, 0.3)' : '2px solid var(--border-light)',
                       boxShadow: 'var(--elevation-2)',
                     }}
                   >
-                    <div className="relative w-24 h-24 rounded-2xl overflow-hidden flex-shrink-0 shadow-lg">
-                      <ImageWithFallback
-                        src={stylist.image}
-                        alt={stylist.name}
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute inset-0 rounded-2xl ring-2 ring-inset ring-white/50" />
-                      <div 
-                        className="absolute top-2 right-2 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1 shadow-lg"
-                        style={{ background: 'var(--gradient-gold)' }}
+                    {pkg.popular && (
+                      <div className="absolute -top-2 -right-2">
+                        <div
+                          className="text-white text-[10px] font-black px-3 py-1.5 rounded-full flex items-center gap-1"
+                          style={{
+                            background: 'var(--gradient-primary)',
+                            boxShadow: 'var(--elevation-3)'
+                          }}
+                        >
+                          <Zap className="w-3 h-3 fill-white" />
+                          MOST POPULAR
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="flex items-start gap-4 mb-4">
+                      <div
+                        className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg flex-shrink-0"
+                        style={{
+                          background: pkg.popular ? 'var(--gradient-primary)' : 'var(--foreground)'
+                        }}
                       >
-                        <Star className="w-3 h-3 fill-white text-white" />
-                        <span className="text-[11px] font-black text-white">{stylist.rating}</span>
+                        <Icon className="w-7 h-7 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-black text-lg mb-1" style={{ color: 'var(--foreground)' }}>{pkg.name}</h3>
+                        <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{pkg.description}</p>
                       </div>
                     </div>
 
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-1.5 mb-1">
-                        <h3 className="font-black text-base" style={{ color: 'var(--foreground)' }}>{stylist.name}</h3>
-                        {stylist.verified && <BadgeCheck className="w-4 h-4" style={{ color: 'var(--accent-info)', fill: 'var(--accent-info-subtle)' }} />}
+                    <div className="flex items-end gap-2 mb-5">
+                      <span
+                        className="text-4xl font-black"
+                        style={{
+                          color: pkg.popular ? 'var(--primary)' : 'var(--foreground)'
+                        }}
+                      >
+                        {pkg.price}
+                      </span>
+                      <span className="text-base line-through pb-1.5" style={{ color: 'var(--text-tertiary)' }}>{pkg.originalPrice}</span>
+                      <div className="flex-1" />
+                      <div
+                        className="text-white text-xs font-black px-3 py-1.5 rounded-full shadow-lg"
+                        style={{ background: 'var(--accent-success)' }}
+                      >
+                        {pkg.savings}
                       </div>
-                      <p className="text-sm font-medium mb-2" style={{ color: 'var(--text-secondary)' }}>{stylist.speciality}</p>
-                      <div className="flex items-center gap-2">
-                        <div 
-                          className="flex items-center gap-1 px-2 py-1 rounded-lg"
-                          style={{ 
-                            backgroundColor: 'var(--primary-subtle)',
-                            color: 'var(--primary)'
-                          }}
-                        >
-                          <Award className="w-3 h-3" />
-                          <span className="text-xs font-bold">{stylist.experience}</span>
+                    </div>
+
+                    <div className="space-y-2.5 mb-5">
+                      {pkg.services.map((service, idx) => (
+                        <div key={idx} className="flex items-center gap-2.5">
+                          <div
+                            className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
+                            style={{
+                              background: pkg.popular ? 'var(--gradient-primary)' : 'var(--foreground)'
+                            }}
+                          >
+                            <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                          </div>
+                          <span className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{service}</span>
                         </div>
-                      </div>
+                      ))}
                     </div>
 
                     <button
                       onClick={() => navigate(`/booking/${id}`)}
-                      className="flex-shrink-0 text-white text-xs font-bold px-6 py-3 rounded-full shadow-lg"
-                      style={{ background: 'var(--foreground)' }}
+                      className="w-full py-3.5 rounded-2xl font-bold text-sm transition-all shadow-lg flex items-center justify-center gap-2 text-white"
+                      style={{
+                        background: pkg.popular ? 'var(--gradient-primary)' : 'var(--foreground)',
+                        boxShadow: 'var(--elevation-2)'
+                      }}
                     >
-                      Book
+                      Book Package
+                      <ChevronRight className="w-4 h-4" />
                     </button>
                   </div>
-                ))}
-              </div>
+                );
+              })}
             </div>
-          )}
+          </div>
 
-          {/* Reviews Tab */}
-          {activeTab === "reviews" && (
-            <div>
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <div 
-                      className="w-10 h-10 rounded-2xl flex items-center justify-center"
-                      style={{ background: 'var(--gradient-cool)' }}
-                    >
-                      <MessageCircle className="w-5 h-5 text-white" />
-                    </div>
-                    <h2 className="text-2xl font-black" style={{ color: 'var(--foreground)' }}>Reviews</h2>
-                  </div>
-                  <div className="flex items-center gap-2 ml-12">
-                    <div className="flex items-center gap-1.5 bg-amber-100 px-3 py-1 rounded-full">
-                      <Star className="w-4 h-4 fill-amber-500 text-amber-500" />
-                      <span className="font-black text-sm" style={{ color: 'var(--foreground)' }}>{salonData.rating}</span>
-                    </div>
-                    <span className="text-sm" style={{ color: 'var(--text-tertiary)' }}>•</span>
-                    <span className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>{salonData.reviews} reviews</span>
-                  </div>
+          {/* ──── MEMBERSHIP SECTION ──── */}
+          <div ref={setSectionRef("membership")} id="membership" className="scroll-mt-24 pb-8">
+            <div className="mb-6">
+              <div className="flex items-center gap-2 mb-2">
+                <div
+                  className="w-10 h-10 rounded-2xl flex items-center justify-center"
+                  style={{ background: 'var(--gradient-accent)' }}
+                >
+                  <Crown className="w-5 h-5 text-white" />
                 </div>
-                <button className="text-rose-500 text-sm font-bold">See all</button>
+                <h2 className="text-2xl font-black" style={{ color: 'var(--foreground)' }}>Membership Plans</h2>
               </div>
+              <p className="text-sm ml-12" style={{ color: 'var(--text-secondary)' }}>Exclusive perks & VIP treatment</p>
+            </div>
 
-              <div className="space-y-4 pb-6">
-                {reviews.map((review) => (
-                  <div key={review.id} className="p-5 rounded-3xl" style={{ background: 'var(--background-elevated)', border: '1px solid var(--border-light)', boxShadow: 'var(--elevation-2)' }}>
-                    <div className="flex items-start gap-3 mb-4">
-                      <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 ring-2 ring-gray-100">
-                        <ImageWithFallback src={review.avatar} alt={review.name} className="w-full h-full object-cover" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-1.5 mb-1">
-                          <h4 className="font-bold text-sm" style={{ color: 'var(--foreground)' }}>{review.name}</h4>
-                          {review.verified && <BadgeCheck className="w-4 h-4 text-blue-500 fill-blue-100" />}
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="flex">
-                            {[...Array(5)].map((_, i) => (
-                              <Star
-                                key={i}
-                                className={`w-3.5 h-3.5 ${
-                                  i < review.rating ? "fill-amber-400 text-amber-400" : "fill-gray-200 text-gray-200"
-                                }`}
-                              />
-                            ))}
+            <div className="space-y-4">
+              {memberships.map((membership) => {
+                const Icon = membership.icon;
+                return (
+                  <div
+                    key={membership.id}
+                    className="relative p-6 rounded-3xl overflow-hidden"
+                    style={{
+                      background: 'var(--background-elevated)',
+                      border: '2px solid var(--border-light)',
+                      boxShadow: 'var(--elevation-2)',
+                    }}
+                  >
+                    <div
+                      className="absolute inset-0 opacity-5"
+                      style={{ background: membership.color }}
+                    />
+
+                    {membership.popular && (
+                      <div
+                        className="absolute top-0 left-0 right-0 h-1"
+                        style={{ background: membership.color }}
+                      />
+                    )}
+
+                    <div className="relative">
+                      <div className="flex items-start justify-between mb-5">
+                        <div className="flex-1">
+                          <h3 className="font-black text-lg mb-2" style={{ color: 'var(--foreground)' }}>{membership.name}</h3>
+                          <div className="flex items-baseline gap-1">
+                            <span
+                              className="text-4xl font-black"
+                              style={{ color: 'var(--primary)' }}
+                            >
+                              {membership.price}
+                            </span>
+                            <span className="text-sm font-medium" style={{ color: 'var(--text-tertiary)' }}>{membership.period}</span>
                           </div>
-                          <span className="text-xs" style={{ color: 'var(--text-tertiary)' }}>•</span>
-                          <span className="text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>{review.date}</span>
+                          {membership.popular && (
+                            <div
+                              className="inline-flex items-center gap-1 text-[10px] font-black px-2.5 py-1 rounded-full mt-2"
+                              style={{
+                                backgroundColor: 'var(--primary-subtle)',
+                                color: 'var(--primary)'
+                              }}
+                            >
+                              <Zap className="w-3 h-3" style={{ fill: 'var(--primary)' }} />
+                              BEST VALUE
+                            </div>
+                          )}
+                        </div>
+                        <div
+                          className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg"
+                          style={{ background: membership.color }}
+                        >
+                          <Icon className="w-8 h-8 text-white" />
                         </div>
                       </div>
-                    </div>
 
-                    <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--text-primary)' }}>{review.text}</p>
-
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full flex items-center gap-1.5">
-                        <Award className="w-3.5 h-3.5" />
-                        <span className="text-xs font-semibold">{review.service}</span>
-                      </div>
-                    </div>
-
-                    {review.images.length > 0 && (
-                      <div className="flex gap-2">
-                        {review.images.map((img, idx) => (
-                          <div key={idx} className="w-24 h-24 rounded-2xl overflow-hidden shadow-lg ring-2 ring-gray-100">
-                            <ImageWithFallback src={img} alt="Review" className="w-full h-full object-cover" />
+                      <div className="space-y-2.5 mb-5">
+                        {membership.benefits.map((benefit, idx) => (
+                          <div key={idx} className="flex items-center gap-2.5">
+                            <div
+                              className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm"
+                              style={{ background: membership.color }}
+                            >
+                              <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                            </div>
+                            <span className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{benefit}</span>
                           </div>
                         ))}
                       </div>
-                    )}
+
+                      <button
+                        className="w-full text-white py-3.5 rounded-2xl font-bold text-sm shadow-lg flex items-center justify-center gap-2"
+                        style={{ background: membership.color }}
+                      >
+                        Join Now
+                        <ChevronRight className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
-                ))}
+                );
+              })}
+            </div>
+          </div>
+
+          {/* ──── TEAM SECTION ──── */}
+          <div ref={setSectionRef("team")} id="team" className="scroll-mt-24 pb-8">
+            <div className="mb-6">
+              <div className="flex items-center gap-2 mb-2">
+                <div
+                  className="w-10 h-10 rounded-2xl flex items-center justify-center"
+                  style={{ background: 'var(--gradient-cool)' }}
+                >
+                  <Users className="w-5 h-5 text-white" />
+                </div>
+                <h2 className="text-2xl font-black" style={{ color: 'var(--foreground)' }}>Our Team</h2>
+              </div>
+              <p className="text-sm ml-12" style={{ color: 'var(--text-secondary)' }}>Award-winning beauty professionals</p>
+            </div>
+
+            <div className="space-y-4">
+              {stylists.map((stylist) => (
+                <div
+                  key={stylist.id}
+                  className="flex items-center gap-4 p-4 rounded-3xl"
+                  style={{
+                    background: 'var(--background-elevated)',
+                    border: '1px solid var(--border-light)',
+                    boxShadow: 'var(--elevation-2)',
+                  }}
+                >
+                  <div className="relative w-24 h-24 rounded-2xl overflow-hidden flex-shrink-0 shadow-lg">
+                    <ImageWithFallback
+                      src={stylist.image}
+                      alt={stylist.name}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 rounded-2xl ring-2 ring-inset ring-white/50" />
+                    <div
+                      className="absolute top-2 right-2 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1 shadow-lg"
+                      style={{ background: 'var(--gradient-gold)' }}
+                    >
+                      <Star className="w-3 h-3 fill-white text-white" />
+                      <span className="text-[11px] font-black text-white">{stylist.rating}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <h3 className="font-black text-base" style={{ color: 'var(--foreground)' }}>{stylist.name}</h3>
+                      {stylist.verified && <BadgeCheck className="w-4 h-4" style={{ color: 'var(--accent-info)', fill: 'var(--accent-info-subtle)' }} />}
+                    </div>
+                    <p className="text-sm font-medium mb-2" style={{ color: 'var(--text-secondary)' }}>{stylist.speciality}</p>
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="flex items-center gap-1 px-2 py-1 rounded-lg"
+                        style={{
+                          backgroundColor: 'var(--primary-subtle)',
+                          color: 'var(--primary)'
+                        }}
+                      >
+                        <Award className="w-3 h-3" />
+                        <span className="text-xs font-bold">{stylist.experience}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => navigate(`/booking/${id}`)}
+                    className="flex-shrink-0 text-white text-xs font-bold px-6 py-3 rounded-full shadow-lg"
+                    style={{ background: 'var(--foreground)' }}
+                  >
+                    Book
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ──── REVIEWS SECTION ──── */}
+          <div ref={setSectionRef("reviews")} id="reviews" className="scroll-mt-24 pb-8">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <div
+                    className="w-10 h-10 rounded-2xl flex items-center justify-center"
+                    style={{ background: 'var(--gradient-cool)' }}
+                  >
+                    <MessageCircle className="w-5 h-5 text-white" />
+                  </div>
+                  <h2 className="text-2xl font-black" style={{ color: 'var(--foreground)' }}>Reviews</h2>
+                </div>
+                <div className="flex items-center gap-2 ml-12">
+                  <div className="flex items-center gap-1.5 px-3 py-1 rounded-full" style={{ backgroundColor: 'var(--primary-subtle)' }}>
+                    <Star className="w-4 h-4 fill-amber-500 text-amber-500" />
+                    <span className="font-black text-sm" style={{ color: 'var(--foreground)' }}>{salonData.rating}</span>
+                  </div>
+                  <span className="text-sm" style={{ color: 'var(--text-tertiary)' }}>•</span>
+                  <span className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>{salonData.reviews} reviews</span>
+                </div>
+              </div>
+              <button className="text-sm font-bold" style={{ color: 'var(--primary)' }}>See all</button>
+            </div>
+
+            <div className="space-y-4">
+              {reviewsData.map((review) => (
+                <div key={review.id} className="p-5 rounded-3xl" style={{ background: 'var(--background-elevated)', border: '1px solid var(--border-light)', boxShadow: 'var(--elevation-2)' }}>
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 ring-2" style={{ borderColor: 'var(--border-light)' }}>
+                      <ImageWithFallback src={review.avatar} alt={review.name} className="w-full h-full object-cover" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <h4 className="font-bold text-sm" style={{ color: 'var(--foreground)' }}>{review.name}</h4>
+                        {review.verified && <BadgeCheck className="w-4 h-4" style={{ color: 'var(--accent-info)', fill: 'var(--accent-info-subtle)' }} />}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="flex">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`w-3.5 h-3.5 ${
+                                i < review.rating ? "fill-amber-400 text-amber-400" : "text-gray-200"
+                              }`}
+                              style={i >= review.rating ? { color: 'var(--muted)' } : undefined}
+                            />
+                          ))}
+                        </div>
+                        <span className="text-xs" style={{ color: 'var(--text-tertiary)' }}>•</span>
+                        <span className="text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>{review.date}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--text-primary)' }}>{review.text}</p>
+
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="px-3 py-1.5 rounded-full flex items-center gap-1.5" style={{ backgroundColor: 'var(--muted)', color: 'var(--foreground)' }}>
+                      <Award className="w-3.5 h-3.5" />
+                      <span className="text-xs font-semibold">{review.service}</span>
+                    </div>
+                  </div>
+
+                  {review.images.length > 0 && (
+                    <div className="flex gap-2">
+                      {review.images.map((img, idx) => (
+                        <div key={idx} className="w-24 h-24 rounded-2xl overflow-hidden shadow-lg ring-2" style={{ borderColor: 'var(--border-light)' }}>
+                          <ImageWithFallback src={img} alt="Review" className="w-full h-full object-cover" />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ──── ABOUT SECTION ──── */}
+          <div ref={setSectionRef("about")} id="about" className="scroll-mt-24 pb-8">
+            <div className="mb-6">
+              <div className="flex items-center gap-2 mb-2">
+                <div
+                  className="w-10 h-10 rounded-2xl flex items-center justify-center"
+                  style={{ background: 'var(--accent-success)' }}
+                >
+                  <MapPin className="w-5 h-5 text-white" />
+                </div>
+                <h2 className="text-2xl font-black" style={{ color: 'var(--foreground)' }}>About</h2>
               </div>
             </div>
-          )}
 
-          {/* About Tab */}
-          {activeTab === "about" && (
-            <div>
-              <div className="mb-6">
-                <div className="flex items-center gap-2 mb-2">
-                  <div 
-                    className="w-10 h-10 rounded-2xl flex items-center justify-center"
-                    style={{ background: 'var(--accent-success)' }}
+            <div className="space-y-4">
+              <div
+                className="p-6 rounded-3xl shadow-lg"
+                style={{
+                  background: 'var(--background-elevated)',
+                  border: '1px solid var(--border)'
+                }}
+              >
+                <h3 className="font-black text-lg mb-3" style={{ color: 'var(--foreground)' }}>Our Story</h3>
+                <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--text-secondary)' }}>{salonData.about}</p>
+                <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                  With over 10 years of excellence in beauty services, we've helped thousands of clients look and feel
+                  their best. Our team stays ahead of the latest trends and techniques to bring you world-class
+                  treatments in a luxurious, welcoming environment.
+                </p>
+              </div>
+
+              <div
+                className="p-6 rounded-3xl space-y-5 shadow-lg"
+                style={{
+                  backgroundColor: 'var(--card)',
+                  border: '1px solid var(--border)'
+                }}
+              >
+                <div className="flex items-start gap-4">
+                  <div
+                    className="w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0"
+                    style={{ background: 'var(--gradient-primary)' }}
                   >
                     <MapPin className="w-5 h-5 text-white" />
                   </div>
-                  <h2 className="text-2xl font-black" style={{ color: 'var(--foreground)' }}>About</h2>
-                </div>
-              </div>
-
-              <div className="space-y-4 pb-6">
-                <div 
-                  className="p-6 rounded-3xl shadow-lg"
-                  style={{ 
-                    background: 'var(--background-elevated)',
-                    border: '1px solid var(--border)'
-                  }}
-                >
-                  <h3 className="font-black text-lg mb-3" style={{ color: 'var(--foreground)' }}>Our Story</h3>
-                  <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--text-secondary)' }}>{salonData.about}</p>
-                  <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-                    With over 10 years of excellence in beauty services, we've helped thousands of clients look and feel
-                    their best. Our team stays ahead of the latest trends and techniques to bring you world-class
-                    treatments in a luxurious, welcoming environment.
-                  </p>
+                  <div className="flex-1">
+                    <p className="text-xs font-black tracking-wider mb-1.5" style={{ color: 'var(--muted-foreground)' }}>ADDRESS</p>
+                    <p className="text-sm font-medium leading-relaxed" style={{ color: 'var(--foreground)' }}>{salonData.address}</p>
+                  </div>
                 </div>
 
-                <div 
-                  className="p-6 rounded-3xl space-y-5 shadow-lg"
-                  style={{ 
-                    backgroundColor: 'var(--card)',
-                    border: '1px solid var(--border)'
-                  }}
-                >
-                  <div className="flex items-start gap-4">
-                    <div 
-                      className="w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0"
-                      style={{ background: 'var(--gradient-primary)' }}
-                    >
-                      <MapPin className="w-5 h-5 text-white" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-xs font-black tracking-wider mb-1.5" style={{ color: 'var(--muted-foreground)' }}>ADDRESS</p>
-                      <p className="text-sm font-medium leading-relaxed" style={{ color: 'var(--foreground)' }}>{salonData.address}</p>
-                    </div>
+                <div className="h-px" style={{ background: 'linear-gradient(to right, transparent, var(--border), transparent)' }} />
+
+                <div className="flex items-start gap-4">
+                  <div
+                    className="w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0"
+                    style={{ background: 'var(--gradient-cool)' }}
+                  >
+                    <Clock className="w-5 h-5 text-white" />
                   </div>
-
-                  <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
-
-                  <div className="flex items-start gap-4">
-                    <div 
-                      className="w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0"
-                      style={{ background: 'var(--gradient-cool)' }}
-                    >
-                      <Clock className="w-5 h-5 text-white" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-xs font-black text-gray-400 tracking-wider mb-1.5">HOURS</p>
-                      <p className="text-sm text-gray-900 font-medium">{salonData.hours}</p>
-                    </div>
+                  <div className="flex-1">
+                    <p className="text-xs font-black tracking-wider mb-1.5" style={{ color: 'var(--muted-foreground)' }}>HOURS</p>
+                    <p className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>{salonData.hours}</p>
                   </div>
+                </div>
 
-                  <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+                <div className="h-px" style={{ background: 'linear-gradient(to right, transparent, var(--border), transparent)' }} />
 
-                  <div className="flex items-start gap-4">
-                    <div 
-                      className="w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0"
-                      style={{ background: 'var(--accent-success)' }}
-                    >
-                      <Phone className="w-5 h-5 text-white" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-xs font-black text-gray-400 tracking-wider mb-1.5">CONTACT</p>
-                      <p className="text-sm text-gray-900 font-medium">+91 98765 43210</p>
-                    </div>
+                <div className="flex items-start gap-4">
+                  <div
+                    className="w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0"
+                    style={{ background: 'var(--accent-success)' }}
+                  >
+                    <Phone className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-xs font-black tracking-wider mb-1.5" style={{ color: 'var(--muted-foreground)' }}>CONTACT</p>
+                    <p className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>+91 98765 43210</p>
                   </div>
                 </div>
               </div>
             </div>
-          )}
+          </div>
+
         </div>
 
         {/* Floating Bottom CTA */}
         <div className="fixed bottom-0 left-0 right-0 z-40 max-w-[390px] mx-auto">
           <div className="relative">
-            {/* Gradient glow effect */}
-            <div 
+            <div
               className="absolute inset-0 blur-3xl opacity-60"
               style={{
                 background: 'radial-gradient(ellipse at center, rgba(244, 63, 94, 0.4) 0%, transparent 70%)',
               }}
             />
 
-            <div 
+            <div
               className="relative backdrop-blur-3xl border-t px-6 pt-4 pb-8 transition-colors duration-300"
-              style={{ 
+              style={{
                 backgroundColor: 'var(--card-glass)',
                 borderColor: 'var(--border-light)',
                 boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.08)',
               }}
             >
-              {/* Service counter and total */}
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <p className="text-xs font-semibold mb-1" style={{ color: 'var(--muted-foreground)' }}>
-                    {selectedServices.size > 0 
-                      ? `${selectedServices.size} ${selectedServices.size === 1 ? 'service' : 'services'} selected` 
+                    {selectedServices.size > 0
+                      ? `${selectedServices.size} ${selectedServices.size === 1 ? 'service' : 'services'} selected`
                       : 'Select services to book'}
                   </p>
                   {selectedServices.size > 0 && (
-                    <motion.p 
+                    <motion.p
                       initial={{ opacity: 0, y: -5 }}
                       animate={{ opacity: 1, y: 0 }}
                       className="text-lg font-black"
@@ -1237,24 +1332,22 @@ export function SalonDetails() {
                   )}
                 </div>
 
-                {/* Enhanced Book Now Button */}
                 <motion.button
-                  onClick={() => navigate(`/booking/${id}`, { 
-                    state: { 
+                  onClick={() => navigate(`/booking/${id}`, {
+                    state: {
                       selectedServiceDetails: selectedServiceDetails,
-                      salonName: salonData.name 
-                    } 
+                      salonName: salonData.name
+                    }
                   })}
                   className="relative text-white font-black px-7 py-3.5 rounded-full overflow-hidden flex items-center gap-2 shrink-0"
-                  style={{ 
-                    background: 'linear-gradient(135deg, #EC4899 0%, #F43F5E 50%, #FB923C 100%)',
+                  style={{
+                    background: 'var(--gradient-brand-sunset)',
                     boxShadow: '0 8px 32px rgba(236, 72, 153, 0.4), 0 4px 16px rgba(244, 63, 94, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4)',
                   }}
                   whileTap={{ scale: 0.96 }}
                   whileHover={{ scale: 1.02 }}
                   transition={{ duration: 0.2, ease: "easeOut" }}
                 >
-                  {/* Shimmer effect */}
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
                     animate={{
@@ -1268,11 +1361,10 @@ export function SalonDetails() {
                     }}
                   />
 
-                  {/* Button content */}
                   <span className="relative z-10 text-[15px] font-black drop-shadow-lg whitespace-nowrap">
                     Book Now
                   </span>
-                  
+
                   <motion.div
                     className="relative z-10"
                     animate={{
@@ -1287,11 +1379,10 @@ export function SalonDetails() {
                     <ChevronRight className="w-5 h-5 drop-shadow-lg" strokeWidth={3} />
                   </motion.div>
 
-                  {/* Glow pulse effect */}
                   <motion.div
                     className="absolute inset-0 rounded-full"
                     style={{
-                      background: 'linear-gradient(135deg, #EC4899 0%, #F43F5E 100%)',
+                      background: 'var(--gradient-brand-rose)',
                     }}
                     animate={{
                       opacity: [0, 0.5, 0],
@@ -1306,7 +1397,6 @@ export function SalonDetails() {
                 </motion.button>
               </div>
 
-              {/* Quick info */}
               {selectedServices.size === 0 && (
                 <div className="flex items-center justify-center gap-2 text-xs" style={{ color: 'var(--muted-foreground)' }}>
                   <Sparkles className="w-3.5 h-3.5" />

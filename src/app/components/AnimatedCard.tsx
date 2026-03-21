@@ -1,7 +1,13 @@
 import { motion, MotionProps } from "motion/react";
-import { HTMLAttributes, ReactNode } from "react";
+import { HTMLAttributes, ButtonHTMLAttributes, ReactNode } from "react";
 
 interface AnimatedCardProps extends Omit<HTMLAttributes<HTMLDivElement>, keyof MotionProps> {
+  children: ReactNode;
+  hoverable?: boolean;
+  delay?: number;
+}
+
+interface AnimatedButtonCardProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, keyof MotionProps> {
   children: ReactNode;
   hoverable?: boolean;
   delay?: number;
@@ -134,7 +140,7 @@ export function CategoryCard({
   onClick,
   delay = 0,
   ...props
-}: AnimatedCardProps) {
+}: AnimatedButtonCardProps) {
   return (
     <motion.button
       className={`flex flex-col items-center gap-2 ${className}`}
@@ -216,7 +222,7 @@ export function FloatingButton({
   className = "",
   pulse = false,
   ...props
-}: AnimatedCardProps & { pulse?: boolean }) {
+}: AnimatedButtonCardProps & { pulse?: boolean }) {
   return (
     <motion.button
       className={`rounded-full shadow-2xl transition-all duration-300 ease-in-out ${className}`}

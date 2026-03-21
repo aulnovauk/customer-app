@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import type { Address } from "../../types";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Search,
@@ -205,47 +206,75 @@ export function Shop() {
   const bestsellers = filteredProducts.filter((p) => p.isBestseller);
   const newProducts = filteredProducts.filter((p) => p.isNew);
 
-  const toggleLike = (productId: number) => {
-    const newLiked = new Set(likedProducts);
-    if (newLiked.has(productId)) {
-      newLiked.delete(productId);
-    } else {
-      newLiked.add(productId);
-    }
-    setLikedProducts(newLiked);
-  };
+  const toggleLike = useCallback((productId: number) => {
+    setLikedProducts((prev) => {
+      const newLiked = new Set(prev);
+      if (newLiked.has(productId)) {
+        newLiked.delete(productId);
+      } else {
+        newLiked.add(productId);
+      }
+      return newLiked;
+    });
+  }, []);
 
-  const addToCart = (productId: number) => {
-    const newCart = new Map(cart);
-    const currentQty = newCart.get(productId) || 0;
-    newCart.set(productId, currentQty + 1);
-    setCart(newCart);
-  };
+  const addToCart = useCallback((productId: number) => {
+    setCart((prev) => {
+      const newCart = new Map(prev);
+      newCart.set(productId, (newCart.get(productId) || 0) + 1);
+      return newCart;
+    });
+  }, []);
 
-  const updateCartQty = (productId: number, delta: number) => {
-    const newCart = new Map(cart);
-    const currentQty = newCart.get(productId) || 0;
-    const newQty = currentQty + delta;
-    if (newQty <= 0) {
+  const updateCartQty = useCallback((productId: number, delta: number) => {
+    setCart((prev) => {
+      const newCart = new Map(prev);
+      const newQty = (newCart.get(productId) || 0) + delta;
+      if (newQty <= 0) {
+        newCart.delete(productId);
+      } else {
+        newCart.set(productId, newQty);
+      }
+      return newCart;
+    });
+  }, []);
+
+  const removeItem = useCallback((productId: number) => {
+    setCart((prev) => {
+      const newCart = new Map(prev);
       newCart.delete(productId);
-    } else {
-      newCart.set(productId, newQty);
-    }
-    setCart(newCart);
-  };
+      return newCart;
+    });
+  }, []);
 
-  const removeItem = (productId: number) => {
-    const newCart = new Map(cart);
-    newCart.delete(productId);
-    setCart(newCart);
-  };
+  const handleCategoryChange = useCallback((categoryId: ProductCategory) => {
+    setActiveCategory(categoryId);
+  }, []);
+
+  const handleOpenFilters = useCallback(() => setShowFilters(true), []);
+  const handleOpenCart = useCallback(() => setShowCart(true), []);
+
+  const handleLikeClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    const id = parseInt(e.currentTarget.dataset.productId ?? "0", 10);
+    toggleLike(id);
+  }, [toggleLike]);
+
+  const handleAddToCartClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    const id = parseInt(e.currentTarget.dataset.productId ?? "0", 10);
+    addToCart(id);
+  }, [addToCart]);
+
+  const handleCategoryClickData = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    const id = e.currentTarget.dataset.filterId as ProductCategory;
+    if (id) setActiveCategory(id);
+  }, []);
 
   const handleCheckout = () => {
     setShowCart(false);
     setShowAddressSelection(true);
   };
 
-  const handleAddressSelected = (address: any) => {
+  const handleAddressSelected = (_address: Address) => {
     setShowAddressSelection(false);
     setShowCheckout(true);
   };
@@ -283,7 +312,7 @@ export function Shop() {
             <div className="flex items-center gap-2">
               <motion.button
                 whileTap={{ scale: 0.95 }}
-                onClick={() => setShowFilters(true)}
+                onClick={handleOpenFilters}
                 className="w-11 h-11 rounded-full flex items-center justify-center transition-colors"
                 style={{
                   backgroundColor: "var(--card)",
@@ -295,7 +324,7 @@ export function Shop() {
               </motion.button>
               <motion.button
                 whileTap={{ scale: 0.95 }}
-                onClick={() => setShowCart(true)}
+                onClick={handleOpenCart}
                 className="relative w-11 h-11 rounded-full flex items-center justify-center transition-colors"
                 style={{
                   backgroundColor: "var(--card)",
@@ -403,7 +432,7 @@ export function Shop() {
                     {/* Heart Button */}
                     <motion.button
                       whileTap={{ scale: 0.9 }}
-                      onClick={() => toggleLike(product.id)}
+                      data-product-id={product.id} onClick={handleLikeClick}
                       className="absolute bottom-3 right-3 w-10 h-10 rounded-full backdrop-blur-xl flex items-center justify-center transition-all shadow-lg"
                       style={{
                         backgroundColor: likedProducts.has(product.id)
@@ -471,15 +500,15 @@ export function Shop() {
                     {/* Add to Cart Button */}
                     <motion.button
                       whileTap={{ scale: 0.97 }}
-                      onClick={() => addToCart(product.id)}
+                      data-product-id={product.id} onClick={handleAddToCartClick}
                       disabled={!product.inStock}
                       className="w-full py-3 rounded-2xl text-sm font-black transition-all flex items-center justify-center gap-2"
                       style={{
                         background: product.inStock
-                          ? "linear-gradient(135deg, #E85A8B 0%, #F186AC 100%)"
+                          ? "var(--gradient-brand-button)"
                           : "var(--muted)",
-                        color: "#FFFFFF",
-                        boxShadow: product.inStock ? "0 4px 16px rgba(232, 90, 139, 0.35)" : "none",
+                        color: "var(--text-inverse)",
+                        boxShadow: product.inStock ? "var(--shadow-brand-button)" : "none",
                         opacity: product.inStock ? 1 : 0.5,
                       }}
                     >
@@ -508,15 +537,15 @@ export function Shop() {
               return (
                 <motion.button
                   key={filter.id}
-                  onClick={() => setActiveCategory(filter.id)}
+                  data-filter-id={filter.id} onClick={handleCategoryClickData}
                   whileTap={{ scale: 0.95 }}
                   className="flex items-center gap-2 px-4 py-2.5 rounded-full flex-shrink-0 text-sm font-bold transition-all"
                   style={
                     isActive
                       ? {
-                          background: "linear-gradient(135deg, #E85A8B 0%, #F186AC 100%)",
-                          color: "#FFFFFF",
-                          boxShadow: "0 4px 12px rgba(232, 90, 139, 0.3)",
+                          background: "var(--gradient-brand-button)",
+                          color: "var(--text-inverse)",
+                          boxShadow: "var(--shadow-brand-button)",
                         }
                       : {
                           backgroundColor: "var(--card)",
@@ -601,7 +630,7 @@ export function Shop() {
                     {/* Heart */}
                     <motion.button
                       whileTap={{ scale: 0.9 }}
-                      onClick={() => toggleLike(product.id)}
+                      data-product-id={product.id} onClick={handleLikeClick}
                       className="absolute top-2.5 right-2.5 w-9 h-9 rounded-full backdrop-blur-xl flex items-center justify-center shadow-md transition-all"
                       style={{
                         backgroundColor: likedProducts.has(product.id)
@@ -667,15 +696,15 @@ export function Shop() {
                     {/* Add to Cart */}
                     <motion.button
                       whileTap={{ scale: 0.96 }}
-                      onClick={() => addToCart(product.id)}
+                      data-product-id={product.id} onClick={handleAddToCartClick}
                       disabled={!product.inStock}
                       className="w-full py-2.5 rounded-xl text-xs font-black transition-all"
                       style={{
                         background: product.inStock
-                          ? "linear-gradient(135deg, #E85A8B 0%, #F186AC 100%)"
+                          ? "var(--gradient-brand-button)"
                           : "var(--muted)",
-                        color: "#FFFFFF",
-                        boxShadow: product.inStock ? "0 3px 12px rgba(232, 90, 139, 0.3)" : "none",
+                        color: "var(--text-inverse)",
+                        boxShadow: product.inStock ? "var(--shadow-brand-button)" : "none",
                         opacity: product.inStock ? 1 : 0.5,
                       }}
                     >
@@ -730,6 +759,7 @@ export function Shop() {
       <AnimatePresence>
         {showCheckout && (
           <CheckoutFlow
+            isOpen={showCheckout}
             cartItems={cartItems}
             cartTotal={cartTotal}
             onClose={() => setShowCheckout(false)}

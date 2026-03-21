@@ -11,7 +11,7 @@ export function PremiumBadge({
 }) {
   const variants = {
     gold: {
-      background: "linear-gradient(135deg, #ffd98a 0%, #f4c157 50%, #daa520 100%)",
+      background: "var(--gradient-gold-sheen)",
       shimmer: "linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)",
     },
     rose: {
@@ -19,7 +19,7 @@ export function PremiumBadge({
       shimmer: "linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent)",
     },
     platinum: {
-      background: "linear-gradient(135deg, #e8e8e8 0%, #c0c0c0 50%, #a8a8a8 100%)",
+      background: "var(--gradient-platinum-sheen)",
       shimmer: "linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent)",
     },
   };
@@ -84,9 +84,9 @@ export function LuxuryRating({ rating, reviews }: { rating: number; reviews?: nu
           />
           <defs>
             <linearGradient id="gold-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#ffd98a" />
-              <stop offset="50%" stopColor="#f4c157" />
-              <stop offset="100%" stopColor="#daa520" />
+              <stop offset="0%" style={{ stopColor: "var(--color-gold-300)" }} />
+              <stop offset="50%" style={{ stopColor: "var(--color-gold-500)" }} />
+              <stop offset="100%" style={{ stopColor: "var(--color-gold-700)" }} />
             </linearGradient>
           </defs>
         </motion.svg>

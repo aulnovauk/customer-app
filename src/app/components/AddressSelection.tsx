@@ -1,18 +1,7 @@
-import { motion, AnimatePresence, useMotionValue, useTransform } from "motion/react";
+import { motion, AnimatePresence, useMotionValue, useTransform, type PanInfo } from "motion/react";
 import { X, ChevronRight, MapPin, Home, Briefcase, Plus, Check, Pencil, Save } from "lucide-react";
 import { useState } from "react";
-
-interface Address {
-  id: number;
-  type: "home" | "work" | "other";
-  name: string;
-  phone: string;
-  address: string;
-  city: string;
-  state: string;
-  pincode: string;
-  isDefault?: boolean;
-}
+import type { Address } from "../../types";
 
 interface AddressSelectionProps {
   isOpen: boolean;
@@ -93,7 +82,7 @@ export function AddressSelection({ isOpen, onClose, onContinue }: AddressSelecti
     setEditForm(null);
   };
 
-  const handleDragEnd = (_event: any, info: any) => {
+  const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     const offset = info.offset.y;
     const velocity = info.velocity.y;
 
@@ -186,8 +175,8 @@ export function AddressSelection({ isOpen, onClose, onContinue }: AddressSelecti
                   <div
                     className="w-12 h-12 rounded-2xl flex items-center justify-center"
                     style={{
-                      background: "linear-gradient(135deg, #E85A8B 0%, #F186AC 100%)",
-                      boxShadow: "0 4px 16px rgba(232, 90, 139, 0.3)",
+                      background: `var(--gradient-brand-button)`,
+                      boxShadow: `var(--shadow-brand-button)`,
                     }}
                   >
                     <MapPin className="w-6 h-6 text-white" strokeWidth={2.5} />
@@ -228,7 +217,7 @@ export function AddressSelection({ isOpen, onClose, onContinue }: AddressSelecti
                       backgroundColor: "var(--card)",
                       border: `2px solid ${
                         selectedAddressId === address.id
-                          ? "#E85A8B"
+                          ? "var(--brand-primary-500)"
                           : "var(--border-light)"
                       }`,
                       boxShadow:
@@ -247,8 +236,8 @@ export function AddressSelection({ isOpen, onClose, onContinue }: AddressSelecti
                           transition={{ type: "spring", stiffness: 500, damping: 25 }}
                           className="absolute top-4 right-4 w-7 h-7 rounded-full flex items-center justify-center"
                           style={{
-                            background: "linear-gradient(135deg, #E85A8B 0%, #F186AC 100%)",
-                            boxShadow: "0 2px 8px rgba(232, 90, 139, 0.3)",
+                            background: `var(--gradient-brand-button)`,
+                            boxShadow: `var(--shadow-brand-button)`,
                           }}
                         >
                           <Check className="w-4 h-4 text-white" strokeWidth={3} />
@@ -267,7 +256,7 @@ export function AddressSelection({ isOpen, onClose, onContinue }: AddressSelecti
                               : "var(--background)",
                           color:
                             selectedAddressId === address.id
-                              ? "#E85A8B"
+                              ? "var(--brand-primary-500)"
                               : "var(--muted-foreground)",
                         }}
                       >
@@ -281,7 +270,7 @@ export function AddressSelection({ isOpen, onClose, onContinue }: AddressSelecti
                           className="px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide"
                           style={{
                             backgroundColor: "rgba(16, 185, 129, 0.15)",
-                            color: "#10B981",
+                            color: "var(--color-success)",
                           }}
                         >
                           Default
@@ -374,9 +363,9 @@ export function AddressSelection({ isOpen, onClose, onContinue }: AddressSelecti
                             onClick={handleSave}
                             className="flex-1 py-2.5 rounded-xl font-black text-sm flex items-center justify-center gap-2"
                             style={{
-                              background: "linear-gradient(135deg, #E85A8B 0%, #F186AC 100%)",
-                              color: "#FFFFFF",
-                              boxShadow: "0 4px 12px rgba(232, 90, 139, 0.3)",
+                              background: `var(--gradient-brand-button)`,
+                              color: "var(--text-inverse)",
+                              boxShadow: `var(--shadow-brand-button)`,
                             }}
                           >
                             <Save className="w-4 h-4" strokeWidth={2.5} />
@@ -458,8 +447,8 @@ export function AddressSelection({ isOpen, onClose, onContinue }: AddressSelecti
                   <div
                     className="w-10 h-10 rounded-full flex items-center justify-center"
                     style={{
-                      background: "linear-gradient(135deg, #E85A8B 0%, #F186AC 100%)",
-                      boxShadow: "0 2px 8px rgba(232, 90, 139, 0.3)",
+                      background: `var(--gradient-brand-button)`,
+                      boxShadow: `var(--shadow-brand-button)`,
                     }}
                   >
                     <Plus className="w-5 h-5 text-white" strokeWidth={2.5} />
@@ -486,9 +475,9 @@ export function AddressSelection({ isOpen, onClose, onContinue }: AddressSelecti
                 onClick={handleContinue}
                 className="w-full py-4 rounded-[18px] font-black text-base flex items-center justify-center gap-2 relative overflow-hidden"
                 style={{
-                  background: "linear-gradient(135deg, #E85A8B 0%, #F186AC 100%)",
-                  color: "#FFFFFF",
-                  boxShadow: "0 8px 24px rgba(232, 90, 139, 0.4)",
+                  background: `var(--gradient-brand-button)`,
+                  color: "var(--text-inverse)",
+                  boxShadow: `var(--shadow-brand-button-lg)`,
                 }}
               >
                 <span className="relative z-10">Continue to Payment</span>

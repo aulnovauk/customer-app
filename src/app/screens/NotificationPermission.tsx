@@ -13,7 +13,6 @@ export function NotificationPermission() {
     try {
       // Check if notifications are supported
       if (!("Notification" in window)) {
-        console.log("Notifications not supported");
         handleSkip();
         return;
       }
@@ -40,8 +39,7 @@ export function NotificationPermission() {
       } else {
         navigate("/app", { replace: true });
       }
-    } catch (error) {
-      console.error("Notification permission error:", error);
+    } catch {
       handleSkip();
     } finally {
       setIsRequesting(false);
@@ -73,11 +71,10 @@ export function NotificationPermission() {
         transition={{ delay: 0.3 }}
         className="absolute top-14 right-6 z-20 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300"
         style={{
-          backgroundColor: 'rgba(15, 15, 16, 0.05)',
-          color: '#0F0F10',
+          backgroundColor: 'var(--muted)',
+          color: 'var(--foreground)',
         }}
         whileHover={{ 
-          backgroundColor: 'rgba(15, 15, 16, 0.1)',
           scale: 1.05,
         }}
         whileTap={{ scale: 0.95 }}
@@ -132,7 +129,7 @@ export function NotificationPermission() {
           <div 
             className="relative w-32 h-32 rounded-[40px] flex items-center justify-center"
             style={{
-              background: 'linear-gradient(135deg, #C8A96A, #E6D3A3)',
+              background: 'var(--gradient-slide-gold)',
               boxShadow: '0 24px 48px -12px rgba(200, 169, 106, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.3)',
             }}
           >
@@ -151,7 +148,7 @@ export function NotificationPermission() {
                 scale: { duration: 2, repeat: Infinity, ease: 'easeInOut' },
               }}
             >
-              <Sparkles className="w-5 h-5" style={{ color: '#C8A96A' }} />
+              <Sparkles className="w-5 h-5" style={{ color: 'var(--color-gold-warm)' }} />
             </motion.div>
 
             {/* Main bell icon */}
@@ -173,8 +170,8 @@ export function NotificationPermission() {
             <motion.div
               className="absolute top-6 right-6 w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-black"
               style={{
-                background: 'linear-gradient(135deg, #E85A8B, #D946A0)',
-                boxShadow: '0 4px 12px rgba(232, 90, 139, 0.4)',
+                background: 'var(--gradient-brand-button-cta)',
+                boxShadow: 'var(--shadow-brand-button)',
               }}
               animate={{
                 scale: [1, 1.2, 1],
@@ -201,12 +198,12 @@ export function NotificationPermission() {
           <div className="flex items-center justify-center gap-2 mb-4">
             <div
               className="h-0.5 w-8 rounded-full"
-              style={{ background: 'linear-gradient(90deg, #C8A96A, #E6D3A3)' }}
+              style={{ background: 'var(--gradient-slide-gold-90)' }}
             />
             <span
               className="text-xs font-black tracking-[0.15em] uppercase"
               style={{
-                background: 'linear-gradient(135deg, #C8A96A, #E6D3A3)',
+                background: 'var(--gradient-slide-gold)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
               }}
@@ -215,14 +212,14 @@ export function NotificationPermission() {
             </span>
             <div
               className="h-0.5 w-8 rounded-full"
-              style={{ background: 'linear-gradient(90deg, #E6D3A3, #C8A96A)' }}
+              style={{ background: 'var(--gradient-slide-gold-90-rev)' }}
             />
           </div>
 
           <h1 
             className="text-4xl font-black mb-4"
             style={{
-              color: '#0F0F10',
+              color: 'var(--foreground)',
               letterSpacing: '-0.02em',
             }}
           >
@@ -233,7 +230,7 @@ export function NotificationPermission() {
 
           <p 
             className="text-base leading-relaxed max-w-[300px] mx-auto"
-            style={{ color: 'rgba(15, 15, 16, 0.6)', fontWeight: 500 }}
+            style={{ color: 'var(--muted-foreground)', fontWeight: 500 }}
           >
             Get timely reminders, exclusive offers, and updates about your bookings
           </p>
@@ -250,17 +247,17 @@ export function NotificationPermission() {
             { 
               icon: Calendar, 
               text: "Appointment reminders",
-              color: "#E85A8B"
+              color: "var(--brand-primary-500)"
             },
             { 
               icon: Gift, 
               text: "Exclusive deals & offers",
-              color: "#C8A96A"
+              color: "var(--color-gold-warm)"
             },
             { 
               icon: Sparkles, 
               text: "New salon openings",
-              color: "#A855F7"
+              color: "var(--color-purple-vibrant)"
             },
           ].map((feature, i) => {
             const Icon = feature.icon;
@@ -283,7 +280,7 @@ export function NotificationPermission() {
                 >
                   <Icon className="w-4 h-4" style={{ color: feature.color }} strokeWidth={2.5} />
                 </div>
-                <span className="text-sm font-semibold" style={{ color: '#0F0F10' }}>
+                <span className="text-sm font-semibold" style={{ color: 'var(--foreground)' }}>
                   {feature.text}
                 </span>
               </motion.div>
@@ -307,7 +304,7 @@ export function NotificationPermission() {
           whileHover={{ scale: 1.01 }}
           className="w-full relative overflow-hidden font-black text-white text-base mb-3 transition-all duration-300"
           style={{
-            background: 'linear-gradient(135deg, #C8A96A, #E6D3A3)',
+            background: 'var(--gradient-slide-gold)',
             padding: '18px 32px',
             borderRadius: '20px',
             boxShadow: '0 16px 32px -8px rgba(200, 169, 106, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
@@ -340,13 +337,13 @@ export function NotificationPermission() {
         <button
           onClick={handleSkip}
           className="w-full text-sm font-semibold transition-opacity duration-300 hover:opacity-70"
-          style={{ color: 'rgba(15, 15, 16, 0.5)' }}
+          style={{ color: 'var(--muted-foreground)' }}
         >
           Maybe later
         </button>
 
         {/* Privacy Note */}
-        <p className="text-center text-xs mt-4 px-4" style={{ color: 'rgba(15, 15, 16, 0.4)' }}>
+        <p className="text-center text-xs mt-4 px-4" style={{ color: 'var(--muted-foreground)', opacity: 0.7 }}>
           You can change notification preferences anytime in settings
         </p>
       </motion.div>

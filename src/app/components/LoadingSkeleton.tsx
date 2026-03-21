@@ -1,14 +1,14 @@
-import { motion } from "motion/react";
+import { motion, type Variants } from "motion/react";
 
 // Base skeleton shimmer animation
-const shimmer = {
+const shimmer: Variants = {
   initial: { backgroundPosition: "-1000px 0" },
   animate: {
     backgroundPosition: "1000px 0",
     transition: {
       duration: 2,
       repeat: Infinity,
-      ease: "linear",
+      ease: "linear" as const,
     },
   },
 };

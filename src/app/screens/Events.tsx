@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   Search, 
@@ -261,15 +261,76 @@ export function Events() {
   const featuredEvents = filteredEvents.filter((e) => e.isFeatured);
   const regularEvents = filteredEvents.filter((e) => !e.isFeatured);
 
-  const toggleLike = (eventId: number) => {
-    const newLiked = new Set(likedEvents);
-    if (newLiked.has(eventId)) {
-      newLiked.delete(eventId);
-    } else {
-      newLiked.add(eventId);
-    }
-    setLikedEvents(newLiked);
-  };
+  const toggleLike = useCallback((eventId: number) => {
+    setLikedEvents((prev) => {
+      const newLiked = new Set(prev);
+      if (newLiked.has(eventId)) {
+        newLiked.delete(eventId);
+      } else {
+        newLiked.add(eventId);
+      }
+      return newLiked;
+    });
+  }, []);
+
+  const handleLikeClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    const id = parseInt(e.currentTarget.dataset.eventId ?? "0", 10);
+    toggleLike(id);
+  }, [toggleLike]);
+
+  const handleTabChange = useCallback((tabId: EventTab) => {
+    setActiveTab(tabId);
+  }, []);
+
+  const handleCategoryChange = useCallback((categoryId: EventCategory) => {
+    setActiveCategory(categoryId);
+  }, []);
+
+  const handleDateChange = useCallback((dateId: string) => {
+    setSelectedDate(dateId);
+  }, []);
+
+  const handleSpotsFilterChange = useCallback((filterId: string) => {
+    setSpotsFilter(filterId);
+  }, []);
+
+  const handleOpenFilters = useCallback(() => setShowFilters(true), []);
+  const handleCloseFilters = useCallback(() => setShowFilters(false), []);
+  const handleToggleVerified = useCallback(() => setVerifiedOnly((v) => !v), []);
+  const handlePricePresetSelect = useCallback((range: [number, number]) => {
+    setPriceRange(range);
+  }, []);
+  const handleResetFilters = useCallback(() => {
+    setPriceRange([0, 2000]);
+    setSelectedDate("all");
+    setSpotsFilter("all");
+    setVerifiedOnly(false);
+  }, []);
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  }, []);
+
+  const handleTabClickData = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    setActiveTab(e.currentTarget.dataset.tabId as EventTab);
+  }, []);
+
+  const handleCategoryClickData = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    setActiveCategory(e.currentTarget.dataset.categoryId as EventCategory);
+  }, []);
+
+  const handlePresetClickData = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    const min = parseInt(e.currentTarget.dataset.presetMin ?? "0", 10);
+    const max = parseInt(e.currentTarget.dataset.presetMax ?? "3000", 10);
+    setPriceRange([min, max]);
+  }, []);
+
+  const handleSpotsClickData = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    setSpotsFilter(e.currentTarget.dataset.optionId ?? "all");
+  }, []);
+
+  const handleDateClickData = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    setSelectedDate(e.currentTarget.dataset.dateId ?? "all");
+  }, []);
 
   const getBadgeConfig = (badge?: EventBadge) => {
     if (!badge) return null;
@@ -278,31 +339,31 @@ export function Events() {
       new: {
         label: "New",
         icon: Sparkles,
-        gradient: "linear-gradient(135deg, #10B981 0%, #34D399 100%)",
+        gradient: "var(--gradient-success)",
         shadow: "0 2px 8px rgba(16, 185, 129, 0.3)",
       },
       limited: {
         label: "Limited",
         icon: Timer,
-        gradient: "linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%)",
+        gradient: "var(--gradient-warning)",
         shadow: "0 2px 8px rgba(245, 158, 11, 0.3)",
       },
       popular: {
         label: "Popular",
         icon: Flame,
-        gradient: "linear-gradient(135deg, #EF4444 0%, #F87171 100%)",
+        gradient: "var(--gradient-error)",
         shadow: "0 2px 8px rgba(239, 68, 68, 0.3)",
       },
       trending: {
         label: "Trending",
         icon: TrendingUp,
-        gradient: "linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)",
+        gradient: "var(--gradient-purple)",
         shadow: "0 2px 8px rgba(139, 92, 246, 0.3)",
       },
       "selling-fast": {
         label: "Selling Fast",
         icon: Zap,
-        gradient: "linear-gradient(135deg, #EC4899 0%, #F472B6 100%)",
+        gradient: "var(--gradient-vibrant-pink)",
         shadow: "0 2px 8px rgba(236, 72, 153, 0.3)",
       },
     };
@@ -338,7 +399,7 @@ export function Events() {
             </div>
             <motion.button
               whileTap={{ scale: 0.95 }}
-              onClick={() => setShowFilters(true)}
+              onClick={handleOpenFilters}
               className="w-11 h-11 rounded-full flex items-center justify-center transition-colors"
               style={{
                 backgroundColor: 'var(--card)',
@@ -361,13 +422,13 @@ export function Events() {
               return (
                 <motion.button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
+                  data-tab-id={tab.id} onClick={handleTabClickData}
                   className="relative flex items-center gap-2 px-5 py-3 rounded-full font-bold text-sm transition-all"
                   style={
                     isActive
                       ? {
-                          background: 'linear-gradient(135deg, #E85A8B 0%, #F186AC 100%)',
-                          color: '#FFFFFF',
+                          background: 'var(--gradient-brand-button)',
+                          color: 'var(--text-inverse)',
                           boxShadow: '0 4px 16px rgba(232, 90, 139, 0.3)',
                         }
                       : {
@@ -396,7 +457,7 @@ export function Events() {
               type="text"
               placeholder="Search events..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={handleSearchChange}
               className="w-full pl-12 pr-4 py-3.5 rounded-2xl text-sm font-medium transition-all outline-none"
               style={{
                 backgroundColor: 'var(--card)',
@@ -457,7 +518,7 @@ export function Events() {
                   {/* Heart Button */}
                   <motion.button
                     whileTap={{ scale: 0.9 }}
-                    onClick={() => toggleLike(event.id)}
+                    data-event-id={event.id} onClick={handleLikeClick}
                     className="absolute top-16 right-4 w-10 h-10 rounded-full backdrop-blur-xl flex items-center justify-center transition-all"
                     style={{
                       backgroundColor: likedEvents.has(event.id) ? 'rgba(251, 113, 133, 0.9)' : 'rgba(255, 255, 255, 0.2)',
@@ -517,8 +578,8 @@ export function Events() {
                       whileTap={{ scale: 0.97 }}
                       className="w-full mt-4 py-3.5 rounded-2xl font-black text-sm flex items-center justify-center gap-2 transition-all"
                       style={{
-                        background: 'linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%)',
-                        color: '#0F0F10',
+                        background: 'var(--gradient-card-inverse)',
+                        color: 'var(--foreground)',
                         boxShadow: '0 4px 16px rgba(0, 0, 0, 0.2)',
                       }}
                     >
@@ -541,14 +602,14 @@ export function Events() {
               return (
                 <motion.button
                   key={filter.id}
-                  onClick={() => setActiveCategory(filter.id)}
+                  data-category-id={filter.id} onClick={handleCategoryClickData}
                   whileTap={{ scale: 0.95 }}
                   className="flex items-center gap-2 px-4 py-2.5 rounded-full flex-shrink-0 text-sm font-bold transition-all"
                   style={
                     isActive
                       ? {
-                          background: 'linear-gradient(135deg, #E85A8B 0%, #F186AC 100%)',
-                          color: '#FFFFFF',
+                          background: 'var(--gradient-brand-button)',
+                          color: 'var(--text-inverse)',
                           boxShadow: '0 4px 12px rgba(232, 90, 139, 0.3)',
                         }
                       : {
@@ -637,7 +698,7 @@ export function Events() {
                     {/* Heart Button - Bottom Right of Image */}
                     <motion.button
                       whileTap={{ scale: 0.9 }}
-                      onClick={() => toggleLike(event.id)}
+                      data-event-id={event.id} onClick={handleLikeClick}
                       className="absolute bottom-3 right-3 w-10 h-10 rounded-full backdrop-blur-xl flex items-center justify-center transition-all"
                       style={{
                         backgroundColor: likedEvents.has(event.id) 
@@ -763,8 +824,8 @@ export function Events() {
                       whileTap={{ scale: 0.97 }}
                       className="w-full py-3.5 rounded-2xl font-black text-sm flex items-center justify-center gap-2 transition-all"
                       style={{
-                        background: 'linear-gradient(135deg, #E85A8B 0%, #F186AC 100%)',
-                        color: '#FFFFFF',
+                        background: 'var(--gradient-brand-button)',
+                        color: 'var(--text-inverse)',
                         boxShadow: '0 4px 16px rgba(232, 90, 139, 0.35)',
                       }}
                     >
@@ -807,7 +868,7 @@ export function Events() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setShowFilters(false)}
+              onClick={handleCloseFilters}
               className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
             />
 
@@ -836,7 +897,7 @@ export function Events() {
                     <div 
                       className="w-10 h-10 rounded-full flex items-center justify-center"
                       style={{
-                        background: 'linear-gradient(135deg, #E85A8B 0%, #F186AC 100%)',
+                        background: 'var(--gradient-brand-button)',
                         boxShadow: '0 4px 12px rgba(232, 90, 139, 0.3)',
                       }}
                     >
@@ -848,7 +909,7 @@ export function Events() {
                   </div>
                   <motion.button
                     whileTap={{ scale: 0.95 }}
-                    onClick={() => setShowFilters(false)}
+                    onClick={handleCloseFilters}
                     className="w-10 h-10 rounded-full flex items-center justify-center"
                     style={{
                       backgroundColor: 'var(--card)',
@@ -912,7 +973,7 @@ export function Events() {
                         onChange={(e) => setPriceRange([parseInt(e.target.value), priceRange[1]])}
                         className="w-full h-2 rounded-full appearance-none cursor-pointer"
                         style={{
-                          background: `linear-gradient(to right, #E85A8B 0%, #E85A8B ${(priceRange[0] / 3000) * 100}%, #E5E7EB ${(priceRange[0] / 3000) * 100}%, #E5E7EB 100%)`,
+                          background: `linear-gradient(to right, var(--brand-primary-500) 0%, var(--brand-primary-500) ${(priceRange[0] / 3000) * 100}%, var(--color-neutral-border) ${(priceRange[0] / 3000) * 100}%, var(--color-neutral-border) 100%)`,
                         }}
                       />
                       <input
@@ -924,7 +985,7 @@ export function Events() {
                         onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
                         className="w-full h-2 rounded-full appearance-none cursor-pointer"
                         style={{
-                          background: `linear-gradient(to right, #E5E7EB 0%, #E5E7EB ${(priceRange[1] / 3000) * 100}%, #E85A8B ${(priceRange[1] / 3000) * 100}%, #E85A8B 100%)`,
+                          background: `linear-gradient(to right, var(--color-neutral-border) 0%, var(--color-neutral-border) ${(priceRange[1] / 3000) * 100}%, var(--brand-primary-500) ${(priceRange[1] / 3000) * 100}%, var(--brand-primary-500) 100%)`,
                         }}
                       />
                     </div>
@@ -940,14 +1001,14 @@ export function Events() {
                         <motion.button
                           key={preset.label}
                           whileTap={{ scale: 0.95 }}
-                          onClick={() => setPriceRange(preset.range as [number, number])}
+                          data-preset-min={preset.range[0]} data-preset-max={preset.range[1]} onClick={handlePresetClickData}
                           className="px-4 py-2 rounded-full text-xs font-bold transition-all"
                           style={{
                             backgroundColor: priceRange[0] === preset.range[0] && priceRange[1] === preset.range[1]
                               ? 'var(--brand-primary)'
                               : 'var(--card)',
                             color: priceRange[0] === preset.range[0] && priceRange[1] === preset.range[1]
-                              ? '#FFFFFF'
+                              ? 'var(--text-inverse)'
                               : 'var(--muted-foreground)',
                             border: `1px solid ${priceRange[0] === preset.range[0] && priceRange[1] === preset.range[1] ? 'transparent' : 'var(--border-light)'}`,
                           }}
@@ -980,16 +1041,16 @@ export function Events() {
                         <motion.button
                           key={option.id}
                           whileTap={{ scale: 0.95 }}
-                          onClick={() => setSpotsFilter(option.id)}
+                          data-option-id={option.id} onClick={handleSpotsClickData}
                           className="p-4 rounded-2xl text-center transition-all"
                           style={{
                             backgroundColor: isActive ? 'var(--brand-primary)' : 'var(--card)',
-                            color: isActive ? '#FFFFFF' : 'var(--foreground)',
+                            color: isActive ? 'var(--text-inverse)' : 'var(--foreground)',
                             border: `1px solid ${isActive ? 'transparent' : 'var(--border-light)'}`,
                             boxShadow: isActive ? '0 4px 12px rgba(232, 90, 139, 0.3)' : 'none',
                           }}
                         >
-                          <Icon className={`w-6 h-6 mx-auto mb-2 ${isActive ? 'text-white' : ''}`} strokeWidth={2.5} style={{ color: isActive ? '#FFFFFF' : 'var(--brand-primary)' }} />
+                          <Icon className={`w-6 h-6 mx-auto mb-2 ${isActive ? 'text-white' : ''}`} strokeWidth={2.5} style={{ color: isActive ? 'var(--text-inverse)' : 'var(--brand-primary)' }} />
                           <p className="text-xs font-bold leading-tight">{option.label}</p>
                         </motion.button>
                       );
@@ -1005,14 +1066,14 @@ export function Events() {
                       backgroundColor: verifiedOnly ? 'rgba(232, 90, 139, 0.1)' : 'var(--card)',
                       border: `1px solid ${verifiedOnly ? 'var(--brand-primary)' : 'var(--border-light)'}`,
                     }}
-                    onClick={() => setVerifiedOnly(!verifiedOnly)}
+                    onClick={handleToggleVerified}
                   >
                     <div className="flex items-center gap-3">
                       <div 
                         className="w-12 h-12 rounded-xl flex items-center justify-center"
                         style={{
                           background: verifiedOnly 
-                            ? 'linear-gradient(135deg, #E85A8B 0%, #F186AC 100%)'
+                            ? 'var(--gradient-brand-button)'
                             : 'var(--background)',
                           border: verifiedOnly ? 'none' : '1px solid var(--border-light)',
                         }}
@@ -1020,7 +1081,7 @@ export function Events() {
                         <BadgeCheck 
                           className="w-6 h-6" 
                           strokeWidth={2.5} 
-                          style={{ color: verifiedOnly ? '#FFFFFF' : 'var(--brand-primary)' }}
+                          style={{ color: verifiedOnly ? 'var(--text-inverse)' : 'var(--brand-primary)' }}
                         />
                       </div>
                       <div>
@@ -1037,7 +1098,7 @@ export function Events() {
                     <div 
                       className="relative w-12 h-7 rounded-full transition-all"
                       style={{
-                        backgroundColor: verifiedOnly ? 'var(--brand-primary)' : '#E5E7EB',
+                        backgroundColor: verifiedOnly ? 'var(--brand-primary)' : 'var(--color-neutral-border)',
                       }}
                     >
                       <motion.div
@@ -1073,11 +1134,11 @@ export function Events() {
                         <motion.button
                           key={date.id}
                           whileTap={{ scale: 0.98 }}
-                          onClick={() => setSelectedDate(date.id)}
+                          data-date-id={date.id} onClick={handleDateClickData}
                           className="w-full px-5 py-4 rounded-2xl text-left flex items-center justify-between transition-all"
                           style={{
                             backgroundColor: isActive ? 'var(--brand-primary)' : 'var(--card)',
-                            color: isActive ? '#FFFFFF' : 'var(--foreground)',
+                            color: isActive ? 'var(--text-inverse)' : 'var(--foreground)',
                             border: `1px solid ${isActive ? 'transparent' : 'var(--border-light)'}`,
                             boxShadow: isActive ? '0 4px 12px rgba(232, 90, 139, 0.3)' : 'none',
                           }}
@@ -1103,12 +1164,7 @@ export function Events() {
               >
                 <motion.button
                   whileTap={{ scale: 0.97 }}
-                  onClick={() => {
-                    setPriceRange([0, 2000]);
-                    setSelectedDate("all");
-                    setSpotsFilter("all");
-                    setVerifiedOnly(false);
-                  }}
+                  onClick={handleResetFilters}
                   className="flex-1 py-4 rounded-2xl font-bold text-sm transition-all"
                   style={{
                     backgroundColor: 'var(--card)',
@@ -1121,11 +1177,11 @@ export function Events() {
                 
                 <motion.button
                   whileTap={{ scale: 0.97 }}
-                  onClick={() => setShowFilters(false)}
+                  onClick={handleCloseFilters}
                   className="flex-[2] py-4 rounded-2xl font-black text-sm flex items-center justify-center gap-2 transition-all"
                   style={{
-                    background: 'linear-gradient(135deg, #E85A8B 0%, #F186AC 100%)',
-                    color: '#FFFFFF',
+                    background: 'var(--gradient-brand-button)',
+                    color: 'var(--text-inverse)',
                     boxShadow: '0 4px 16px rgba(232, 90, 139, 0.35)',
                   }}
                 >

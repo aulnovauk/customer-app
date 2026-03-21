@@ -104,7 +104,7 @@ export function ShopFilters({
               <div
                 className="w-10 h-10 rounded-full flex items-center justify-center"
                 style={{
-                  background: "linear-gradient(135deg, #E85A8B 0%, #F186AC 100%)",
+                  background: "linear-gradient(135deg, var(--brand-primary-500) 0%, var(--brand-primary-400) 100%)",
                   boxShadow: "0 4px 12px rgba(232, 90, 139, 0.3)",
                 }}
               >
@@ -186,7 +186,7 @@ export function ShopFilters({
                 onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
                 className="w-full h-2 rounded-full appearance-none cursor-pointer"
                 style={{
-                  background: `linear-gradient(to right, #E85A8B 0%, #E85A8B ${(priceRange[1] / 7000) * 100}%, #E5E7EB ${(priceRange[1] / 7000) * 100}%, #E5E7EB 100%)`,
+                  background: `linear-gradient(to right, var(--brand-primary-500) 0%, var(--brand-primary-500) ${(priceRange[1] / 7000) * 100}%, var(--color-neutral-border) ${(priceRange[1] / 7000) * 100}%, var(--color-neutral-border) 100%)`,
                 }}
               />
 
@@ -210,7 +210,7 @@ export function ShopFilters({
                           : "var(--card)",
                       color:
                         priceRange[0] === preset.range[0] && priceRange[1] === preset.range[1]
-                          ? "#FFFFFF"
+                          ? "var(--text-inverse)"
                           : "var(--muted-foreground)",
                       border: `1px solid ${
                         priceRange[0] === preset.range[0] && priceRange[1] === preset.range[1]
@@ -246,7 +246,7 @@ export function ShopFilters({
                     className="px-4 py-2.5 rounded-full text-sm font-bold transition-all flex items-center gap-2"
                     style={{
                       backgroundColor: isSelected ? "var(--brand-primary)" : "var(--card)",
-                      color: isSelected ? "#FFFFFF" : "var(--foreground)",
+                      color: isSelected ? "var(--text-inverse)" : "var(--foreground)",
                       border: `1px solid ${isSelected ? "transparent" : "var(--border-light)"}`,
                       boxShadow: isSelected ? "0 4px 12px rgba(232, 90, 139, 0.3)" : "none",
                     }}
@@ -279,7 +279,7 @@ export function ShopFilters({
                     className="p-4 rounded-2xl text-center transition-all"
                     style={{
                       backgroundColor: isActive ? "var(--brand-primary)" : "var(--card)",
-                      color: isActive ? "#FFFFFF" : "var(--foreground)",
+                      color: isActive ? "var(--text-inverse)" : "var(--foreground)",
                       border: `1px solid ${isActive ? "transparent" : "var(--border-light)"}`,
                       boxShadow: isActive ? "0 4px 12px rgba(232, 90, 139, 0.3)" : "none",
                     }}
@@ -311,7 +311,7 @@ export function ShopFilters({
                   className="w-12 h-12 rounded-xl flex items-center justify-center"
                   style={{
                     background: showOnlyInStock
-                      ? "linear-gradient(135deg, #E85A8B 0%, #F186AC 100%)"
+                      ? "linear-gradient(135deg, var(--brand-primary-500) 0%, var(--brand-primary-400) 100%)"
                       : "var(--background)",
                     border: showOnlyInStock ? "none" : "1px solid var(--border-light)",
                   }}
@@ -319,7 +319,7 @@ export function ShopFilters({
                   <Package
                     className="w-6 h-6"
                     strokeWidth={2.5}
-                    style={{ color: showOnlyInStock ? "#FFFFFF" : "var(--brand-primary)" }}
+                    style={{ color: showOnlyInStock ? "var(--text-inverse)" : "var(--brand-primary)" }}
                   />
                 </div>
                 <div>
@@ -336,7 +336,7 @@ export function ShopFilters({
               <div
                 className="relative w-12 h-7 rounded-full transition-all"
                 style={{
-                  backgroundColor: showOnlyInStock ? "var(--brand-primary)" : "#E5E7EB",
+                  backgroundColor: showOnlyInStock ? "var(--brand-primary)" : "var(--color-neutral-border)",
                 }}
               >
                 <motion.div
@@ -363,7 +363,7 @@ export function ShopFilters({
                   className="w-12 h-12 rounded-xl flex items-center justify-center"
                   style={{
                     background: showOnlyDiscounted
-                      ? "linear-gradient(135deg, #E85A8B 0%, #F186AC 100%)"
+                      ? "linear-gradient(135deg, var(--brand-primary-500) 0%, var(--brand-primary-400) 100%)"
                       : "var(--background)",
                     border: showOnlyDiscounted ? "none" : "1px solid var(--border-light)",
                   }}
@@ -371,7 +371,7 @@ export function ShopFilters({
                   <Tag
                     className="w-6 h-6"
                     strokeWidth={2.5}
-                    style={{ color: showOnlyDiscounted ? "#FFFFFF" : "var(--brand-primary)" }}
+                    style={{ color: showOnlyDiscounted ? "var(--text-inverse)" : "var(--brand-primary)" }}
                   />
                 </div>
                 <div>
@@ -388,7 +388,7 @@ export function ShopFilters({
               <div
                 className="relative w-12 h-7 rounded-full transition-all"
                 style={{
-                  backgroundColor: showOnlyDiscounted ? "var(--brand-primary)" : "#E5E7EB",
+                  backgroundColor: showOnlyDiscounted ? "var(--brand-primary)" : "var(--color-neutral-border)",
                 }}
               >
                 <motion.div
@@ -429,8 +429,8 @@ export function ShopFilters({
             onClick={onClose}
             className="flex-[2] py-4 rounded-2xl font-black text-sm flex items-center justify-center gap-2 transition-all"
             style={{
-              background: "linear-gradient(135deg, #E85A8B 0%, #F186AC 100%)",
-              color: "#FFFFFF",
+              background: "linear-gradient(135deg, var(--brand-primary-500) 0%, var(--brand-primary-400) 100%)",
+              color: "var(--text-inverse)",
               boxShadow: "0 4px 16px rgba(232, 90, 139, 0.35)",
             }}
           >

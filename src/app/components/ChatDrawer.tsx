@@ -160,7 +160,7 @@ export function ChatDrawer({ isOpen, onClose, salonName, salonImage, isOnline }:
                   <span
                     className="absolute top-0 right-0 w-4 h-4 rounded-full border-2"
                     style={{
-                      backgroundColor: '#10b981',
+                      backgroundColor: 'var(--color-success)',
                       borderColor: 'var(--background-primary)',
                     }}
                   />
@@ -169,7 +169,7 @@ export function ChatDrawer({ isOpen, onClose, salonName, salonImage, isOnline }:
                   <span
                     className="absolute -top-1 -left-1 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white"
                     style={{
-                      background: '#EF4444',
+                      background: 'var(--color-error)',
                     }}
                   >
                     {messages.filter(m => m.sender === 'salon').length}
@@ -245,7 +245,7 @@ export function ChatDrawer({ isOpen, onClose, salonName, salonImage, isOnline }:
                       <span
                         className="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-white"
                         style={{
-                          backgroundColor: '#10b981',
+                          backgroundColor: 'var(--color-success)',
                           boxShadow: '0 2px 8px rgba(16, 185, 129, 0.6)',
                         }}
                       />
@@ -325,7 +325,7 @@ export function ChatDrawer({ isOpen, onClose, salonName, salonImage, isOnline }:
                       <p
                         className="text-sm leading-relaxed"
                         style={{
-                          color: msg.sender === "user" ? '#ffffff' : 'var(--text-primary)',
+                          color: msg.sender === "user" ? 'var(--text-inverse)' : 'var(--text-primary)',
                         }}
                       >
                         {msg.text}
@@ -399,9 +399,9 @@ export function ChatDrawer({ isOpen, onClose, salonName, salonImage, isOnline }:
                     <Send 
                       className="w-5 h-5" 
                       style={{ 
-                        color: message.trim() ? '#ffffff' : 'var(--text-tertiary)',
+                        color: message.trim() ? 'var(--text-inverse)' : 'var(--text-tertiary)',
                       }} 
-                      fill={message.trim() ? '#ffffff' : 'none'}
+                      fill={message.trim() ? 'var(--text-inverse)' : 'none'}
                     />
                   </motion.button>
                 </div>

@@ -112,13 +112,91 @@
   --gradient-background: linear-gradient(135deg, #F9F7F6 0%, #FFFFFF 100%);
   --gradient-overlay: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%);
   
+  /* Brand button gradients */
+  --gradient-brand-button: linear-gradient(135deg, var(--brand-primary-500) 0%, var(--brand-primary-400) 100%);
+  --gradient-brand-button-cta: linear-gradient(135deg, var(--brand-primary-500), var(--brand-primary-dark));
+  
+  /* Brand button shadows */
+  --shadow-brand-button: 0 4px 12px rgba(232, 90, 139, 0.3);
+  --shadow-brand-button-lg: 0 8px 24px rgba(232, 90, 139, 0.4);
+  
   /* ===== ACCENT COLORS ===== */
   --accent-success: linear-gradient(135deg, #10B981 0%, #34D399 100%);
   --accent-error: linear-gradient(135deg, #EF4444 0%, #F87171 100%);
   --accent-warning: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
   --accent-info: #3B82F6;
   --accent-info-subtle: rgba(59, 130, 246, 0.1);
-  
+
+  /* ===== SEMANTIC STATUS COLORS (solid) ===== */
+  --color-success: #10B981;
+  --color-success-dark: #059669;
+  --color-success-light: #34D399;
+  --color-success-text: #065F46;
+  --color-warning: #F59E0B;
+  --color-warning-light: #FBBF24;
+  --color-error: #EF4444;
+  --color-error-light: #F87171;
+  --color-error-dark: #DC2626;
+  --color-error-text: #991B1B;
+
+  /* ===== NEUTRAL PALETTE ===== */
+  --color-neutral-border: #E5E7EB;
+  --color-neutral-dark: #1F2937;
+  --color-neutral-medium: #999999;
+  --color-foreground-inverse: #0F0F10;
+
+  /* ===== ACCENT ICON COLORS ===== */
+  --icon-indigo: #6366F1;
+  --icon-rose: #F43F5E;
+  --icon-amber: #F59E0B;
+  --icon-emerald: #10B981;
+  --icon-pink: #EC4899;
+  --icon-purple: #8B5CF6;
+  --icon-blue: #3B82F6;
+  --icon-gray: #6B7280;
+  --icon-teal: #14B8A6;
+  --icon-orange: #F97316;
+  --color-purple-vibrant: #A855F7;
+
+  /* ===== WARM GOLD TONES (decorative) ===== */
+  --color-gold-warm: #C8A96A;
+  --color-gold-pale: #E6D3A3;
+
+  /* ===== GOLD SCALE (SVG gradients, sheens) ===== */
+  --color-gold-300: #ffd98a;
+  --color-gold-500: #f4c157;
+  --color-gold-700: #daa520;
+
+  /* ===== ADDITIONAL GRADIENTS ===== */
+  --gradient-success: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+  --gradient-success-cta: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  --gradient-warning: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
+  --gradient-error: linear-gradient(135deg, #EF4444 0%, #F87171 100%);
+  --gradient-purple: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%);
+  --gradient-vibrant-pink: linear-gradient(135deg, #EC4899 0%, #F472B6 100%);
+  --gradient-slide-gold: linear-gradient(135deg, #C8A96A 0%, #E6D3A3 100%);
+  --gradient-slide-gold-90: linear-gradient(90deg, #C8A96A, #E6D3A3);
+  --gradient-slide-gold-90-rev: linear-gradient(90deg, #E6D3A3, #C8A96A);
+  --gradient-slide-amber: linear-gradient(135deg, #F59E0B 0%, #EAB308 100%);
+  --gradient-slide-luxury: linear-gradient(135deg, #E85A8B 0%, #F59E0B 100%);
+  --gradient-card-inverse: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%);
+  --gradient-brand-shimmer: linear-gradient(135deg, var(--brand-primary-500), var(--brand-primary-dark), var(--brand-primary-500));
+  --gradient-brand-purple: linear-gradient(135deg, #A855F7 0%, #D946A0 50%, #E85A8B 100%);
+  --gradient-brand-purple-reverse: linear-gradient(135deg, #E85A8B 0%, #D946A0 50%, #A855F7 100%);
+  --gradient-brand-sunset: linear-gradient(135deg, #EC4899 0%, #F43F5E 50%, #FB923C 100%);
+  --gradient-brand-rose: linear-gradient(135deg, #EC4899 0%, #F43F5E 100%);
+  --gradient-dark-surface: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  --gradient-warm-subtle: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+  --gradient-success-subtle: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
+  --gradient-error-subtle: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
+  --gradient-gold-sheen: linear-gradient(135deg, #ffd98a 0%, #f4c157 50%, #daa520 100%);
+  --gradient-platinum-sheen: linear-gradient(135deg, #e8e8e8 0%, #c0c0c0 50%, #a8a8a8 100%);
+  /* Payment provider brand colors (official brand assets) */
+  --payment-paytm: #00BAF2;
+  --payment-phonepe: #5F259F;
+  --payment-gpay: #4285F4;
+  --payment-amazon: #FF9900;
+
   /* ===== SURFACE VARIATIONS ===== */
   --card-elevated: rgba(255, 255, 255, 0.9);
   --primary-subtle: rgba(255, 27, 141, 0.1);
@@ -260,15 +338,15 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: var(--color-primary);
+  --primary: var(--brand-primary);
   --primary-foreground: #ffffff;
   --secondary: oklch(0.95 0.0058 264.53);
   --secondary-foreground: #030213;
   --muted: #FFFFFF;  /* Changed from #ececf0 to pure white */
   --muted-foreground: #717182;
-  --accent: var(--color-accent);
+  --accent: var(--accent-gold);
   --accent-foreground: #ffffff;
-  --destructive: var(--color-error);
+  --destructive: #EF4444;
   --destructive-foreground: #ffffff;
   --border: var(--border-medium);
   --input: transparent;
@@ -298,6 +376,7 @@
    Pure white Apple-like aesthetic
    ========================================== */
 .light {
+  --theme-preview-gradient: linear-gradient(135deg, #FF1B8D 0%, #FF6B9D 25%, #FFA8C5 50%, #FFD700 100%);
   /* Explicitly set light mode to pure white */
   --background-base: #FFFFFF;
   --background-elevated: #FFFFFF;
@@ -317,6 +396,7 @@
    Sophisticated dark luxury aesthetic
    ========================================== */
 .dark {
+  --theme-preview-gradient: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 20%, #FF1B8D 60%, #00F0FF 100%);
   /* Neutral colors for dark mode */
   --neutral-50: #0f0f0f;
   --neutral-100: #242424;
@@ -418,6 +498,7 @@
    Cozy warm aesthetic with amber/peach tones
    ========================================== */
 .warm {
+  --theme-preview-gradient: linear-gradient(135deg, #FF9A76 0%, #FFD700 100%);
   /* Warm-tinted neutral colors */
   --neutral-50: #fef9f5;
   --neutral-100: #fef3eb;
@@ -505,6 +586,7 @@
    Bold and rugged aesthetic with dark tones
    ========================================== */
 .masculine {
+  --theme-preview-gradient: linear-gradient(135deg, #001F3F 0%, #0047FF 30%, #0088FF 70%, #00F0FF 100%);
   /* Dark-tinted neutral colors */
   --neutral-50: #1a1a1a;
   --neutral-100: #242424;
@@ -623,6 +705,7 @@
    Balanced and neutral aesthetic with pastel tones
    ========================================== */
 .unisex {
+  --theme-preview-gradient: linear-gradient(135deg, #00CFC1 0%, #20E3B2 33%, #FF9A76 66%, #FF6B6B 100%);
   /* Pastel neutral colors */
   --neutral-50: #fef9f5;
   --neutral-100: #fef3eb;
@@ -718,6 +801,7 @@
    Modern and vibrant aesthetic with neon tones
    ========================================== */
 .genz {
+  --theme-preview-gradient: linear-gradient(135deg, #B026FF 0%, #FF006E 25%, #FF1B8D 50%, #00F0FF 75%, #00FFFF 100%);
   /* Neon-tinted neutral colors */
   --neutral-50: #0f0f0f;
   --neutral-100: #242424;
@@ -813,6 +897,7 @@
    Elegant and luxurious aesthetic with gold tones
    ========================================== */
 .luxe {
+  --theme-preview-gradient: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 25%, #8B7500 75%, #FFD700 100%);
   /* Gold-tinted neutral colors */
   --neutral-50: #fef9f5;
   --neutral-100: #fef3eb;
@@ -908,6 +993,7 @@
    Fiery orange, magenta & violet
    ========================================== */
 .sunset {
+  --theme-preview-gradient: linear-gradient(135deg, #FF4500 0%, #FF6B35 20%, #FF006E 40%, #B026FF 70%, #7B2CBF 100%);
   --brand-primary: #FF4500;
   --brand-primary-light: #FF6B35;
   --brand-primary-lighter: #FF8C69;
@@ -934,6 +1020,7 @@
    Deep navy to bright aqua
    ========================================== */
 .ocean {
+  --theme-preview-gradient: linear-gradient(135deg, #001529 0%, #003B73 25%, #0074D9 50%, #00D4FF 75%, #00FFF5 100%);
   --brand-primary: #003B73;
   --brand-primary-light: #0074D9;
   --brand-primary-lighter: #00D4FF;
@@ -960,6 +1047,7 @@
    Rich purple & rose gold
    ========================================== */
 .royal {
+  --theme-preview-gradient: linear-gradient(135deg, #4A0072 0%, #6B0FB8 30%, #9B30FF 60%, #E6A4B4 85%, #FFD700 100%);
   --brand-primary: #6B0FB8;
   --brand-primary-light: #9B30FF;
   --brand-primary-lighter: #C77DFF;
@@ -986,6 +1074,7 @@
    Fresh mint & electric lime
    ========================================== */
 .mint {
+  --theme-preview-gradient: linear-gradient(135deg, #00C9A7 0%, #00FF9F 40%, #7FFF00 70%, #CCFF00 100%);
   /* Mint brand colors - Fresh mint & electric lime */
   --brand-primary: #00FF9F;
   --brand-primary-light: #33FFAD;
@@ -1100,6 +1189,7 @@
    Cherry blossom & peach
    ========================================== */
 .sakura {
+  --theme-preview-gradient: linear-gradient(135deg, #FF1493 0%, #FF69B4 30%, #FFB6C1 60%, #FFAB91 85%, #FFE4B5 100%);
   /* Sakura brand colors - Cherry blossom & peach */
   --brand-primary: #FF69B4;
   --brand-primary-light: #FF85C8;
@@ -1214,6 +1304,7 @@
    Neon green & hot magenta
    ========================================== */
 .cyber {
+  --theme-preview-gradient: linear-gradient(135deg, #0D1117 0%, #39FF14 35%, #00FFFF 50%, #FF00FF 75%, #FF1493 100%);
   /* Cyberpunk brand colors - Neon green & hot magenta */
   --brand-primary: #39FF14;
   --brand-primary-light: #66FF47;
@@ -1434,4 +1525,22 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none; /* Safari and Chrome */
   }
+
+  /* ===== SAFE AREA INSETS (iPhone X+ notch / Dynamic Island) ===== */
+  :root {
+    --safe-area-top: env(safe-area-inset-top, 0px);
+    --safe-area-right: env(safe-area-inset-right, 0px);
+    --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-area-left: env(safe-area-inset-left, 0px);
+  }
+
+  .safe-top    { padding-top:    env(safe-area-inset-top, 0px); }
+  .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .safe-left   { padding-left:   env(safe-area-inset-left, 0px); }
+  .safe-right  { padding-right:  env(safe-area-inset-right, 0px); }
+
+  /* pb-safe: bottom padding + 32px base for sticky footers */
+  .pb-safe { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 2rem); }
+  /* pt-safe: top padding for screens behind the status bar */
+  .pt-safe { padding-top: calc(env(safe-area-inset-top, 0px) + 3.5rem); }
 }

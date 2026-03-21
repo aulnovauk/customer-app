@@ -4,6 +4,7 @@ import { BackgroundPattern } from "./BackgroundPattern";
 import { SparkleEffect } from "./SparkleEffect";
 import { HolographicOverlay } from "./HolographicOverlay";
 import { motion } from "motion/react";
+import { DEFAULT_ORB_COLORS, DEFAULT_SPARKLE_COLOR } from "../constants/animationColors";
 
 export function BackgroundShowcase() {
   const [showOrbs, setShowOrbs] = useState(true);
@@ -144,12 +145,12 @@ export function BackgroundShowcase() {
       {/* Active Effects */}
       {showOrbs && (
         <FloatingOrbs
-          colors={["#FFE8F5", "#FFE8D5", "#E0F0FF", "#FFF0E0"]}
+          colors={DEFAULT_ORB_COLORS}
           intensity="medium"
         />
       )}
       {showPattern && <BackgroundPattern pattern={pattern} />}
-      {showSparkles && <SparkleEffect count={20} color="#FFE8F5" />}
+      {showSparkles && <SparkleEffect count={20} color={DEFAULT_SPARKLE_COLOR} />}
       {showHolographic && <HolographicOverlay enabled intensity={0.08} />}
     </div>
   );

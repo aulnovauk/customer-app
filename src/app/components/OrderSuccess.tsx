@@ -46,7 +46,7 @@ export function OrderSuccess({ isOpen = true, onClose, orderId }: OrderSuccessPr
                 className="absolute w-2 h-2 rounded-full"
                 style={{
                   left: `${Math.random() * 100}%`,
-                  backgroundColor: ["#E85A8B", "#F186AC", "#10B981", "#F59E0B", "#6366F1"][
+                  backgroundColor: ["var(--brand-primary-500)", "var(--brand-primary-400)", "var(--color-success)", "var(--color-warning)", "var(--icon-indigo)"][
                     Math.floor(Math.random() * 5)
                   ],
                 }}
@@ -61,7 +61,7 @@ export function OrderSuccess({ isOpen = true, onClose, orderId }: OrderSuccessPr
             transition={{ delay: 0.2, type: "spring", damping: 12, stiffness: 200 }}
             className="relative z-10 w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center"
             style={{
-              background: "linear-gradient(135deg, #10B981 0%, #059669 100%)",
+              background: "var(--gradient-success-cta)",
               boxShadow: "0 8px 32px rgba(16, 185, 129, 0.4)",
             }}
           >
@@ -118,7 +118,7 @@ export function OrderSuccess({ isOpen = true, onClose, orderId }: OrderSuccessPr
               <div
                 className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
                 style={{
-                  background: "linear-gradient(135deg, #E85A8B 0%, #F186AC 100%)",
+                  background: "var(--gradient-brand-button)",
                 }}
               >
                 <Package className="w-6 h-6 text-white" strokeWidth={2.5} />
@@ -146,8 +146,8 @@ export function OrderSuccess({ isOpen = true, onClose, orderId }: OrderSuccessPr
               onClick={onClose}
               className="w-full py-4 rounded-2xl font-black text-base transition-all"
               style={{
-                background: "linear-gradient(135deg, #E85A8B 0%, #F186AC 100%)",
-                color: "#FFFFFF",
+                background: "var(--gradient-brand-button)",
+                color: "var(--text-inverse)",
                 boxShadow: "0 4px 16px rgba(232, 90, 139, 0.35)",
               }}
             >

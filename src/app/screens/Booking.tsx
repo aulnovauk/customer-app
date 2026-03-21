@@ -572,7 +572,7 @@ export function Booking() {
                                   width: '8px',
                                   height: '8px',
                                   borderRadius: '50%',
-                                  background: 'linear-gradient(135deg, #10b981, #059669)',
+                                  background: 'var(--gradient-success-cta)',
                                   boxShadow: '0 2px 8px rgba(16, 185, 129, 0.4)',
                                   border: '2px solid var(--background-elevated)',
                                 }}
@@ -584,7 +584,7 @@ export function Booking() {
                               className="text-xs font-semibold uppercase"
                               style={{
                                 color: isSelected 
-                                  ? '#FFFFFF' 
+                                  ? 'var(--text-inverse)' 
                                   : 'var(--text-secondary)',
                               }}
                             >
@@ -596,7 +596,7 @@ export function Booking() {
                               className="text-2xl font-black"
                               style={{
                                 color: isSelected 
-                                  ? '#FFFFFF' 
+                                  ? 'var(--text-inverse)' 
                                   : 'var(--foreground)',
                                 letterSpacing: '-0.02em',
                               }}
@@ -647,10 +647,10 @@ export function Booking() {
                               padding: '12px 16px',
                               borderRadius: '999px',
                               background: isSelected
-                                ? 'linear-gradient(135deg, #C8A96A, #E6D3A3)'
+                                ? 'var(--gradient-slide-gold)'
                                 : 'var(--background-elevated)',
                               border: isSelected ? 'none' : '2px solid var(--border-light)',
-                              color: isSelected ? '#FFFFFF' : 'var(--foreground)',
+                              color: isSelected ? 'var(--text-inverse)' : 'var(--foreground)',
                               boxShadow: isSelected
                                 ? '0 6px 20px -4px rgba(200, 169, 106, 0.4), 0 2px 8px -2px rgba(230, 211, 163, 0.3)'
                                 : '0 2px 6px rgba(0, 0, 0, 0.04)',
@@ -691,7 +691,7 @@ export function Booking() {
                               color: isDisabled
                                 ? 'var(--muted-foreground)'
                                 : isSelected
-                                ? '#FFFFFF'
+                                ? 'var(--text-inverse)'
                                 : 'var(--foreground)',
                               boxShadow: isDisabled
                                 ? 'none'
@@ -735,7 +735,7 @@ export function Booking() {
                                   width: '6px',
                                   height: '6px',
                                   borderRadius: '50%',
-                                  background: slot.slots === 1 ? '#f59e0b' : '#10b981',
+                                  background: slot.slots === 1 ? 'var(--color-warning)' : 'var(--color-success)',
                                   border: '2px solid var(--background-elevated)',
                                   boxShadow: `0 2px 6px ${slot.slots === 1 ? 'rgba(245, 158, 11, 0.4)' : 'rgba(16, 185, 129, 0.4)'}`,
                                 }}
@@ -763,7 +763,7 @@ export function Booking() {
                   <div 
                     className="rounded-3xl p-6 mb-6 transition-colors duration-300 relative overflow-hidden"
                     style={{ 
-                      background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
+                      background: 'var(--gradient-dark-surface)',
                       boxShadow: '0 8px 32px -4px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
                     }}
                   >
@@ -789,7 +789,7 @@ export function Booking() {
                           border: '1px solid rgba(251, 191, 36, 0.3)',
                         }}
                       >
-                        <span className="text-sm font-black" style={{ color: '#fbbf24' }}>
+                        <span className="text-sm font-black" style={{ color: 'var(--color-warning-light)' }}>
                           {currentStylist?.rating} ★
                         </span>
                       </div>
@@ -800,7 +800,7 @@ export function Booking() {
                         <span className="text-sm font-semibold" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
                           Stylist
                         </span>
-                        <span className="font-bold text-base text-right max-w-[60%]" style={{ color: '#FFFFFF' }}>
+                        <span className="font-bold text-base text-right max-w-[60%]" style={{ color: 'var(--text-inverse)' }}>
                           {currentStylist?.name}
                         </span>
                       </div>
@@ -811,7 +811,7 @@ export function Booking() {
                         </span>
                         <div className="text-right max-w-[60%]">
                           {selectedServiceDetails.map((service, idx) => (
-                            <div key={idx} className="font-bold text-sm mb-1" style={{ color: '#FFFFFF' }}>
+                            <div key={idx} className="font-bold text-sm mb-1" style={{ color: 'var(--text-inverse)' }}>
                               {service.name}
                             </div>
                           ))}
@@ -822,7 +822,7 @@ export function Booking() {
                         <span className="text-sm font-semibold" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
                           Date & Time
                         </span>
-                        <span className="font-bold text-base" style={{ color: '#FFFFFF' }}>
+                        <span className="font-bold text-base" style={{ color: 'var(--text-inverse)' }}>
                           Mar {selectedDate}, {selectedTime}
                         </span>
                       </div>
@@ -831,7 +831,7 @@ export function Booking() {
                         <span className="text-sm font-semibold" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
                           Duration
                         </span>
-                        <span className="font-bold text-base" style={{ color: '#FFFFFF' }}>
+                        <span className="font-bold text-base" style={{ color: 'var(--text-inverse)' }}>
                           {calculateTotalDuration()}
                         </span>
                       </div>
@@ -840,7 +840,7 @@ export function Booking() {
                       <div className="h-px" style={{ background: 'rgba(255, 255, 255, 0.1)' }} />
 
                       <div className="flex justify-between items-center pt-2">
-                        <span className="text-base font-black" style={{ color: '#FFFFFF' }}>
+                        <span className="text-base font-black" style={{ color: 'var(--text-inverse)' }}>
                           Total Price
                         </span>
                         <span className="text-2xl font-black" style={{ 
@@ -909,9 +909,9 @@ export function Booking() {
                 height: '52px',
                 borderRadius: '999px',
                 background: canContinue()
-                  ? 'linear-gradient(135deg, #E85A8B 0%, #D946A0 50%, #E85A8B 100%)'
+                  ? 'var(--gradient-brand-shimmer)'
                   : 'var(--muted)',
-                color: canContinue() ? '#FFFFFF' : 'var(--muted-foreground)',
+                color: canContinue() ? 'var(--text-inverse)' : 'var(--muted-foreground)',
                 boxShadow: canContinue()
                   ? '0 12px 32px -8px rgba(232, 90, 139, 0.5), 0 4px 12px -4px rgba(217, 70, 160, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
                   : '0 2px 8px rgba(0, 0, 0, 0.04)',

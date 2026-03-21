@@ -184,8 +184,8 @@ export function MapView() {
           <svg className="absolute inset-0 w-full h-full opacity-20" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <pattern id="road" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
-                <path d="M 0 50 L 100 50" stroke="#999" strokeWidth="1" fill="none"/>
-                <path d="M 50 0 L 50 100" stroke="#999" strokeWidth="1" fill="none"/>
+                <path d="M 0 50 L 100 50" style={{ stroke: "var(--color-neutral-medium)" }} strokeWidth="1" fill="none"/>
+                <path d="M 50 0 L 50 100" style={{ stroke: "var(--color-neutral-medium)" }} strokeWidth="1" fill="none"/>
               </pattern>
             </defs>
             <rect width="100%" height="100%" fill="url(#road)" />
@@ -210,7 +210,7 @@ export function MapView() {
                   <svg width="24" height="32" viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M12 0C5.37 0 0 5.37 0 12c0 9 12 20 12 20s12-11 12-20c0-6.63-5.37-12-12-12z"
-                      fill="#1F2937"
+                      style={{ fill: "var(--color-neutral-dark)" }}
                     />
                     <circle cx="12" cy="12" r="6" fill="white" />
                   </svg>
@@ -339,13 +339,13 @@ export function MapView() {
                       <div 
                         className="w-1.5 h-1.5 rounded-full"
                         style={{ 
-                          backgroundColor: salon.isOpen ? '#10B981' : '#EF4444',
+                          backgroundColor: salon.isOpen ? 'var(--color-success)' : 'var(--color-error)',
                           boxShadow: salon.isOpen ? '0 0 6px rgba(16, 185, 129, 0.6)' : '0 0 6px rgba(239, 68, 68, 0.6)'
                         }}
                       />
                       <span 
                         className="text-xs font-bold"
-                        style={{ color: salon.isOpen ? '#10B981' : '#EF4444' }}
+                        style={{ color: salon.isOpen ? 'var(--color-success)' : 'var(--color-error)' }}
                       >
                         {salon.isOpen ? 'Open' : 'Closed'}
                       </span>
@@ -368,9 +368,9 @@ export function MapView() {
                             className="flex-shrink-0 px-2 py-0.5 rounded-md text-[11px] font-bold transition-all duration-200"
                             style={{
                               background: salon.isOpen 
-                                ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)'
-                                : '#E5E7EB',
-                              color: salon.isOpen ? '#FFFFFF' : '#9CA3AF',
+                                ? 'var(--gradient-success-cta)'
+                                : 'var(--color-neutral-border)',
+                              color: salon.isOpen ? 'var(--text-inverse)' : 'var(--muted-foreground)',
                               boxShadow: salon.isOpen 
                                 ? '0 1px 6px rgba(16, 185, 129, 0.25)'
                                 : '0 1px 3px rgba(0, 0, 0, 0.08)',

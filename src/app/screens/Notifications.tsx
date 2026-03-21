@@ -82,7 +82,7 @@ export function Notifications() {
       {/* Header */}
       <div 
         className="border-b border-white/40 sticky top-0 z-10 backdrop-blur-md"
-        style={{ background: "linear-gradient(160deg, #fff0f3 0%, #fff8f0 60%, #f0f4ff 100%)" }}
+        style={{ background: "var(--gradient-background-pastel)" }}
       >
         <div className="px-5 pt-12 pb-4 flex items-center justify-between">
           <div className="flex items-center gap-4">

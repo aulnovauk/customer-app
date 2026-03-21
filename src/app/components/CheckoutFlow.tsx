@@ -118,10 +118,10 @@ export function CheckoutFlow({
   ];
 
   const wallets = [
-    { id: "paytm" as WalletType, label: "Paytm", color: "#00BAF2" },
-    { id: "phonepe" as WalletType, label: "PhonePe", color: "#5F259F" },
-    { id: "gpay" as WalletType, label: "Google Pay", color: "#4285F4" },
-    { id: "amazon" as WalletType, label: "Amazon Pay", color: "#FF9900" },
+    { id: "paytm" as WalletType, label: "Paytm", color: "var(--payment-paytm)" },
+    { id: "phonepe" as WalletType, label: "PhonePe", color: "var(--payment-phonepe)" },
+    { id: "gpay" as WalletType, label: "Google Pay", color: "var(--payment-gpay)" },
+    { id: "amazon" as WalletType, label: "Amazon Pay", color: "var(--payment-amazon)" },
   ];
 
   const handleNext = () => {
@@ -266,9 +266,9 @@ export function CheckoutFlow({
                             className="w-12 h-12 rounded-full flex items-center justify-center"
                             style={{
                               background: isCompleted
-                                ? "linear-gradient(135deg, #10B981 0%, #059669 100%)"
+                                ? "var(--gradient-success-cta)"
                                 : isActive
-                                ? "linear-gradient(135deg, #E85A8B 0%, #F186AC 100%)"
+                                ? "var(--gradient-brand-button)"
                                 : "var(--muted)",
                               boxShadow: isActive || isCompleted
                                 ? `0 4px 12px ${isCompleted ? "rgba(16, 185, 129, 0.3)" : "rgba(232, 90, 139, 0.3)"}`
@@ -280,7 +280,7 @@ export function CheckoutFlow({
                             ) : (
                               <StepIcon
                                 className="w-5 h-5"
-                                style={{ color: isActive ? "#FFFFFF" : "var(--muted-foreground)" }}
+                                style={{ color: isActive ? "var(--text-inverse)" : "var(--muted-foreground)" }}
                                 strokeWidth={2.5}
                               />
                             )}
@@ -298,7 +298,7 @@ export function CheckoutFlow({
                           <div
                             className="flex-1 h-1 mx-2 rounded-full"
                             style={{
-                              backgroundColor: isCompleted ? "#10B981" : "var(--border-light)",
+                              backgroundColor: isCompleted ? "var(--color-success)" : "var(--border-light)",
                             }}
                           />
                         )}
@@ -509,7 +509,7 @@ export function CheckoutFlow({
                                   className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
                                   style={{
                                     background: isSelected
-                                      ? "linear-gradient(135deg, #E85A8B 0%, #F186AC 100%)"
+                                      ? "var(--gradient-brand-button)"
                                       : "var(--background)",
                                     border: isSelected ? "none" : "1px solid var(--border-light)",
                                   }}
@@ -517,7 +517,7 @@ export function CheckoutFlow({
                                   <MethodIcon
                                     className="w-6 h-6"
                                     strokeWidth={2.5}
-                                    style={{ color: isSelected ? "#FFFFFF" : "var(--brand-primary)" }}
+                                    style={{ color: isSelected ? "var(--text-inverse)" : "var(--brand-primary)" }}
                                   />
                                 </div>
                                 <div className="flex-1">
@@ -885,9 +885,9 @@ export function CheckoutFlow({
                   className="w-full py-4 rounded-2xl font-black text-base flex items-center justify-center gap-2 transition-all"
                   style={{
                     background: isStepValid() && !isProcessing
-                      ? "linear-gradient(135deg, #E85A8B 0%, #F186AC 100%)"
+                      ? "var(--gradient-brand-button)"
                       : "var(--muted)",
-                    color: isStepValid() && !isProcessing ? "#FFFFFF" : "var(--muted-foreground)",
+                    color: isStepValid() && !isProcessing ? "var(--text-inverse)" : "var(--muted-foreground)",
                     boxShadow: isStepValid() && !isProcessing ? "0 4px 16px rgba(232, 90, 139, 0.35)" : "none",
                     opacity: isStepValid() && !isProcessing ? 1 : 0.6,
                     cursor: isStepValid() && !isProcessing ? "pointer" : "not-allowed",

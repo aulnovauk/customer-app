@@ -255,13 +255,13 @@ export function Search() {
                     <div 
                       className="w-1.5 h-1.5 rounded-full"
                       style={{ 
-                        backgroundColor: salon.isOpen ? '#10B981' : '#EF4444',
+                        backgroundColor: salon.isOpen ? 'var(--color-success)' : 'var(--color-error)',
                         boxShadow: salon.isOpen ? '0 0 6px rgba(16, 185, 129, 0.6)' : '0 0 6px rgba(239, 68, 68, 0.6)'
                       }}
                     />
                     <span 
                       className="text-xs font-bold"
-                      style={{ color: salon.isOpen ? '#10B981' : '#EF4444' }}
+                      style={{ color: salon.isOpen ? 'var(--color-success)' : 'var(--color-error)' }}
                     >
                       {salon.isOpen ? 'Open' : 'Closed'}
                     </span>
@@ -284,9 +284,9 @@ export function Search() {
                           className="flex-shrink-0 px-2 py-0.5 rounded-md text-[11px] font-bold transition-all duration-200"
                           style={{
                             background: salon.isOpen 
-                              ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)'
-                              : '#F3F4F6',
-                            color: salon.isOpen ? '#FFFFFF' : '#9CA3AF',
+                              ? 'var(--gradient-success-cta)'
+                              : 'var(--color-neutral-border)',
+                            color: salon.isOpen ? 'var(--text-inverse)' : 'var(--muted-foreground)',
                             boxShadow: salon.isOpen 
                               ? '0 1px 6px rgba(16, 185, 129, 0.25)'
                               : '0 1px 3px rgba(0, 0, 0, 0.08)',

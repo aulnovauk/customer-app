@@ -11,7 +11,7 @@ const slides = [
     title: "Your perfect\nbeauty salon",
     subtitle: "Find top-rated salons & stylists near you with real-time availability",
     icon: MapPin,
-    gradient: "linear-gradient(135deg, #E85A8B, #D946A0)",
+    gradient: "var(--gradient-brand-button-cta)",
   },
   {
     image: "https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3b21hbiUyMGhhaXJzdHlsaXN0JTIwYm9va2luZyUyMGFwcG9pbnRtZW50fGVufDF8fHx8MTczOTkyNzQ4MHww&ixlib=rb-4.1.0&q=80&w=1080",
@@ -19,7 +19,7 @@ const slides = [
     title: "One tap\nappointments",
     subtitle: "Schedule your beauty routine with ease. Choose your stylist, date & time",
     icon: Calendar,
-    gradient: "linear-gradient(135deg, #C8A96A, #E6D3A3)",
+    gradient: "var(--gradient-slide-gold)",
   },
   {
     image: "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3b21hbiUyMGJlYXV0eSUyMHRyZWF0bWVudCUyMHJlbGF4aW5nfGVufDF8fHx8MTczOTkyNzQ4MHww&ixlib=rb-4.1.0&q=80&w=1080",
@@ -27,7 +27,7 @@ const slides = [
     title: "Luxury beauty\nservices",
     subtitle: "Access exclusive treatments, expert stylists & premium care",
     icon: Star,
-    gradient: "linear-gradient(135deg, #F59E0B, #EAB308)",
+    gradient: "var(--gradient-slide-amber)",
   },
   {
     image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiZWF1dHklMjBzYWxvbiUyMHdvbWFuJTIwc21pbGluZ3xlbnwxfHx8fDE3Mzk5Mjc0ODB8MA&ixlib=rb-4.1.0&q=80&w=1080",
@@ -35,7 +35,7 @@ const slides = [
     title: "Your beauty\njourney begins",
     subtitle: "Join thousands of happy customers discovering their perfect look",
     icon: Sparkles,
-    gradient: "linear-gradient(135deg, #E85A8B, #F59E0B)",
+    gradient: "var(--gradient-slide-luxury)",
   },
 ];
 
@@ -62,7 +62,7 @@ export function Onboarding() {
     navigate("/app");
   };
 
-  const handleDragEnd = (event: any, info: PanInfo) => {
+  const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     const swipeThreshold = 50;
     
     if (info.offset.x > swipeThreshold && current > 0) {
@@ -286,7 +286,7 @@ export function Onboarding() {
                     style={{
                       background: i === current 
                         ? slides[current].gradient 
-                        : '#FFFFFF',
+                        : 'var(--text-inverse)',
                       boxShadow: i === current 
                         ? '0 4px 16px rgba(232, 90, 139, 0.5)' 
                         : 'none',
@@ -304,7 +304,7 @@ export function Onboarding() {
               className="relative overflow-hidden font-black transition-all duration-300"
               style={{
                 background: isLast 
-                  ? 'linear-gradient(135deg, #E85A8B, #D946A0, #E85A8B)'
+                  ? 'var(--gradient-brand-shimmer)'
                   : slides[current].gradient,
                 padding: isLast ? '16px 32px' : '0',
                 width: isLast ? 'auto' : '64px',

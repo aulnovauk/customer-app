@@ -42,13 +42,13 @@ export function Splash() {
     <div 
       className="h-screen flex items-center justify-center relative overflow-hidden"
       style={{
-        background: 'linear-gradient(135deg, #E85A8B 0%, #D946A0 50%, #A855F7 100%)',
+        background: 'var(--gradient-brand-purple-reverse)',
       }}
     >
       {/* Animated gradient orbs */}
       <motion.div
         className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full opacity-40 blur-3xl"
-        style={{ background: '#F59E0B' }}
+        style={{ background: 'var(--color-warning)' }}
         animate={{
           scale: [1, 1.2, 1],
           x: [0, 30, 0],
@@ -62,7 +62,7 @@ export function Splash() {
       />
       <motion.div
         className="absolute bottom-1/4 right-1/4 w-72 h-72 rounded-full opacity-30 blur-3xl"
-        style={{ background: '#C8A96A' }}
+        style={{ background: 'var(--color-gold-warm)' }}
         animate={{
           scale: [1, 1.3, 1],
           x: [0, -40, 0],
@@ -126,7 +126,7 @@ export function Splash() {
                 className="w-14 h-14" 
                 strokeWidth={2}
                 style={{
-                  background: 'linear-gradient(135deg, #E85A8B, #D946A0)',
+                  background: 'var(--gradient-brand-shimmer)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                 }}

@@ -38,7 +38,7 @@ export function ChatButton({ isOnline = true, onClick }: ChatButtonProps) {
           <motion.span
             className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full"
             style={{
-              backgroundColor: '#10b981',
+              backgroundColor: 'var(--color-success)',
               opacity: 0.3,
             }}
             animate={{
@@ -56,7 +56,7 @@ export function ChatButton({ isOnline = true, onClick }: ChatButtonProps) {
           <span
             className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2"
             style={{
-              backgroundColor: '#10b981',
+              backgroundColor: 'var(--color-success)',
               borderColor: 'rgba(255, 255, 255, 0.95)',
             }}
           />
@@ -68,7 +68,7 @@ export function ChatButton({ isOnline = true, onClick }: ChatButtonProps) {
         <span
           className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2"
           style={{
-            backgroundColor: '#94a3b8',
+            backgroundColor: 'var(--muted-foreground)',
             borderColor: 'rgba(255, 255, 255, 0.95)',
           }}
         />

@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import { useMemo } from "react";
+import { DEFAULT_SPARKLE_COLOR } from "../constants/animationColors";
 
 interface Sparkle {
   id: number;
@@ -19,7 +20,7 @@ interface SparkleEffectProps {
 export function SparkleEffect({
   count = 15,
   enabled = true,
-  color = "#ffffff",
+  color = DEFAULT_SPARKLE_COLOR,
 }: SparkleEffectProps) {
   const sparkles: Sparkle[] = useMemo(() => {
     return Array.from({ length: count }, (_, i) => ({

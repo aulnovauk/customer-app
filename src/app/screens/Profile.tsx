@@ -16,6 +16,7 @@ import {
   Check,
   RotateCcw,
 } from "lucide-react";
+import type { MenuItem } from "../../types";
 import { motion, AnimatePresence } from "motion/react";
 import { useNavigate } from "react-router";
 import { useState, useRef } from "react";
@@ -25,22 +26,21 @@ import type { ThemeMode } from "../context/ThemeContext";
 const themesList: {
   id: ThemeMode;
   name: string;
-  gradient: string;
   emoji: string;
 }[] = [
-  { id: "light", name: "Light", gradient: "linear-gradient(135deg, #FF1B8D 0%, #FF6B9D 25%, #FFA8C5 50%, #FFD700 100%)", emoji: "✨" },
-  { id: "dark", name: "Dark", gradient: "linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 20%, #FF1B8D 60%, #00F0FF 100%)", emoji: "🌙" },
-  { id: "warm", name: "Warm", gradient: "linear-gradient(135deg, #FF9A76 0%, #FFD700 100%)", emoji: "🌅" },
-  { id: "masculine", name: "Electric Blue", gradient: "linear-gradient(135deg, #001F3F 0%, #0047FF 30%, #0088FF 70%, #00F0FF 100%)", emoji: "⚡" },
-  { id: "unisex", name: "Tropical", gradient: "linear-gradient(135deg, #00CFC1 0%, #20E3B2 33%, #FF9A76 66%, #FF6B6B 100%)", emoji: "🌴" },
-  { id: "genz", name: "Neon Dreams", gradient: "linear-gradient(135deg, #B026FF 0%, #FF006E 25%, #FF1B8D 50%, #00F0FF 75%, #00FFFF 100%)", emoji: "🎮" },
-  { id: "luxe", name: "Black Gold", gradient: "linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 25%, #8B7500 75%, #FFD700 100%)", emoji: "👑" },
-  { id: "sunset", name: "Sunset Blaze", gradient: "linear-gradient(135deg, #FF4500 0%, #FF6B35 20%, #FF006E 40%, #B026FF 70%, #7B2CBF 100%)", emoji: "🔥" },
-  { id: "ocean", name: "Ocean Depths", gradient: "linear-gradient(135deg, #001529 0%, #003B73 25%, #0074D9 50%, #00D4FF 75%, #00FFF5 100%)", emoji: "🌊" },
-  { id: "royal", name: "Royal", gradient: "linear-gradient(135deg, #4A0072 0%, #6B0FB8 30%, #9B30FF 60%, #E6A4B4 85%, #FFD700 100%)", emoji: "💜" },
-  { id: "mint", name: "Mint Fresh", gradient: "linear-gradient(135deg, #00C9A7 0%, #00FF9F 40%, #7FFF00 70%, #CCFF00 100%)", emoji: "🍃" },
-  { id: "sakura", name: "Sakura", gradient: "linear-gradient(135deg, #FF1493 0%, #FF69B4 30%, #FFB6C1 60%, #FFAB91 85%, #FFE4B5 100%)", emoji: "🌸" },
-  { id: "cyber", name: "Cyberpunk", gradient: "linear-gradient(135deg, #0D1117 0%, #39FF14 35%, #00FFFF 50%, #FF00FF 75%, #FF1493 100%)", emoji: "🤖" },
+  { id: "light", name: "Light", emoji: "✨" },
+  { id: "dark", name: "Dark", emoji: "🌙" },
+  { id: "warm", name: "Warm", emoji: "🌅" },
+  { id: "masculine", name: "Electric Blue", emoji: "⚡" },
+  { id: "unisex", name: "Tropical", emoji: "🌴" },
+  { id: "genz", name: "Neon Dreams", emoji: "🎮" },
+  { id: "luxe", name: "Black Gold", emoji: "👑" },
+  { id: "sunset", name: "Sunset Blaze", emoji: "🔥" },
+  { id: "ocean", name: "Ocean Depths", emoji: "🌊" },
+  { id: "royal", name: "Royal", emoji: "💜" },
+  { id: "mint", name: "Mint Fresh", emoji: "🍃" },
+  { id: "sakura", name: "Sakura", emoji: "🌸" },
+  { id: "cyber", name: "Cyberpunk", emoji: "🤖" },
 ];
 
 const stats = [
@@ -49,30 +49,30 @@ const stats = [
   { label: "Points", value: "250" },
 ];
 
-const menuSections = [
+const menuSections: { title: string; items: MenuItem[] }[] = [
   {
     title: "Account",
     items: [
-      { icon: History, label: "Booking history", color: "#6366F1", path: "/app/bookings" },
-      { icon: Heart, label: "Saved venues", color: "#F43F5E", path: "/app/favorites" },
-      { icon: Award, label: "Loyalty rewards", color: "#F59E0B", badge: "250 pts", path: null },
-      { icon: CreditCard, label: "Payment methods", color: "#10B981", path: null },
+      { icon: History, label: "Booking history", color: "var(--icon-indigo)", path: "/app/bookings" },
+      { icon: Heart, label: "Saved venues", color: "var(--icon-rose)", path: "/app/favorites" },
+      { icon: Award, label: "Loyalty rewards", color: "var(--icon-amber)", badge: "250 pts", path: null },
+      { icon: CreditCard, label: "Payment methods", color: "var(--icon-emerald)", path: null },
     ],
   },
   {
     title: "Preferences",
     items: [
-      { icon: Palette, label: "Theme Gallery", color: "#EC4899", badge: "NEW", path: "/themes" },
-      { icon: Bell, label: "Notifications", color: "#8B5CF6", path: null },
-      { icon: Shield, label: "Privacy & Security", color: "#3B82F6", path: null },
-      { icon: Settings, label: "App settings", color: "#6B7280", path: null },
+      { icon: Palette, label: "Theme Gallery", color: "var(--icon-pink)", badge: "NEW", path: "/themes" },
+      { icon: Bell, label: "Notifications", color: "var(--icon-purple)", path: null },
+      { icon: Shield, label: "Privacy & Security", color: "var(--icon-blue)", path: null },
+      { icon: Settings, label: "App settings", color: "var(--icon-gray)", path: null },
     ],
   },
   {
     title: "Support",
     items: [
-      { icon: HelpCircle, label: "Help & Support", color: "#14B8A6", path: null },
-      { icon: RotateCcw, label: "Reset Onboarding", color: "#F97316", path: null, action: "reset-onboarding" },
+      { icon: HelpCircle, label: "Help & Support", color: "var(--icon-teal)", path: null },
+      { icon: RotateCcw, label: "Reset Onboarding", color: "var(--icon-orange)", path: null, action: "reset-onboarding" },
     ],
   },
 ];
@@ -119,7 +119,7 @@ export function Profile() {
     setTheme(theme === "light" ? "dark" : "light");
   };
 
-  const handleMenuItemClick = (item: any) => {
+  const handleMenuItemClick = (item: MenuItem) => {
     if (item.action === "reset-onboarding") {
       // Clear all onboarding-related localStorage
       localStorage.removeItem("onboarding_completed");
@@ -164,7 +164,7 @@ export function Profile() {
                 JS
               </div>
             )}
-            <div className="absolute -bottom-1 -right-1 w-6 h-6 border-2 border-card rounded-full" style={{ backgroundColor: '#10B981' }} />
+            <div className="absolute -bottom-1 -right-1 w-6 h-6 border-2 border-card rounded-full" style={{ backgroundColor: 'var(--color-success)' }} />
             {/* Camera button overlay */}
             <button
               onClick={handleUploadClick}
@@ -244,12 +244,12 @@ export function Profile() {
                       >
                         {/* Circle Preview */}
                         <div
-                          className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl shadow-md transition-all ${
+                          className={`${option.id} w-16 h-16 rounded-full flex items-center justify-center text-2xl shadow-md transition-all ${
                             isActive
                               ? "ring-4 ring-offset-2 ring-offset-card ring-primary scale-110"
                               : "border border-border hover:scale-105"
                           }`}
-                          style={{ background: option.gradient }}
+                          style={{ background: 'var(--theme-preview-gradient)' }}
                         >
                           <span className="drop-shadow-md">{option.emoji}</span>
                         </div>

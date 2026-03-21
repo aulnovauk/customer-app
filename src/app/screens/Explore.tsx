@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Search, SlidersHorizontal, List, Star, MapPin as MapPinIcon, ChevronDown, Check, X } from "lucide-react";
 import { useNavigate } from "react-router";
 import { motion } from "motion/react";
@@ -209,22 +209,59 @@ export function Explore() {
     return true;
   });
 
-  const toggleAmenity = (amenity: string) => {
-    setSelectedAmenities((prev) =>
-      prev.includes(amenity) ? prev.filter((a) => a !== amenity) : [...prev, amenity]
-    );
-  };
-
-  const togglePrice = (price: string) => {
-    setSelectedPrice((prev) => (prev.includes(price) ? prev.filter((p) => p !== price) : [...prev, price]));
-  };
-
   const clearAllFilters = () => {
     setSelectedType("All");
     setSelectedAmenities([]);
     setSelectedPrice([]);
     setOnlyVerified(false);
   };
+
+  const handleToggleFilters = useCallback(() => setShowFilters((f) => !f), []);
+  const handleToggleSortBy = useCallback(() => setSortBy((s) => s === "Best match" ? "Distance" : "Best match"), []);
+  const handleToggleVerified = useCallback(() => setOnlyVerified((v) => !v), []);
+
+  const handleSalonClickData = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    const id = parseInt((e.currentTarget as HTMLElement).dataset.salonId ?? "0", 10);
+    navigate(`/salon/${id}`);
+  }, [navigate]);
+
+  const handleTypeClickData = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    setSelectedType(e.currentTarget.dataset.typeId ?? "");
+  }, []);
+
+  const handleAmenityClickData = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    const amenity = e.currentTarget.dataset.amenity ?? "";
+    setSelectedAmenities((prev) =>
+      prev.includes(amenity) ? prev.filter((a) => a !== amenity) : [...prev, amenity]
+    );
+  }, []);
+
+  const handlePriceClickData = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    const price = e.currentTarget.dataset.price ?? "";
+    setSelectedPrice((prev) =>
+      prev.includes(price) ? prev.filter((p) => p !== price) : [...prev, price]
+    );
+  }, []);
+
+  const handleSlotClickData = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    const salonId = parseInt(e.currentTarget.dataset.salonId ?? "0", 10);
+    const slot = e.currentTarget.dataset.slot ?? "";
+    navigate(`/salon/${salonId}?time=${encodeURIComponent(slot)}`);
+  }, [navigate]);
+
+  const handleSeeMoreClickData = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    const salonId = parseInt(e.currentTarget.dataset.salonId ?? "0", 10);
+    navigate(`/salon/${salonId}?tab=booking`);
+  }, [navigate]);
+
+  const handleServiceClickData = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    const salonId = parseInt(e.currentTarget.dataset.salonId ?? "0", 10);
+    const serviceName = e.currentTarget.dataset.serviceName ?? "";
+    navigate(`/salon/${salonId}?service=${encodeURIComponent(serviceName)}&tab=services`);
+  }, [navigate]);
 
   return (
     <div className="h-screen overflow-hidden max-w-[390px] mx-auto relative transition-colors duration-300" style={{ backgroundColor: 'var(--muted)' }}>
@@ -235,8 +272,8 @@ export function Explore() {
           <svg className="absolute inset-0 w-full h-full opacity-20" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <pattern id="road" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
-                <path d="M 0 50 L 100 50" stroke="#999" strokeWidth="1" fill="none" />
-                <path d="M 50 0 L 50 100" stroke="#999" strokeWidth="1" fill="none" />
+                <path d="M 0 50 L 100 50" style={{ stroke: 'var(--color-neutral-medium)' }} strokeWidth="1" fill="none" />
+                <path d="M 50 0 L 50 100" style={{ stroke: 'var(--color-neutral-medium)' }} strokeWidth="1" fill="none" />
               </pattern>
             </defs>
             <rect width="100%" height="100%" fill="url(#road)" />
@@ -259,7 +296,7 @@ export function Explore() {
                 <svg width="24" height="32" viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
                     d="M12 0C5.37 0 0 5.37 0 12c0 9 12 20 12 20s12-11 12-20c0-6.63-5.37-12-12-12z"
-                    fill="#1F2937"
+                    style={{ fill: 'var(--color-neutral-dark)' }}
                   />
                   <circle cx="12" cy="12" r="6" fill="white" />
                 </svg>
@@ -329,7 +366,7 @@ export function Explore() {
         <div className="px-5 py-4 border-b transition-colors duration-300" style={{ borderColor: 'var(--border-light)' }}>
           <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
             <button
-              onClick={() => setShowFilters(!showFilters)}
+              onClick={handleToggleFilters}
               className={`px-4 py-2 border rounded-full flex items-center gap-2 shadow-sm flex-shrink-0 transition-colors duration-300`}
               style={{ 
                 backgroundColor: showFilters ? 'var(--muted)' : 'var(--card)',
@@ -340,7 +377,7 @@ export function Explore() {
             </button>
 
             <button
-              onClick={() => setSortBy(sortBy === "Best match" ? "Distance" : "Best match")}
+              onClick={handleToggleSortBy}
               className="px-4 py-2 border rounded-full flex items-center gap-2 shadow-sm flex-shrink-0 transition-colors duration-300"
               style={{ 
                 backgroundColor: 'var(--card)',
@@ -381,7 +418,7 @@ export function Explore() {
                 {typeOptions.map((type) => (
                   <button
                     key={type}
-                    onClick={() => setSelectedType(type)}
+                    data-type-id={type} onClick={handleTypeClickData}
                     className={`px-4 py-2 rounded-full text-sm font-medium transition-all`}
                     style={
                       selectedType === type 
@@ -402,7 +439,7 @@ export function Explore() {
                 {amenityOptions.map((amenity) => (
                   <button
                     key={amenity}
-                    onClick={() => toggleAmenity(amenity)}
+                    data-amenity={amenity} onClick={handleAmenityClickData}
                     className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1`}
                     style={
                       selectedAmenities.includes(amenity)
@@ -424,7 +461,7 @@ export function Explore() {
                 {priceOptions.map((price) => (
                   <button
                     key={price}
-                    onClick={() => togglePrice(price)}
+                    data-price={price} onClick={handlePriceClickData}
                     className={`px-4 py-2 rounded-full text-sm font-bold transition-all`}
                     style={
                       selectedPrice.includes(price)
@@ -442,7 +479,7 @@ export function Explore() {
             <div className="flex items-center justify-between">
               <p className="text-sm font-bold" style={{ color: 'var(--foreground)' }}>Only verified venues</p>
               <button
-                onClick={() => setOnlyVerified(!onlyVerified)}
+                onClick={handleToggleVerified}
                 className={`w-12 h-6 rounded-full transition-all relative`}
                 style={{ backgroundColor: onlyVerified ? 'var(--foreground)' : 'var(--border)' }}
               >
@@ -471,7 +508,7 @@ export function Explore() {
                 {/* Salon Image - Separate element with all rounded corners */}
                 <div 
                   className="relative h-48 rounded-2xl overflow-hidden mb-3"
-                  onClick={() => navigate(`/salon/${salon.id}`)}
+                  data-salon-id={salon.id} onClick={handleSalonClickData}
                   style={{ backgroundColor: 'var(--muted)' }}
                 >
                   <ImageWithFallback src={salon.image} alt={salon.name} className="w-full h-full object-cover" />
@@ -484,7 +521,7 @@ export function Explore() {
                 </div>
 
                 {/* Salon Info - No card boundaries, just content */}
-                <div onClick={() => navigate(`/salon/${salon.id}`)}>
+                <div data-salon-id={salon.id} onClick={handleSalonClickData}>
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex-1">
                       <h3 className="font-black text-xl mb-1" style={{ color: 'var(--foreground)' }}>{salon.name}</h3>
@@ -504,13 +541,13 @@ export function Explore() {
                       <div 
                         className="w-1.5 h-1.5 rounded-full"
                         style={{ 
-                          backgroundColor: salon.isOpen ? '#10B981' : '#EF4444',
+                          backgroundColor: salon.isOpen ? 'var(--color-success)' : 'var(--color-error)',
                           boxShadow: salon.isOpen ? '0 0 6px rgba(16, 185, 129, 0.6)' : '0 0 6px rgba(239, 68, 68, 0.6)'
                         }}
                       />
                       <span 
                         className="text-xs font-bold"
-                        style={{ color: salon.isOpen ? '#10B981' : '#EF4444' }}
+                        style={{ color: salon.isOpen ? 'var(--color-success)' : 'var(--color-error)' }}
                       >
                         {salon.isOpen ? 'Open' : 'Closed'}
                       </span>
@@ -525,17 +562,14 @@ export function Explore() {
                         {getAvailableSlots(salon.nextSlots).slice(0, 4).map((slot, idx) => (
                           <motion.button
                             key={idx}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              navigate(`/salon/${salon.id}?time=${encodeURIComponent(slot)}`);
-                            }}
+                            data-salon-id={salon.id} data-slot={slot} onClick={handleSlotClickData}
                             whileTap={{ scale: 0.95 }}
                             className="flex-shrink-0 px-2 py-0.5 rounded-md text-[11px] font-bold transition-all duration-200"
                             style={{
                               background: salon.isOpen 
-                                ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)'
+                                ? 'var(--gradient-success-cta)'
                                 : 'var(--muted)',
-                              color: salon.isOpen ? '#FFFFFF' : 'var(--muted-foreground)',
+                              color: salon.isOpen ? 'var(--text-inverse)' : 'var(--muted-foreground)',
                               boxShadow: salon.isOpen 
                                 ? '0 1px 6px rgba(16, 185, 129, 0.25)'
                                 : '0 1px 3px rgba(0, 0, 0, 0.08)',
@@ -548,10 +582,7 @@ export function Explore() {
                         {/* See More Link */}
                         {getAvailableSlots(salon.nextSlots).length > 4 && (
                           <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              navigate(`/salon/${salon.id}?tab=booking`);
-                            }}
+                            data-salon-id={salon.id} onClick={handleSeeMoreClickData}
                             className="flex-shrink-0 text-[11px] font-bold"
                             style={{
                               color: 'var(--primary)',
@@ -570,16 +601,8 @@ export function Explore() {
                       {salon.services.slice(0, 3).map((service, idx) => (
                         <button
                           key={idx}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(`/salon/${salon.id}?service=${encodeURIComponent(service.name)}&tab=services`);
-                          }}
-                          className="w-full flex items-center justify-between transition-colors rounded-lg p-3"
-                          style={{
-                            backgroundColor: 'transparent'
-                          }}
-                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--muted)'}
-                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                          data-salon-id={salon.id} data-service-name={service.name} onClick={handleServiceClickData}
+                          className="w-full flex items-center justify-between transition-colors rounded-lg p-3 hover:bg-muted"
                         >
                           <div className="flex-1 text-left">
                             <p className="font-bold text-base mb-0.5" style={{ color: 'var(--foreground)' }}>{service.name}</p>
