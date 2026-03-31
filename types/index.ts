@@ -103,4 +103,6 @@ export interface SalonData {
   price: string;
   services: string[];
   trending?: boolean;
+  phone?: string;
+  website?: string;
 }
