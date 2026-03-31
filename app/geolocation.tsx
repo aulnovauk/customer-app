@@ -203,7 +203,10 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    boxShadow: '0px 8px 24px rgba(255, 27, 141, 0.3)',
+    ...Platform.select({
+      web: { boxShadow: '0px 8px 24px rgba(255, 27, 141, 0.3)' },
+      default: { shadowColor: '#FF1B8D', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.3, shadowRadius: 24 },
+    }),
     elevation: 8,
   },
   title: {

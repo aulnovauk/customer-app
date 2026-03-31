@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Pressable, StyleSheet, Platform } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
@@ -114,7 +114,10 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     overflow: 'hidden',
     marginBottom: 16,
-    boxShadow: '0px 2px 12px rgba(0, 0, 0, 0.08)',
+    ...Platform.select({
+      web: { boxShadow: '0px 2px 12px rgba(0, 0, 0, 0.08)' },
+      default: { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.08, shadowRadius: 12 },
+    }),
     elevation: 3,
   },
   cardImage: {
@@ -216,7 +219,10 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     overflow: 'hidden',
     marginRight: 12,
-    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.06)',
+    ...Platform.select({
+      web: { boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.06)' },
+      default: { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 8 },
+    }),
     elevation: 2,
   },
   compactImage: {

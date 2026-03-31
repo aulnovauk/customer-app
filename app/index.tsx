@@ -229,7 +229,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.95)',
     justifyContent: 'center',
     alignItems: 'center',
-    boxShadow: '0px 24px 48px rgba(0, 0, 0, 0.3)',
+    ...Platform.select({
+      web: { boxShadow: '0px 24px 48px rgba(0, 0, 0, 0.3)' },
+      default: { shadowColor: '#000', shadowOffset: { width: 0, height: 24 }, shadowOpacity: 0.3, shadowRadius: 48 },
+    }),
     elevation: 10,
   },
   title: {
@@ -239,7 +242,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     letterSpacing: -0.5,
     marginBottom: 4,
-    textShadow: '0px 4px 24px rgba(0, 0, 0, 0.2)',
+    ...Platform.select({
+      web: { textShadow: '0px 4px 24px rgba(0, 0, 0, 0.2)' },
+      default: { textShadowColor: 'rgba(0, 0, 0, 0.2)', textShadowOffset: { width: 0, height: 4 }, textShadowRadius: 24 },
+    }),
   },
   subtitle: {
     color: 'rgba(255, 255, 255, 0.8)',

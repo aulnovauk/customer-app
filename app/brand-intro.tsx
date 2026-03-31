@@ -103,7 +103,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter_700Bold',
     color: '#FFFFFF',
     letterSpacing: 2,
-    textShadow: '0px 4px 16px rgba(0, 0, 0, 0.3)',
+    ...Platform.select({
+      web: { textShadow: '0px 4px 16px rgba(0, 0, 0, 0.3)' },
+      default: { textShadowColor: 'rgba(0, 0, 0, 0.3)', textShadowOffset: { width: 0, height: 4 }, textShadowRadius: 16 },
+    }),
   },
   tagline: {
     fontSize: 16,

@@ -86,7 +86,10 @@ const styles = StyleSheet.create({
   iconCircle: {
     width: 100, height: 100, borderRadius: 50,
     justifyContent: 'center', alignItems: 'center',
-    boxShadow: '0px 8px 24px rgba(232, 90, 139, 0.3)', elevation: 8,
+    ...Platform.select({
+      web: { boxShadow: '0px 8px 24px rgba(232, 90, 139, 0.3)' },
+      default: { shadowColor: '#E85A8B', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.3, shadowRadius: 24 },
+    }), elevation: 8,
   },
   title: { fontSize: 28, fontFamily: 'Inter_700Bold', textAlign: 'center', marginBottom: 12 },
   description: { fontSize: 15, fontFamily: 'Inter_400Regular', textAlign: 'center', lineHeight: 22, paddingHorizontal: 16 },

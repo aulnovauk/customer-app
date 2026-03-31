@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, type ViewStyle } from 'react-native';
+import { View, StyleSheet, Platform, type ViewStyle } from 'react-native';
 import { useColors } from '@/hooks/useColors';
 
 interface GlassCardProps {
@@ -29,7 +29,10 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     borderWidth: 1,
     padding: 16,
-    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.06)',
+    ...Platform.select({
+      web: { boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.06)' },
+      default: { shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.06, shadowRadius: 12 },
+    }),
     elevation: 2,
   },
 });
