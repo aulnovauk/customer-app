@@ -103,9 +103,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter_700Bold',
     color: '#FFFFFF',
     letterSpacing: 2,
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
-    textShadowOffset: { width: 0, height: 4 },
-    textShadowRadius: 16,
+    textShadow: '0px 4px 16px rgba(0, 0, 0, 0.3)',
   },
   tagline: {
     fontSize: 16,
