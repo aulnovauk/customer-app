@@ -7,7 +7,6 @@
     "icon": "./assets/images/icon.png",
     "scheme": "beaute",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "splash": {
       "backgroundColor": "#E85A8B",
       "resizeMode": "contain"
