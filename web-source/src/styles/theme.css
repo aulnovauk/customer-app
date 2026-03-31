@@ -1,0 +1,1546 @@
+@custom-variant dark (&:is(.dark *));
+@custom-variant warm (&:is(.warm *));
+@custom-variant masculine (&:is(.masculine *));
+@custom-variant unisex (&:is(.unisex *));
+@custom-variant genz (&:is(.genz *));
+@custom-variant luxe (&:is(.luxe *));
+@custom-variant sunset (&:is(.sunset *));
+@custom-variant ocean (&:is(.ocean *));
+@custom-variant royal (&:is(.royal *));
+@custom-variant mint (&:is(.mint *));
+@custom-variant sakura (&:is(.sakura *));
+@custom-variant cyber (&:is(.cyber *));
+
+:root {
+  /* ==========================================
+     🎨 LUXURY BEAUTY BRAND - DESIGN TOKENS
+     Industry-Standard Design System
+     ========================================== */
+
+  /* ===== PRIMARY BRAND COLOR ===== */
+  --brand-primary: #FF1B8D;
+  --brand-primary-light: #FF6B9D;
+  --brand-primary-lighter: #FFA8C5;
+  --brand-primary-dark: #E6007A;
+  --brand-primary-darker: #CC0066;
+  
+  /* Primary gradient variations */
+  --brand-primary-50: #FEF2F5;
+  --brand-primary-100: #FDE6ED;
+  --brand-primary-200: #FCC9DB;
+  --brand-primary-300: #F9A3BD;
+  --brand-primary-400: #F186AC;
+  --brand-primary-500: #E85A8B;
+  --brand-primary-600: #D6427A;
+  --brand-primary-700: #C42A69;
+  
+  /* Brand rose & pink color scale (for light mode) */
+  --brand-rose-50: #FEF2F5;
+  --brand-rose-100: #FDE6ED;
+  --brand-rose-200: #FCC9DB;
+  --brand-rose-300: #F9A3BD;
+  --brand-rose-400: #F186AC;
+  --brand-rose-500: #E85A8B;
+  --brand-rose-600: #D6427A;
+  --brand-rose-700: #C42A69;
+  
+  --brand-pink-50: #FEF2F5;
+  --brand-pink-100: #FDE6ED;
+  --brand-pink-200: #FCC9DB;
+  --brand-pink-300: #F9A3BD;
+  --brand-pink-400: #F186AC;
+  --brand-pink-500: #E85A8B;
+  --brand-pink-600: #D6427A;
+  --brand-pink-700: #C42A69;
+  
+  /* ===== ACCENT GOLD COLORS ===== */
+  --accent-gold: #FFD700;
+  --accent-gold-light: #FFE55C;
+  --accent-gold-lighter: #FFF4AA;
+  --accent-gold-dark: #E6C200;
+  --accent-gold-darker: #CCAA00;
+  
+  /* ===== BACKGROUND & SURFACE COLORS ===== */
+  --background-base: #FFFFFF;
+  --background-elevated: #FFFFFF;
+  --background-subtle: #FFFFFF;  /* Changed from #F9F7F6 to pure white */
+  
+  /* Surface colors for light mode */
+  --surface-base: #FFFFFF;
+  --surface-elevated: #FFFFFF;
+  --surface-overlay: rgba(255, 255, 255, 0.95);
+  
+  /* Glassmorphism for light mode */
+  --surface-glass-light: rgba(255, 255, 255, 0.6);
+  --surface-glass-medium: rgba(255, 255, 255, 0.75);
+  --surface-glass-heavy: rgba(255, 255, 255, 0.9);
+  
+  /* Glass backgrounds for floating elements (light mode) */
+  --background-glass: rgba(255, 255, 255, 0.95);
+  --card-glass: rgba(255, 255, 255, 0.95);
+  
+  /* Background gradients for light mode */
+  --gradient-background-pastel: linear-gradient(160deg, #FEF2F5 0%, #F9F7F6 50%, #FFF5ED 100%);
+  --gradient-background-soft: linear-gradient(135deg, #FEF2F5 0%, #F9F7F6 100%);
+  
+  /* ===== TEXT COLORS ===== */
+  --text-primary: #0F0F10;
+  --text-secondary: #5C5C60;
+  --text-tertiary: #9B9B9F;
+  --text-disabled: #C7C7CC;
+  --text-inverse: #FFFFFF;
+  
+  /* ===== GRADIENT DEFINITIONS ===== */
+  /* Primary gradient - pink variations */
+  --gradient-primary: linear-gradient(135deg, #FF1B8D 0%, #FF6B9D 50%, #FFA8C5 100%);
+  --gradient-primary-bold: linear-gradient(135deg, #CC0066 0%, #FF1B8D 50%, #FF6B9D 100%);
+  --gradient-primary-soft: linear-gradient(135deg, #FF6B9D 0%, #FFA8C5 50%, #FFD1E0 100%);
+  
+  /* Gold gradients */
+  --gradient-gold: linear-gradient(135deg, #FFD700 0%, #FFE55C 100%);
+  --gradient-gold-soft: linear-gradient(135deg, #FFE55C 0%, #FFF4AA 100%);
+  
+  /* Accent gradients */
+  --gradient-accent: linear-gradient(135deg, #A855F7 0%, #EC4899 100%);
+  --gradient-cool: linear-gradient(135deg, #3B82F6 0%, #6366F1 100%);
+  
+  /* Combined luxury gradient */
+  --gradient-luxury: linear-gradient(135deg, #FF1B8D 0%, #FF6B9D 25%, #FFA8C5 50%, #FFD700 100%);
+  --gradient-luxury-soft: linear-gradient(135deg, #FF6B9D 0%, #FFA8C5 50%, #FFE55C 100%);
+  
+  /* Background gradients */
+  --gradient-background: linear-gradient(135deg, #F9F7F6 0%, #FFFFFF 100%);
+  --gradient-overlay: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%);
+  
+  /* Brand button gradients */
+  --gradient-brand-button: linear-gradient(135deg, var(--brand-primary-500) 0%, var(--brand-primary-400) 100%);
+  --gradient-brand-button-cta: linear-gradient(135deg, var(--brand-primary-500), var(--brand-primary-dark));
+  
+  /* Brand button shadows */
+  --shadow-brand-button: 0 4px 12px rgba(232, 90, 139, 0.3);
+  --shadow-brand-button-lg: 0 8px 24px rgba(232, 90, 139, 0.4);
+  
+  /* ===== ACCENT COLORS ===== */
+  --accent-success: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+  --accent-error: linear-gradient(135deg, #EF4444 0%, #F87171 100%);
+  --accent-warning: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
+  --accent-info: #3B82F6;
+  --accent-info-subtle: rgba(59, 130, 246, 0.1);
+
+  /* ===== SEMANTIC STATUS COLORS (solid) ===== */
+  --color-success: #10B981;
+  --color-success-dark: #059669;
+  --color-success-light: #34D399;
+  --color-success-text: #065F46;
+  --color-warning: #F59E0B;
+  --color-warning-light: #FBBF24;
+  --color-error: #EF4444;
+  --color-error-light: #F87171;
+  --color-error-dark: #DC2626;
+  --color-error-text: #991B1B;
+
+  /* ===== NEUTRAL PALETTE ===== */
+  --color-neutral-border: #E5E7EB;
+  --color-neutral-dark: #1F2937;
+  --color-neutral-medium: #999999;
+  --color-foreground-inverse: #0F0F10;
+
+  /* ===== ACCENT ICON COLORS ===== */
+  --icon-indigo: #6366F1;
+  --icon-rose: #F43F5E;
+  --icon-amber: #F59E0B;
+  --icon-emerald: #10B981;
+  --icon-pink: #EC4899;
+  --icon-purple: #8B5CF6;
+  --icon-blue: #3B82F6;
+  --icon-gray: #6B7280;
+  --icon-teal: #14B8A6;
+  --icon-orange: #F97316;
+  --color-purple-vibrant: #A855F7;
+
+  /* ===== WARM GOLD TONES (decorative) ===== */
+  --color-gold-warm: #C8A96A;
+  --color-gold-pale: #E6D3A3;
+
+  /* ===== GOLD SCALE (SVG gradients, sheens) ===== */
+  --color-gold-300: #ffd98a;
+  --color-gold-500: #f4c157;
+  --color-gold-700: #daa520;
+
+  /* ===== ADDITIONAL GRADIENTS ===== */
+  --gradient-success: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+  --gradient-success-cta: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  --gradient-warning: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
+  --gradient-error: linear-gradient(135deg, #EF4444 0%, #F87171 100%);
+  --gradient-purple: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%);
+  --gradient-vibrant-pink: linear-gradient(135deg, #EC4899 0%, #F472B6 100%);
+  --gradient-slide-gold: linear-gradient(135deg, #C8A96A 0%, #E6D3A3 100%);
+  --gradient-slide-gold-90: linear-gradient(90deg, #C8A96A, #E6D3A3);
+  --gradient-slide-gold-90-rev: linear-gradient(90deg, #E6D3A3, #C8A96A);
+  --gradient-slide-amber: linear-gradient(135deg, #F59E0B 0%, #EAB308 100%);
+  --gradient-slide-luxury: linear-gradient(135deg, #E85A8B 0%, #F59E0B 100%);
+  --gradient-card-inverse: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%);
+  --gradient-brand-shimmer: linear-gradient(135deg, var(--brand-primary-500), var(--brand-primary-dark), var(--brand-primary-500));
+  --gradient-brand-purple: linear-gradient(135deg, #A855F7 0%, #D946A0 50%, #E85A8B 100%);
+  --gradient-brand-purple-reverse: linear-gradient(135deg, #E85A8B 0%, #D946A0 50%, #A855F7 100%);
+  --gradient-brand-sunset: linear-gradient(135deg, #EC4899 0%, #F43F5E 50%, #FB923C 100%);
+  --gradient-brand-rose: linear-gradient(135deg, #EC4899 0%, #F43F5E 100%);
+  --gradient-dark-surface: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  --gradient-warm-subtle: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+  --gradient-success-subtle: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
+  --gradient-error-subtle: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
+  --gradient-gold-sheen: linear-gradient(135deg, #ffd98a 0%, #f4c157 50%, #daa520 100%);
+  --gradient-platinum-sheen: linear-gradient(135deg, #e8e8e8 0%, #c0c0c0 50%, #a8a8a8 100%);
+  /* Payment provider brand colors (official brand assets) */
+  --payment-paytm: #00BAF2;
+  --payment-phonepe: #5F259F;
+  --payment-gpay: #4285F4;
+  --payment-amazon: #FF9900;
+
+  /* ===== SURFACE VARIATIONS ===== */
+  --card-elevated: rgba(255, 255, 255, 0.9);
+  --primary-subtle: rgba(255, 27, 141, 0.1);
+  
+  /* ===== SHADOW SYSTEM ===== */
+  /* Basic shadows - single layer */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.12);
+  
+  /* Layered shadows - soft + medium for depth */
+  --shadow-layered-xs: 
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 1px 4px rgba(0, 0, 0, 0.02);
+  
+  --shadow-layered-sm: 
+    0 2px 4px rgba(0, 0, 0, 0.05),
+    0 4px 8px rgba(0, 0, 0, 0.03);
+  
+  --shadow-layered-md: 
+    0 4px 8px rgba(0, 0, 0, 0.06),
+    0 8px 16px rgba(0, 0, 0, 0.04);
+  
+  --shadow-layered-lg: 
+    0 8px 16px rgba(0, 0, 0, 0.08),
+    0 16px 32px rgba(0, 0, 0, 0.06);
+  
+  --shadow-layered-xl: 
+    0 12px 24px rgba(0, 0, 0, 0.1),
+    0 24px 48px rgba(0, 0, 0, 0.08);
+  
+  /* Elevation shadows - for creating visual hierarchy */
+  --elevation-1: 
+    0 1px 3px rgba(0, 0, 0, 0.05),
+    0 1px 2px rgba(0, 0, 0, 0.03);
+  
+  --elevation-2: 
+    0 3px 6px rgba(0, 0, 0, 0.06),
+    0 2px 4px rgba(0, 0, 0, 0.04);
+  
+  --elevation-3: 
+    0 6px 12px rgba(0, 0, 0, 0.07),
+    0 3px 6px rgba(0, 0, 0, 0.05);
+  
+  --elevation-4: 
+    0 12px 24px rgba(0, 0, 0, 0.08),
+    0 6px 12px rgba(0, 0, 0, 0.06);
+  
+  --elevation-5: 
+    0 20px 40px rgba(0, 0, 0, 0.1),
+    0 10px 20px rgba(0, 0, 0, 0.08);
+  
+  /* Brand-colored shadows with layers */
+  --shadow-brand-sm: 
+    0 4px 12px rgba(251, 113, 133, 0.12),
+    0 2px 6px rgba(251, 113, 133, 0.08);
+  
+  --shadow-brand-md: 
+    0 8px 24px rgba(251, 113, 133, 0.16),
+    0 4px 12px rgba(251, 113, 133, 0.12);
+  
+  --shadow-brand-lg: 
+    0 16px 48px rgba(251, 113, 133, 0.2),
+    0 8px 24px rgba(251, 113, 133, 0.16);
+  
+  /* Gold accent shadows */
+  --shadow-gold-sm: 
+    0 4px 12px rgba(218, 165, 32, 0.1),
+    0 2px 6px rgba(218, 165, 32, 0.06);
+  
+  --shadow-gold-md: 
+    0 8px 24px rgba(218, 165, 32, 0.14),
+    0 4px 12px rgba(218, 165, 32, 0.1);
+  
+  /* Inset shadows for depth */
+  --shadow-inset-sm: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-inset-md: inset 0 2px 6px rgba(0, 0, 0, 0.1);
+  
+  /* ===== BORDER COLORS ===== */
+  --border-light: rgba(0, 0, 0, 0.06);
+  --border-medium: rgba(0, 0, 0, 0.1);
+  --border-strong: rgba(0, 0, 0, 0.15);
+  --border-brand: var(--brand-rose-200);
+  --border-glass: rgba(255, 255, 255, 0.4);
+  
+  /* ===== RADIUS SYSTEM ===== */
+  --radius-sm: 0.75rem;   /* 12px - minimum for premium feel */
+  --radius-md: 1rem;      /* 16px */
+  --radius-lg: 1.25rem;   /* 20px */
+  --radius-xl: 1.5rem;    /* 24px - maximum for cards */
+  --radius-2xl: 2rem;     /* 32px */
+  --radius-full: 9999px;
+  
+  /* ===== 8PT GRID SPACING SCALE ===== */
+  --space-1: 0.5rem;   /* 8px */
+  --space-2: 1rem;     /* 16px */
+  --space-3: 1.5rem;   /* 24px */
+  --space-4: 2rem;     /* 32px */
+  --space-5: 2.5rem;   /* 40px */
+  --space-6: 3rem;     /* 48px */
+  
+  /* ===== SPACING SCALE (Legacy support) ===== */
+  --spacing-xs: 0.25rem;   /* 4px */
+  --spacing-sm: 0.5rem;    /* 8px */
+  --spacing-md: 0.75rem;   /* 12px */
+  --spacing-lg: 1rem;      /* 16px */
+  --spacing-xl: 1.5rem;    /* 24px */
+  --spacing-2xl: 2rem;     /* 32px */
+  --spacing-3xl: 3rem;     /* 48px */
+  
+  /* ===== SEMANTIC COLOR TOKENS ===== */
+  /* Backgrounds */
+  --background: var(--background-base);
+  --foreground: var(--text-primary);
+  
+  /* Cards and surfaces */
+  --card: var(--background-elevated);
+  --card-foreground: var(--text-primary);
+  
+  /* Primary action colors */
+  --primary: var(--brand-primary);
+  --primary-foreground: var(--text-inverse);
+  
+  /* Muted/subtle elements */
+  --muted: var(--background-subtle);
+  --muted-foreground: var(--text-secondary);
+  
+  /* Accent elements */
+  --accent: var(--accent-gold);
+  --accent-foreground: var(--text-inverse);
+  
+  /* ===== EXISTING THEME TOKENS (Preserved) ===== */
+  --font-size: 16px;
+  --background: var(--surface-base);
+  --foreground: oklch(0.145 0 0);
+  --card: var(--surface-elevated);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: var(--brand-primary);
+  --primary-foreground: #ffffff;
+  --secondary: oklch(0.95 0.0058 264.53);
+  --secondary-foreground: #030213;
+  --muted: #FFFFFF;  /* Changed from #ececf0 to pure white */
+  --muted-foreground: #717182;
+  --accent: var(--accent-gold);
+  --accent-foreground: #ffffff;
+  --destructive: #EF4444;
+  --destructive-foreground: #ffffff;
+  --border: var(--border-medium);
+  --input: transparent;
+  --input-background: #FFFFFF;  /* Changed from #f3f3f5 to pure white */
+  --switch-background: #cbced4;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --radius: var(--radius-lg);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: #030213;
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+/* ==========================================
+   💡 LIGHT MODE THEME (EXPLICIT)
+   Pure white Apple-like aesthetic
+   ========================================== */
+.light {
+  --theme-preview-gradient: linear-gradient(135deg, #FF1B8D 0%, #FF6B9D 25%, #FFA8C5 50%, #FFD700 100%);
+  /* Explicitly set light mode to pure white */
+  --background-base: #FFFFFF;
+  --background-elevated: #FFFFFF;
+  --background-subtle: #FFFFFF;
+  --surface-base: #FFFFFF;
+  --surface-elevated: #FFFFFF;
+  --background: #FFFFFF;
+  --card: #FFFFFF;
+  --muted: #FFFFFF;
+  --input-background: #FFFFFF;
+  --background-glass: rgba(255, 255, 255, 0.95);
+  --card-glass: rgba(255, 255, 255, 0.95);
+}
+
+/* ==========================================
+   🌙 DARK MODE THEME
+   Sophisticated dark luxury aesthetic
+   ========================================== */
+.dark {
+  --theme-preview-gradient: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 20%, #FF1B8D 60%, #00F0FF 100%);
+  /* Neutral colors for dark mode */
+  --neutral-50: #0f0f0f;
+  --neutral-100: #242424;
+  --neutral-200: #2e2e2e;
+  --neutral-300: #404040;
+  --neutral-400: #737373;
+  --neutral-500: #a3a3a3;
+  --neutral-600: #d4d4d4;
+  --neutral-700: #e5e5e5;
+  --neutral-800: #f5f5f5;
+  --neutral-900: #fafafa;
+
+  /* Surface colors for dark mode */
+  --surface-base: #0f0f0f;
+  --surface-elevated: #1a1a1a;
+  --surface-overlay: rgba(26, 26, 26, 0.95);
+  
+  /* Glassmorphism for dark mode */
+  --surface-glass-light: rgba(26, 26, 26, 0.6);
+  --surface-glass-medium: rgba(26, 26, 26, 0.75);
+  --surface-glass-heavy: rgba(26, 26, 26, 0.9);
+
+  /* Background gradients for dark mode */
+  --gradient-background-pastel: linear-gradient(160deg, #1a0f13 0%, #1a1410 50%, #0f111a 100%);
+  --gradient-background-soft: linear-gradient(135deg, #1a0f13 0%, #1a1410 100%);
+  
+  /* Overlay gradients */
+  --gradient-overlay-top: linear-gradient(180deg, rgba(15, 15, 15, 0.9) 0%, rgba(15, 15, 15, 0) 100%);
+  --gradient-overlay-bottom: linear-gradient(0deg, rgba(15, 15, 15, 0.9) 0%, rgba(15, 15, 15, 0) 100%);
+
+  /* Borders for dark mode */
+  --border-light: rgba(255, 255, 255, 0.06);
+  --border-medium: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.15);
+  --border-glass: rgba(255, 255, 255, 0.1);
+
+  /* Shadows for dark mode */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.7);
+
+  /* Glass backgrounds for floating elements (dark mode) */
+  --background-glass: rgba(26, 26, 26, 0.85);
+  --card-glass: rgba(26, 26, 26, 0.7);
+  
+  /* ===== DARK MODE LUXURY COLORS ===== */
+  /* Background & Surface */
+  --background-base: #0f0f0f;
+  --background-elevated: #1a1a1a;
+  --background-subtle: #242424;
+  
+  /* Text colors for dark mode */
+  --text-primary: #fafafa;
+  --text-secondary: #a3a3a3;
+  --text-tertiary: #737373;
+  --text-disabled: #404040;
+  --text-inverse: #0f0f0f;
+
+  /* Existing dark mode tokens */
+  --background: #0f0f0f;
+  --foreground: #fafafa;
+  --card: #1a1a1a;
+  --card-foreground: #fafafa;
+  --popover: #1a1a1a;
+  --popover-foreground: #fafafa;
+  --primary: var(--brand-rose-400);
+  --primary-foreground: #ffffff;
+  --secondary: #242424;
+  --secondary-foreground: #fafafa;
+  --muted: #2e2e2e;
+  --muted-foreground: #a3a3a3;
+  --accent: var(--brand-pink-500);
+  --accent-foreground: #ffffff;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.1);
+  --input-background: #1a1a1a;
+  --ring: rgba(255, 255, 255, 0.2);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: #0f0f0f;
+  --sidebar-foreground: #fafafa;
+  --sidebar-primary: var(--brand-rose-400);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #242424;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: rgba(255, 255, 255, 0.2);
+}
+
+/* ==========================================
+   🌅 WARM MODE THEME
+   Cozy warm aesthetic with amber/peach tones
+   ========================================== */
+.warm {
+  --theme-preview-gradient: linear-gradient(135deg, #FF9A76 0%, #FFD700 100%);
+  /* Warm-tinted neutral colors */
+  --neutral-50: #fef9f5;
+  --neutral-100: #fef3eb;
+  --neutral-200: #fde8d7;
+  --neutral-300: #fad8bc;
+  --neutral-400: #d4a574;
+  --neutral-500: #a37d56;
+  --neutral-600: #735838;
+  --neutral-700: #523d28;
+  --neutral-800: #3a2a1a;
+  --neutral-900: #251810;
+
+  /* Warm surface colors */
+  --surface-base: #fef9f5;
+  --surface-elevated: #fffcf9;
+  --surface-overlay: rgba(255, 252, 249, 0.95);
+  
+  /* Warm glassmorphism */
+  --surface-glass-light: rgba(255, 252, 249, 0.6);
+  --surface-glass-medium: rgba(255, 252, 249, 0.75);
+  --surface-glass-heavy: rgba(255, 252, 249, 0.9);
+
+  /* Warm gradients */
+  --gradient-background-pastel: linear-gradient(160deg, #fff5ed 0%, #fff8f0 50%, #fff3e0 100%);
+  --gradient-background-soft: linear-gradient(135deg, #fff5ed 0%, #fff8f0 100%);
+  
+  /* Warm overlay gradients */
+  --gradient-overlay-top: linear-gradient(180deg, rgba(255, 252, 249, 0.9) 0%, rgba(255, 252, 249, 0) 100%);
+  --gradient-overlay-bottom: linear-gradient(0deg, rgba(255, 252, 249, 0.9) 0%, rgba(255, 252, 249, 0) 100%);
+
+  /* Warm borders */
+  --border-light: rgba(212, 165, 116, 0.15);
+  --border-medium: rgba(212, 165, 116, 0.25);
+  --border-strong: rgba(212, 165, 116, 0.35);
+  --border-brand: #fad8bc;
+  --border-glass: rgba(255, 252, 249, 0.4);
+
+  /* Warm shadows */
+  --shadow-xs: 0 1px 2px rgba(163, 125, 86, 0.08);
+  --shadow-sm: 0 2px 4px rgba(163, 125, 86, 0.1);
+  --shadow-md: 0 4px 12px rgba(163, 125, 86, 0.12);
+  --shadow-lg: 0 8px 24px rgba(163, 125, 86, 0.15);
+  --shadow-xl: 0 16px 48px rgba(163, 125, 86, 0.18);
+
+  /* Warm brand colors */
+  --brand-rose-50: #fff5ed;
+  --brand-rose-100: #ffedd5;
+  --brand-peach-50: #fff8f0;
+  --brand-peach-100: #fff5ed;
+
+  /* Warm theme tokens */
+  --background: #fef9f5;
+  --foreground: #3a2a1a;
+  --card: #fffcf9;
+  --card-foreground: #3a2a1a;
+  --popover: #fffcf9;
+  --popover-foreground: #3a2a1a;
+  --primary: var(--brand-rose-400);
+  --primary-foreground: #ffffff;
+  --secondary: #fef3eb;
+  --secondary-foreground: #3a2a1a;
+  --muted: #fde8d7;
+  --muted-foreground: #735838;
+  --accent: var(--brand-pink-500);
+  --accent-foreground: #ffffff;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: rgba(212, 165, 116, 0.25);
+  --input: transparent;
+  --input-background: #fef3eb;
+  --switch-background: #fad8bc;
+  --ring: rgba(212, 165, 116, 0.3);
+  --sidebar: #fef9f5;
+  --sidebar-foreground: #3a2a1a;
+  --sidebar-primary: var(--brand-rose-400);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #fef3eb;
+  --sidebar-accent-foreground: #3a2a1a;
+  --sidebar-border: rgba(212, 165, 116, 0.25);
+  --sidebar-ring: rgba(212, 165, 116, 0.3);
+}
+
+/* ==========================================
+   🌟 MASUCLINE MODE THEME
+   Bold and rugged aesthetic with dark tones
+   ========================================== */
+.masculine {
+  --theme-preview-gradient: linear-gradient(135deg, #001F3F 0%, #0047FF 30%, #0088FF 70%, #00F0FF 100%);
+  /* Dark-tinted neutral colors */
+  --neutral-50: #1a1a1a;
+  --neutral-100: #242424;
+  --neutral-200: #2e2e2e;
+  --neutral-300: #404040;
+  --neutral-400: #737373;
+  --neutral-500: #a3a3a3;
+  --neutral-600: #d4d4d4;
+  --neutral-700: #e5e5e5;
+  --neutral-800: #f5f5f5;
+  --neutral-900: #fafafa;
+
+  /* Masculine surface colors */
+  --surface-base: #1a1a1a;
+  --surface-elevated: #242424;
+  --surface-overlay: rgba(26, 26, 26, 0.95);
+  
+  /* Masculine glassmorphism */
+  --surface-glass-light: rgba(26, 26, 26, 0.6);
+  --surface-glass-medium: rgba(26, 26, 26, 0.75);
+  --surface-glass-heavy: rgba(26, 26, 26, 0.9);
+
+  /* Masculine gradients */
+  --gradient-background-pastel: linear-gradient(160deg, #1a0f13 0%, #1a1410 50%, #0f111a 100%);
+  --gradient-background-soft: linear-gradient(135deg, #1a0f13 0%, #1a1410 100%);
+  
+  /* Masculine overlay gradients */
+  --gradient-overlay-top: linear-gradient(180deg, rgba(15, 15, 15, 0.9) 0%, rgba(15, 15, 15, 0) 100%);
+  --gradient-overlay-bottom: linear-gradient(0deg, rgba(15, 15, 15, 0.9) 0%, rgba(15, 15, 15, 0) 100%);
+
+  /* Masculine borders */
+  --border-light: rgba(255, 255, 255, 0.06);
+  --border-medium: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.15);
+  --border-brand: #fad8bc;
+  --border-glass: rgba(255, 255, 255, 0.4);
+
+  /* Masculine shadows */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.7);
+
+  /* Masculine brand colors - Electric Blue & Neon Cyan */
+  --brand-primary: #0047FF;
+  --brand-primary-light: #0088FF;
+  --brand-primary-lighter: #00AAFF;
+  --brand-primary-dark: #0033CC;
+  --brand-primary-darker: #001F3F;
+  
+  --accent-gold: #00F0FF;
+  --accent-gold-light: #66F6FF;
+  --accent-gold-lighter: #99FAFF;
+  
+  /* Primary gradient - blue variations */
+  --gradient-primary: linear-gradient(135deg, #0047FF 0%, #0088FF 50%, #00F0FF 100%);
+  --gradient-primary-bold: linear-gradient(135deg, #001F3F 0%, #0047FF 30%, #0088FF 70%, #00F0FF 100%);
+  --gradient-primary-soft: linear-gradient(135deg, #0088FF 0%, #00AAFF 50%, #00F0FF 100%);
+  
+  /* Cyan gradients */
+  --gradient-gold: linear-gradient(135deg, #00F0FF 0%, #66F6FF 100%);
+  --gradient-gold-soft: linear-gradient(135deg, #66F6FF 0%, #99FAFF 100%);
+  
+  /* Combined luxury gradient */
+  --gradient-luxury: linear-gradient(135deg, #001F3F 0%, #0047FF 30%, #0088FF 70%, #00F0FF 100%);
+  --gradient-luxury-soft: linear-gradient(135deg, #0088FF 0%, #00AAFF 50%, #66F6FF 100%);
+  
+  /* Brand-colored shadows */
+  --shadow-brand-sm: 
+    0 4px 12px rgba(59, 130, 246, 0.12),
+    0 2px 6px rgba(59, 130, 246, 0.08);
+  
+  --shadow-brand-md: 
+    0 8px 24px rgba(59, 130, 246, 0.16),
+    0 4px 12px rgba(59, 130, 246, 0.12);
+  
+  --shadow-brand-lg: 
+    0 16px 48px rgba(59, 130, 246, 0.2),
+    0 8px 24px rgba(59, 130, 246, 0.16);
+
+  /* Masculine theme tokens */
+  --background: #1a1a1a;
+  --foreground: #fafafa;
+  --card: #242424;
+  --card-foreground: #fafafa;
+  --popover: #242424;
+  --popover-foreground: #fafafa;
+  --primary: #0047FF;
+  --primary-foreground: #ffffff;
+  --secondary: #242424;
+  --secondary-foreground: #fafafa;
+  --muted: #2e2e2e;
+  --muted-foreground: #a3a3a3;
+  --accent: #00F0FF;
+  --accent-foreground: #ffffff;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.1);
+  --input-background: #1a1a1a;
+  --switch-background: #fad8bc;
+  --ring: rgba(255, 255, 255, 0.2);
+  --sidebar: #1a1a1a;
+  --sidebar-foreground: #fafafa;
+  --sidebar-primary: var(--brand-rose-400);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #242424;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: rgba(255, 255, 255, 0.2);
+}
+
+/* ==========================================
+   🌟 UNISEX MODE THEME
+   Balanced and neutral aesthetic with pastel tones
+   ========================================== */
+.unisex {
+  --theme-preview-gradient: linear-gradient(135deg, #00CFC1 0%, #20E3B2 33%, #FF9A76 66%, #FF6B6B 100%);
+  /* Pastel neutral colors */
+  --neutral-50: #fef9f5;
+  --neutral-100: #fef3eb;
+  --neutral-200: #fde8d7;
+  --neutral-300: #fad8bc;
+  --neutral-400: #d4a574;
+  --neutral-500: #a37d56;
+  --neutral-600: #735838;
+  --neutral-700: #523d28;
+  --neutral-800: #3a2a1a;
+  --neutral-900: #251810;
+
+  /* Unisex surface colors */
+  --surface-base: #fef9f5;
+  --surface-elevated: #fffcf9;
+  --surface-overlay: rgba(255, 252, 249, 0.95);
+  
+  /* Unisex glassmorphism */
+  --surface-glass-light: rgba(255, 252, 249, 0.6);
+  --surface-glass-medium: rgba(255, 252, 249, 0.75);
+  --surface-glass-heavy: rgba(255, 252, 249, 0.9);
+
+  /* Unisex gradients */
+  --gradient-background-pastel: linear-gradient(160deg, #fff5ed 0%, #fff8f0 50%, #fff3e0 100%);
+  --gradient-background-soft: linear-gradient(135deg, #fff5ed 0%, #fff8f0 100%);
+  
+  /* Unisex overlay gradients */
+  --gradient-overlay-top: linear-gradient(180deg, rgba(255, 252, 249, 0.9) 0%, rgba(255, 252, 249, 0) 100%);
+  --gradient-overlay-bottom: linear-gradient(0deg, rgba(255, 252, 249, 0.9) 0%, rgba(255, 252, 249, 0) 100%);
+
+  /* Unisex borders */
+  --border-light: rgba(212, 165, 116, 0.15);
+  --border-medium: rgba(212, 165, 116, 0.25);
+  --border-strong: rgba(212, 165, 116, 0.35);
+  --border-brand: #fad8bc;
+  --border-glass: rgba(255, 252, 249, 0.4);
+
+  /* Unisex shadows */
+  --shadow-xs: 0 1px 2px rgba(163, 125, 86, 0.08);
+  --shadow-sm: 0 2px 4px rgba(163, 125, 86, 0.1);
+  --shadow-md: 0 4px 12px rgba(163, 125, 86, 0.12);
+  --shadow-lg: 0 8px 24px rgba(163, 125, 86, 0.15);
+  --shadow-xl: 0 16px 48px rgba(163, 125, 86, 0.18);
+
+  /* Unisex brand colors - Tropical Teal & Coral */
+  --brand-primary: #00CFC1;
+  --brand-primary-light: #20E3B2;
+  --brand-primary-lighter: #66F0D1;
+  --brand-primary-dark: #00B8A9;
+  --brand-primary-darker: #009688;
+  
+  --accent-gold: #FF6B6B;
+  --accent-gold-light: #FF9A76;
+  --accent-gold-lighter: #FFC9A8;
+  
+  --gradient-primary: linear-gradient(135deg, #00CFC1 0%, #20E3B2 33%, #FF9A76 66%, #FF6B6B 100%);
+  --gradient-luxury: linear-gradient(135deg, #00CFC1 0%, #20E3B2 50%, #FF9A76 100%);
+
+  /* Unisex theme tokens */
+  --background: #FFFFFF;
+  --foreground: #0F0F10;
+  --card: #FFFFFF;
+  --card-foreground: #0F0F10;
+  --popover: #FFFFFF;
+  --popover-foreground: #0F0F10;
+  --primary: #00CFC1;
+  --primary-foreground: #ffffff;
+  --secondary: #F0FFFE;
+  --secondary-foreground: #0F0F10;
+  --muted: #E6FAF8;
+  --muted-foreground: #5C5C60;
+  --accent: #FF6B6B;
+  --accent-foreground: #ffffff;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: rgba(212, 165, 116, 0.25);
+  --input: transparent;
+  --input-background: #fef3eb;
+  --switch-background: #fad8bc;
+  --ring: rgba(212, 165, 116, 0.3);
+  --sidebar: #fef9f5;
+  --sidebar-foreground: #3a2a1a;
+  --sidebar-primary: var(--brand-rose-400);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #fef3eb;
+  --sidebar-accent-foreground: #3a2a1a;
+  --sidebar-border: rgba(212, 165, 116, 0.25);
+  --sidebar-ring: rgba(212, 165, 116, 0.3);
+}
+
+/* ==========================================
+   🌟 GENZ MODE THEME
+   Modern and vibrant aesthetic with neon tones
+   ========================================== */
+.genz {
+  --theme-preview-gradient: linear-gradient(135deg, #B026FF 0%, #FF006E 25%, #FF1B8D 50%, #00F0FF 75%, #00FFFF 100%);
+  /* Neon-tinted neutral colors */
+  --neutral-50: #0f0f0f;
+  --neutral-100: #242424;
+  --neutral-200: #2e2e2e;
+  --neutral-300: #404040;
+  --neutral-400: #737373;
+  --neutral-500: #a3a3a3;
+  --neutral-600: #d4d4d4;
+  --neutral-700: #e5e5e5;
+  --neutral-800: #f5f5f5;
+  --neutral-900: #fafafa;
+
+  /* Genz surface colors */
+  --surface-base: #0f0f0f;
+  --surface-elevated: #1a1a1a;
+  --surface-overlay: rgba(26, 26, 26, 0.95);
+  
+  /* Genz glassmorphism */
+  --surface-glass-light: rgba(26, 26, 26, 0.6);
+  --surface-glass-medium: rgba(26, 26, 26, 0.75);
+  --surface-glass-heavy: rgba(26, 26, 26, 0.9);
+
+  /* Genz gradients */
+  --gradient-background-pastel: linear-gradient(160deg, #1a0f13 0%, #1a1410 50%, #0f111a 100%);
+  --gradient-background-soft: linear-gradient(135deg, #1a0f13 0%, #1a1410 100%);
+  
+  /* Genz overlay gradients */
+  --gradient-overlay-top: linear-gradient(180deg, rgba(15, 15, 15, 0.9) 0%, rgba(15, 15, 15, 0) 100%);
+  --gradient-overlay-bottom: linear-gradient(0deg, rgba(15, 15, 15, 0.9) 0%, rgba(15, 15, 15, 0) 100%);
+
+  /* Genz borders */
+  --border-light: rgba(255, 255, 255, 0.06);
+  --border-medium: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.15);
+  --border-brand: #fad8bc;
+  --border-glass: rgba(255, 255, 255, 0.4);
+
+  /* Genz shadows */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.7);
+
+  /* Genz brand colors - Neon Dreams */
+  --brand-primary: #B026FF;
+  --brand-primary-light: #D966FF;
+  --brand-primary-lighter: #E699FF;
+  --brand-primary-dark: #9900FF;
+  --brand-primary-darker: #7700CC;
+  
+  --accent-gold: #00FFFF;
+  --accent-gold-light: #66FFFF;
+  --accent-gold-lighter: #99FFFF;
+  
+  --gradient-primary: linear-gradient(135deg, #B026FF 0%, #FF006E 25%, #FF1B8D 50%, #00F0FF 75%, #00FFFF 100%);
+  --gradient-luxury: linear-gradient(135deg, #B026FF 0%, #FF006E 33%, #00F0FF 66%, #00FFFF 100%);
+
+  /* Genz theme tokens */
+  --background: #0f0f0f;
+  --foreground: #fafafa;
+  --card: #1a1a1a;
+  --card-foreground: #fafafa;
+  --popover: #1a1a1a;
+  --popover-foreground: #fafafa;
+  --primary: #B026FF;
+  --primary-foreground: #ffffff;
+  --secondary: #242424;
+  --secondary-foreground: #fafafa;
+  --muted: #2e2e2e;
+  --muted-foreground: #a3a3a3;
+  --accent: #00FFFF;
+  --accent-foreground: #ffffff;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.1);
+  --input-background: #1a1a1a;
+  --switch-background: #fad8bc;
+  --ring: rgba(255, 255, 255, 0.2);
+  --sidebar: #0f0f0f;
+  --sidebar-foreground: #fafafa;
+  --sidebar-primary: var(--brand-rose-400);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #242424;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: rgba(255, 255, 255, 0.2);
+}
+
+/* ==========================================
+   🌟 LUXE MODE THEME
+   Elegant and luxurious aesthetic with gold tones
+   ========================================== */
+.luxe {
+  --theme-preview-gradient: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 25%, #8B7500 75%, #FFD700 100%);
+  /* Gold-tinted neutral colors */
+  --neutral-50: #fef9f5;
+  --neutral-100: #fef3eb;
+  --neutral-200: #fde8d7;
+  --neutral-300: #fad8bc;
+  --neutral-400: #d4a574;
+  --neutral-500: #a37d56;
+  --neutral-600: #735838;
+  --neutral-700: #523d28;
+  --neutral-800: #3a2a1a;
+  --neutral-900: #251810;
+
+  /* Luxe surface colors */
+  --surface-base: #fef9f5;
+  --surface-elevated: #fffcf9;
+  --surface-overlay: rgba(255, 252, 249, 0.95);
+  
+  /* Luxe glassmorphism */
+  --surface-glass-light: rgba(255, 252, 249, 0.6);
+  --surface-glass-medium: rgba(255, 252, 249, 0.75);
+  --surface-glass-heavy: rgba(255, 252, 249, 0.9);
+
+  /* Luxe gradients */
+  --gradient-background-pastel: linear-gradient(160deg, #fff5ed 0%, #fff8f0 50%, #fff3e0 100%);
+  --gradient-background-soft: linear-gradient(135deg, #fff5ed 0%, #fff8f0 100%);
+  
+  /* Luxe overlay gradients */
+  --gradient-overlay-top: linear-gradient(180deg, rgba(255, 252, 249, 0.9) 0%, rgba(255, 252, 249, 0) 100%);
+  --gradient-overlay-bottom: linear-gradient(0deg, rgba(255, 252, 249, 0.9) 0%, rgba(255, 252, 249, 0) 100%);
+
+  /* Luxe borders */
+  --border-light: rgba(212, 165, 116, 0.15);
+  --border-medium: rgba(212, 165, 116, 0.25);
+  --border-strong: rgba(212, 165, 116, 0.35);
+  --border-brand: #fad8bc;
+  --border-glass: rgba(255, 252, 249, 0.4);
+
+  /* Luxe shadows */
+  --shadow-xs: 0 1px 2px rgba(163, 125, 86, 0.08);
+  --shadow-sm: 0 2px 4px rgba(163, 125, 86, 0.1);
+  --shadow-md: 0 4px 12px rgba(163, 125, 86, 0.12);
+  --shadow-lg: 0 8px 24px rgba(163, 125, 86, 0.15);
+  --shadow-xl: 0 16px 48px rgba(163, 125, 86, 0.18);
+
+  /* Luxe brand colors - Black Gold Elite */
+  --brand-primary: #0A0A0A;
+  --brand-primary-light: #1A1A1A;
+  --brand-primary-lighter: #2E2E2E;
+  --brand-primary-dark: #000000;
+  --brand-primary-darker: #000000;
+  
+  --accent-gold: #FFD700;
+  --accent-gold-light: #FFE55C;
+  --accent-gold-lighter: #FFF4AA;
+  
+  --gradient-primary: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 25%, #8B7500 75%, #FFD700 100%);
+  --gradient-luxury: linear-gradient(135deg, #0A0A0A 0%, #FFD700 100%);
+
+  /* Luxe theme tokens */
+  --background: #FFFFFF;
+  --foreground: #0A0A0A;
+  --card: #FFFFFF;
+  --card-foreground: #0A0A0A;
+  --popover: #FFFFFF;
+  --popover-foreground: #0A0A0A;
+  --primary: #0A0A0A;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F5F5F5;
+  --secondary-foreground: #0A0A0A;
+  --muted: #E5E5E5;
+  --muted-foreground: #5C5C60;
+  --accent: #FFD700;
+  --accent-foreground: #ffffff;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: rgba(212, 165, 116, 0.25);
+  --input: transparent;
+  --input-background: #fef3eb;
+  --switch-background: #fad8bc;
+  --ring: rgba(212, 165, 116, 0.3);
+  --sidebar: #fef9f5;
+  --sidebar-foreground: #3a2a1a;
+  --sidebar-primary: var(--brand-rose-400);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #fef3eb;
+  --sidebar-accent-foreground: #3a2a1a;
+  --sidebar-border: rgba(212, 165, 116, 0.25);
+  --sidebar-ring: rgba(212, 165, 116, 0.3);
+}
+
+/* ==========================================
+   🔥 SUNSET BLAZE THEME
+   Fiery orange, magenta & violet
+   ========================================== */
+.sunset {
+  --theme-preview-gradient: linear-gradient(135deg, #FF4500 0%, #FF6B35 20%, #FF006E 40%, #B026FF 70%, #7B2CBF 100%);
+  --brand-primary: #FF4500;
+  --brand-primary-light: #FF6B35;
+  --brand-primary-lighter: #FF8C69;
+  --brand-primary-dark: #E63E00;
+  --brand-primary-darker: #CC3700;
+  
+  --accent-gold: #FF00FF;
+  --accent-gold-light: #FF66FF;
+  --accent-gold-lighter: #FF99FF;
+  
+  --gradient-primary: linear-gradient(135deg, #FF4500 0%, #FF6B35 20%, #FF006E 40%, #B026FF 70%, #7B2CBF 100%);
+  --gradient-luxury: linear-gradient(135deg, #FF4500 0%, #FF006E 50%, #B026FF 100%);
+  
+  --background: #FFFFFF;
+  --foreground: #0F0F10;
+  --card: #FFFFFF;
+  --primary: #FF4500;
+  --accent: #FF00FF;
+  --shadow-brand-md: 0 8px 24px rgba(255, 69, 0, 0.3), 0 4px 12px rgba(255, 0, 110, 0.2);
+}
+
+/* ==========================================
+   🌊 OCEAN DEPTHS THEME
+   Deep navy to bright aqua
+   ========================================== */
+.ocean {
+  --theme-preview-gradient: linear-gradient(135deg, #001529 0%, #003B73 25%, #0074D9 50%, #00D4FF 75%, #00FFF5 100%);
+  --brand-primary: #003B73;
+  --brand-primary-light: #0074D9;
+  --brand-primary-lighter: #00D4FF;
+  --brand-primary-dark: #002952;
+  --brand-primary-darker: #001529;
+  
+  --accent-gold: #00FFF5;
+  --accent-gold-light: #66FFF8;
+  --accent-gold-lighter: #99FFFA;
+  
+  --gradient-primary: linear-gradient(135deg, #001529 0%, #003B73 25%, #0074D9 50%, #00D4FF 75%, #00FFF5 100%);
+  --gradient-luxury: linear-gradient(135deg, #003B73 0%, #0074D9 50%, #00FFF5 100%);
+  
+  --background: #FFFFFF;
+  --foreground: #0F0F10;
+  --card: #FFFFFF;
+  --primary: #003B73;
+  --accent: #00FFF5;
+  --shadow-brand-md: 0 8px 24px rgba(0, 59, 115, 0.3), 0 4px 12px rgba(0, 255, 245, 0.2);
+}
+
+/* ==========================================
+   💜 ROYAL MAJESTY THEME
+   Rich purple & rose gold
+   ========================================== */
+.royal {
+  --theme-preview-gradient: linear-gradient(135deg, #4A0072 0%, #6B0FB8 30%, #9B30FF 60%, #E6A4B4 85%, #FFD700 100%);
+  --brand-primary: #6B0FB8;
+  --brand-primary-light: #9B30FF;
+  --brand-primary-lighter: #C77DFF;
+  --brand-primary-dark: #4A0072;
+  --brand-primary-darker: #300050;
+  
+  --accent-gold: #E6A4B4;
+  --accent-gold-light: #F5C4D0;
+  --accent-gold-lighter: #FFD700;
+  
+  --gradient-primary: linear-gradient(135deg, #4A0072 0%, #6B0FB8 30%, #9B30FF 60%, #E6A4B4 85%, #FFD700 100%);
+  --gradient-luxury: linear-gradient(135deg, #6B0FB8 0%, #9B30FF 50%, #E6A4B4 100%);
+  
+  --background: #FFFFFF;
+  --foreground: #0F0F10;
+  --card: #FFFFFF;
+  --primary: #6B0FB8;
+  --accent: #E6A4B4;
+  --shadow-brand-md: 0 8px 24px rgba(107, 15, 184, 0.3), 0 4px 12px rgba(230, 164, 180, 0.2);
+}
+
+/* ==========================================
+   🍃 MINT FRESH THEME
+   Fresh mint & electric lime
+   ========================================== */
+.mint {
+  --theme-preview-gradient: linear-gradient(135deg, #00C9A7 0%, #00FF9F 40%, #7FFF00 70%, #CCFF00 100%);
+  /* Mint brand colors - Fresh mint & electric lime */
+  --brand-primary: #00FF9F;
+  --brand-primary-light: #33FFAD;
+  --brand-primary-lighter: #66FFBB;
+  --brand-primary-dark: #00E68F;
+  --brand-primary-darker: #00C97D;
+  
+  --accent-gold: #CCFF00;
+  --accent-gold-light: #D9FF33;
+  --accent-gold-lighter: #E6FF66;
+  
+  /* Mint surface colors */
+  --surface-base: #F0FFF9;
+  --surface-elevated: #FFFFFF;
+  --surface-overlay: rgba(255, 255, 255, 0.95);
+  
+  /* Mint backgrounds */
+  --background-base: #F0FFF9;
+  --background-elevated: #FFFFFF;
+  --background-subtle: #E6FFF5;
+  
+  /* Mint glassmorphism */
+  --surface-glass-light: rgba(240, 255, 249, 0.6);
+  --surface-glass-medium: rgba(240, 255, 249, 0.75);
+  --surface-glass-heavy: rgba(240, 255, 249, 0.9);
+  
+  /* Mint text colors */
+  --text-primary: #0F0F10;
+  --text-secondary: #5C5C60;
+  --text-tertiary: #9B9B9F;
+  --text-disabled: #C7C7CC;
+  --text-inverse: #FFFFFF;
+  
+  /* Mint gradients */
+  --gradient-primary: linear-gradient(135deg, #00C9A7 0%, #00FF9F 40%, #7FFF00 70%, #CCFF00 100%);
+  --gradient-primary-bold: linear-gradient(135deg, #00C97D 0%, #00E68F 30%, #00FF9F 70%, #7FFF00 100%);
+  --gradient-primary-soft: linear-gradient(135deg, #00FF9F 0%, #66FFBB 50%, #CCFF00 100%);
+  --gradient-luxury: linear-gradient(135deg, #00FF9F 0%, #7FFF00 50%, #CCFF00 100%);
+  --gradient-gold: linear-gradient(135deg, #CCFF00 0%, #D9FF33 100%);
+  --gradient-gold-soft: linear-gradient(135deg, #D9FF33 0%, #E6FF66 100%);
+  --gradient-background: linear-gradient(135deg, #F0FFF9 0%, #FFFFFF 100%);
+  --gradient-overlay: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%);
+  
+  /* Mint background gradients */
+  --gradient-background-pastel: linear-gradient(160deg, #E6FFF5 0%, #F0FFF9 50%, #DCFFE6 100%);
+  --gradient-background-soft: linear-gradient(135deg, #E6FFF5 0%, #F0FFF9 100%);
+  
+  /* Mint borders */
+  --border-light: rgba(0, 255, 159, 0.08);
+  --border-medium: rgba(0, 255, 159, 0.15);
+  --border-strong: rgba(0, 255, 159, 0.25);
+  --border-brand: #66FFBB;
+  --border-glass: rgba(240, 255, 249, 0.4);
+  
+  /* Mint shadows with green tint */
+  --shadow-xs: 0 1px 2px rgba(0, 255, 159, 0.05);
+  --shadow-sm: 0 2px 4px rgba(0, 255, 159, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 255, 159, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 255, 159, 0.1);
+  --shadow-xl: 0 16px 48px rgba(0, 255, 159, 0.12);
+  
+  /* Mint elevation shadows */
+  --elevation-1: 0 1px 3px rgba(0, 255, 159, 0.05), 0 1px 2px rgba(0, 255, 159, 0.03);
+  --elevation-2: 0 3px 6px rgba(0, 255, 159, 0.06), 0 2px 4px rgba(0, 255, 159, 0.04);
+  --elevation-3: 0 6px 12px rgba(0, 255, 159, 0.07), 0 3px 6px rgba(0, 255, 159, 0.05);
+  --elevation-4: 0 12px 24px rgba(0, 255, 159, 0.08), 0 6px 12px rgba(0, 255, 159, 0.06);
+  --elevation-5: 0 20px 40px rgba(0, 255, 159, 0.1), 0 10px 20px rgba(0, 255, 159, 0.08);
+  
+  /* Mint brand shadows */
+  --shadow-brand-sm: 0 4px 12px rgba(0, 255, 159, 0.2), 0 2px 6px rgba(204, 255, 0, 0.15);
+  --shadow-brand-md: 0 8px 24px rgba(0, 255, 159, 0.3), 0 4px 12px rgba(204, 255, 0, 0.2);
+  --shadow-brand-lg: 0 16px 48px rgba(0, 255, 159, 0.35), 0 8px 24px rgba(204, 255, 0, 0.25);
+  
+  /* Glass backgrounds for floating elements */
+  --background-glass: rgba(240, 255, 249, 0.95);
+  --card-glass: rgba(240, 255, 249, 0.95);
+  
+  /* Mint theme tokens */
+  --background: #F0FFF9;
+  --foreground: #0F0F10;
+  --card: #FFFFFF;
+  --card-foreground: #0F0F10;
+  --popover: #FFFFFF;
+  --popover-foreground: #0F0F10;
+  --primary: #00FF9F;
+  --primary-foreground: #FFFFFF;
+  --secondary: #E6FFF5;
+  --secondary-foreground: #0F0F10;
+  --muted: #FFFFFF;
+  --muted-foreground: #5C5C60;
+  --accent: #CCFF00;
+  --accent-foreground: #0F0F10;
+  --destructive: #dc2626;
+  --destructive-foreground: #FFFFFF;
+  --border: rgba(0, 255, 159, 0.15);
+  --input: transparent;
+  --input-background: #E6FFF5;
+  --switch-background: #66FFBB;
+  --ring: rgba(0, 255, 159, 0.3);
+  --sidebar: #F0FFF9;
+  --sidebar-foreground: #0F0F10;
+  --sidebar-primary: #00FF9F;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #E6FFF5;
+  --sidebar-accent-foreground: #0F0F10;
+  --sidebar-border: rgba(0, 255, 159, 0.15);
+  --sidebar-ring: rgba(0, 255, 159, 0.3);
+}
+
+/* ==========================================
+   🌸 SAKURA BLOOM THEME
+   Cherry blossom & peach
+   ========================================== */
+.sakura {
+  --theme-preview-gradient: linear-gradient(135deg, #FF1493 0%, #FF69B4 30%, #FFB6C1 60%, #FFAB91 85%, #FFE4B5 100%);
+  /* Sakura brand colors - Cherry blossom & peach */
+  --brand-primary: #FF69B4;
+  --brand-primary-light: #FF85C8;
+  --brand-primary-lighter: #FFB6C1;
+  --brand-primary-dark: #FF1493;
+  --brand-primary-darker: #E60073;
+  
+  --accent-gold: #FFAB91;
+  --accent-gold-light: #FFC4B0;
+  --accent-gold-lighter: #FFE4B5;
+  
+  /* Sakura surface colors - Soft pink-tinted whites */
+  --surface-base: #FFF9FB;
+  --surface-elevated: #FFFFFF;
+  --surface-overlay: rgba(255, 255, 255, 0.95);
+  
+  /* Sakura backgrounds */
+  --background-base: #FFF9FB;
+  --background-elevated: #FFFFFF;
+  --background-subtle: #FFF0F5;
+  
+  /* Sakura glassmorphism */
+  --surface-glass-light: rgba(255, 249, 251, 0.6);
+  --surface-glass-medium: rgba(255, 249, 251, 0.75);
+  --surface-glass-heavy: rgba(255, 249, 251, 0.9);
+  
+  /* Sakura text colors */
+  --text-primary: #0F0F10;
+  --text-secondary: #5C5C60;
+  --text-tertiary: #9B9B9F;
+  --text-disabled: #C7C7CC;
+  --text-inverse: #FFFFFF;
+  
+  /* Sakura gradients */
+  --gradient-primary: linear-gradient(135deg, #FF1493 0%, #FF69B4 30%, #FFB6C1 60%, #FFAB91 85%, #FFE4B5 100%);
+  --gradient-primary-bold: linear-gradient(135deg, #E60073 0%, #FF1493 30%, #FF69B4 70%, #FFB6C1 100%);
+  --gradient-primary-soft: linear-gradient(135deg, #FF69B4 0%, #FFB6C1 50%, #FFAB91 100%);
+  --gradient-luxury: linear-gradient(135deg, #FF69B4 0%, #FFB6C1 50%, #FFAB91 100%);
+  --gradient-gold: linear-gradient(135deg, #FFAB91 0%, #FFC4B0 100%);
+  --gradient-gold-soft: linear-gradient(135deg, #FFC4B0 0%, #FFE4B5 100%);
+  --gradient-background: linear-gradient(135deg, #FFF9FB 0%, #FFFFFF 100%);
+  --gradient-overlay: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%);
+  
+  /* Sakura background gradients */
+  --gradient-background-pastel: linear-gradient(160deg, #FFF0F5 0%, #FFF9FB 50%, #FFE4E8 100%);
+  --gradient-background-soft: linear-gradient(135deg, #FFF0F5 0%, #FFF9FB 100%);
+  
+  /* Sakura borders */
+  --border-light: rgba(255, 105, 180, 0.08);
+  --border-medium: rgba(255, 105, 180, 0.15);
+  --border-strong: rgba(255, 105, 180, 0.25);
+  --border-brand: #FFB6C1;
+  --border-glass: rgba(255, 249, 251, 0.4);
+  
+  /* Sakura shadows with pink tint */
+  --shadow-xs: 0 1px 2px rgba(255, 105, 180, 0.05);
+  --shadow-sm: 0 2px 4px rgba(255, 105, 180, 0.06);
+  --shadow-md: 0 4px 12px rgba(255, 105, 180, 0.08);
+  --shadow-lg: 0 8px 24px rgba(255, 105, 180, 0.1);
+  --shadow-xl: 0 16px 48px rgba(255, 105, 180, 0.12);
+  
+  /* Sakura elevation shadows */
+  --elevation-1: 0 1px 3px rgba(255, 105, 180, 0.05), 0 1px 2px rgba(255, 105, 180, 0.03);
+  --elevation-2: 0 3px 6px rgba(255, 105, 180, 0.06), 0 2px 4px rgba(255, 105, 180, 0.04);
+  --elevation-3: 0 6px 12px rgba(255, 105, 180, 0.07), 0 3px 6px rgba(255, 105, 180, 0.05);
+  --elevation-4: 0 12px 24px rgba(255, 105, 180, 0.08), 0 6px 12px rgba(255, 105, 180, 0.06);
+  --elevation-5: 0 20px 40px rgba(255, 105, 180, 0.1), 0 10px 20px rgba(255, 105, 180, 0.08);
+  
+  /* Sakura brand shadows */
+  --shadow-brand-sm: 0 4px 12px rgba(255, 105, 180, 0.2), 0 2px 6px rgba(255, 171, 145, 0.15);
+  --shadow-brand-md: 0 8px 24px rgba(255, 105, 180, 0.3), 0 4px 12px rgba(255, 171, 145, 0.2);
+  --shadow-brand-lg: 0 16px 48px rgba(255, 105, 180, 0.35), 0 8px 24px rgba(255, 171, 145, 0.25);
+  
+  /* Glass backgrounds for floating elements */
+  --background-glass: rgba(255, 249, 251, 0.95);
+  --card-glass: rgba(255, 249, 251, 0.95);
+  
+  /* Sakura theme tokens */
+  --background: #FFF9FB;
+  --foreground: #0F0F10;
+  --card: #FFFFFF;
+  --card-foreground: #0F0F10;
+  --popover: #FFFFFF;
+  --popover-foreground: #0F0F10;
+  --primary: #FF69B4;
+  --primary-foreground: #FFFFFF;
+  --secondary: #FFF0F5;
+  --secondary-foreground: #0F0F10;
+  --muted: #FFFFFF;
+  --muted-foreground: #5C5C60;
+  --accent: #FFAB91;
+  --accent-foreground: #FFFFFF;
+  --destructive: #dc2626;
+  --destructive-foreground: #FFFFFF;
+  --border: rgba(255, 105, 180, 0.15);
+  --input: transparent;
+  --input-background: #FFF0F5;
+  --switch-background: #FFB6C1;
+  --ring: rgba(255, 105, 180, 0.3);
+  --sidebar: #FFF9FB;
+  --sidebar-foreground: #0F0F10;
+  --sidebar-primary: #FF69B4;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #FFF0F5;
+  --sidebar-accent-foreground: #0F0F10;
+  --sidebar-border: rgba(255, 105, 180, 0.15);
+  --sidebar-ring: rgba(255, 105, 180, 0.3);
+}
+
+/* ==========================================
+   🤖 CYBERPUNK THEME
+   Neon green & hot magenta
+   ========================================== */
+.cyber {
+  --theme-preview-gradient: linear-gradient(135deg, #0D1117 0%, #39FF14 35%, #00FFFF 50%, #FF00FF 75%, #FF1493 100%);
+  /* Cyberpunk brand colors - Neon green & hot magenta */
+  --brand-primary: #39FF14;
+  --brand-primary-light: #66FF47;
+  --brand-primary-lighter: #99FF7A;
+  --brand-primary-dark: #2BE600;
+  --brand-primary-darker: #1FCC00;
+  
+  --accent-gold: #FF00FF;
+  --accent-gold-light: #FF66FF;
+  --accent-gold-lighter: #FF99FF;
+  
+  /* Cyberpunk surface colors - Dark with neon accents */
+  --surface-base: #0D1117;
+  --surface-elevated: #161B22;
+  --surface-overlay: rgba(22, 27, 34, 0.95);
+  
+  /* Cyberpunk backgrounds */
+  --background-base: #0D1117;
+  --background-elevated: #161B22;
+  --background-subtle: #1C2128;
+  
+  /* Cyberpunk glassmorphism */
+  --surface-glass-light: rgba(22, 27, 34, 0.6);
+  --surface-glass-medium: rgba(22, 27, 34, 0.75);
+  --surface-glass-heavy: rgba(22, 27, 34, 0.9);
+  
+  /* Cyberpunk text colors */
+  --text-primary: #FFFFFF;
+  --text-secondary: #B1B8C0;
+  --text-tertiary: #8B949E;
+  --text-disabled: #6E7681;
+  --text-inverse: #0D1117;
+  
+  /* Cyberpunk gradients */
+  --gradient-primary: linear-gradient(135deg, #0D1117 0%, #39FF14 35%, #00FFFF 50%, #FF00FF 75%, #FF1493 100%);
+  --gradient-primary-bold: linear-gradient(135deg, #1FCC00 0%, #2BE600 30%, #39FF14 70%, #00FFFF 100%);
+  --gradient-primary-soft: linear-gradient(135deg, #39FF14 0%, #66FF47 50%, #00FFFF 100%);
+  --gradient-luxury: linear-gradient(135deg, #39FF14 0%, #00FFFF 50%, #FF00FF 100%);
+  --gradient-gold: linear-gradient(135deg, #FF00FF 0%, #FF66FF 100%);
+  --gradient-gold-soft: linear-gradient(135deg, #FF66FF 0%, #FF99FF 100%);
+  --gradient-background: linear-gradient(135deg, #0D1117 0%, #161B22 100%);
+  --gradient-overlay: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
+  
+  /* Cyberpunk background gradients */
+  --gradient-background-pastel: linear-gradient(160deg, #0D1117 0%, #161B22 50%, #1C2128 100%);
+  --gradient-background-soft: linear-gradient(135deg, #0D1117 0%, #161B22 100%);
+  
+  /* Cyberpunk borders */
+  --border-light: rgba(57, 255, 20, 0.12);
+  --border-medium: rgba(57, 255, 20, 0.2);
+  --border-strong: rgba(57, 255, 20, 0.3);
+  --border-brand: #39FF14;
+  --border-glass: rgba(22, 27, 34, 0.4);
+  
+  /* Cyberpunk shadows with neon glow */
+  --shadow-xs: 0 1px 2px rgba(57, 255, 20, 0.1);
+  --shadow-sm: 0 2px 4px rgba(57, 255, 20, 0.15);
+  --shadow-md: 0 4px 12px rgba(57, 255, 20, 0.2);
+  --shadow-lg: 0 8px 24px rgba(57, 255, 20, 0.25);
+  --shadow-xl: 0 16px 48px rgba(57, 255, 20, 0.3);
+  
+  /* Cyberpunk elevation shadows */
+  --elevation-1: 0 1px 3px rgba(57, 255, 20, 0.1), 0 1px 2px rgba(255, 0, 255, 0.08);
+  --elevation-2: 0 3px 6px rgba(57, 255, 20, 0.15), 0 2px 4px rgba(255, 0, 255, 0.1);
+  --elevation-3: 0 6px 12px rgba(57, 255, 20, 0.2), 0 3px 6px rgba(255, 0, 255, 0.15);
+  --elevation-4: 0 12px 24px rgba(57, 255, 20, 0.25), 0 6px 12px rgba(255, 0, 255, 0.2);
+  --elevation-5: 0 20px 40px rgba(57, 255, 20, 0.3), 0 10px 20px rgba(255, 0, 255, 0.25);
+  
+  /* Cyberpunk brand shadows */
+  --shadow-brand-sm: 0 4px 12px rgba(57, 255, 20, 0.3), 0 2px 6px rgba(255, 0, 255, 0.25);
+  --shadow-brand-md: 0 8px 24px rgba(57, 255, 20, 0.4), 0 4px 12px rgba(255, 0, 255, 0.3);
+  --shadow-brand-lg: 0 16px 48px rgba(57, 255, 20, 0.5), 0 8px 24px rgba(255, 0, 255, 0.4);
+  
+  /* Glass backgrounds for floating elements */
+  --background-glass: rgba(22, 27, 34, 0.85);
+  --card-glass: rgba(22, 27, 34, 0.7);
+  
+  /* Cyberpunk theme tokens */
+  --background: #0D1117;
+  --foreground: #FFFFFF;
+  --card: #161B22;
+  --card-foreground: #FFFFFF;
+  --popover: #161B22;
+  --popover-foreground: #FFFFFF;
+  --primary: #39FF14;
+  --primary-foreground: #0D1117;
+  --secondary: #1C2128;
+  --secondary-foreground: #FFFFFF;
+  --muted: #21262D;
+  --muted-foreground: #B1B8C0;
+  --accent: #FF00FF;
+  --accent-foreground: #FFFFFF;
+  --destructive: #FF1744;
+  --destructive-foreground: #FFFFFF;
+  --border: rgba(57, 255, 20, 0.2);
+  --input: rgba(57, 255, 20, 0.1);
+  --input-background: #161B22;
+  --switch-background: #39FF14;
+  --ring: rgba(57, 255, 20, 0.4);
+  --sidebar: #0D1117;
+  --sidebar-foreground: #FFFFFF;
+  --sidebar-primary: #39FF14;
+  --sidebar-primary-foreground: #0D1117;
+  --sidebar-accent: #1C2128;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: rgba(57, 255, 20, 0.2);
+  --sidebar-ring: rgba(57, 255, 20, 0.4);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-input-background: var(--input-background);
+  --color-switch-background: var(--switch-background);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  /**
+  * Default typography styles for HTML elements (h1-h4, p, label, button, input).
+  * These are in @layer base, so Tailwind utility classes (like text-sm, text-lg) automatically override them.
+  */
+
+  html {
+    font-size: var(--font-size);
+  }
+
+  h1 {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  h2 {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  h3 {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  h4 {
+    font-size: var(--text-base);
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  label {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  button {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  input {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-normal);
+    line-height: 1.5;
+  }
+
+  /* Hide scrollbar for elements with scrollbar-hide class */
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+
+  /* ===== SAFE AREA INSETS (iPhone X+ notch / Dynamic Island) ===== */
+  :root {
+    --safe-area-top: env(safe-area-inset-top, 0px);
+    --safe-area-right: env(safe-area-inset-right, 0px);
+    --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-area-left: env(safe-area-inset-left, 0px);
+  }
+
+  .safe-top    { padding-top:    env(safe-area-inset-top, 0px); }
+  .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .safe-left   { padding-left:   env(safe-area-inset-left, 0px); }
+  .safe-right  { padding-right:  env(safe-area-inset-right, 0px); }
+
+  /* pb-safe: bottom padding + 32px base for sticky footers */
+  .pb-safe { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 2rem); }
+  /* pt-safe: top padding for screens behind the status bar */
+  .pt-safe { padding-top: calc(env(safe-area-inset-top, 0px) + 3.5rem); }
+}

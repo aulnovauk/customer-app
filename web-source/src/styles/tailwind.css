@@ -1,0 +1,278 @@
+@import 'tailwindcss' source(none);
+@source '../**/*.{js,ts,jsx,tsx}';
+
+@import 'tw-animate-css';
+
+/* ==========================================
+   🎨 LUXURY BEAUTY DESIGN SYSTEM
+   Custom Tailwind Utilities
+   ========================================== */
+
+/* ===== BRAND GRADIENT UTILITIES ===== */
+.bg-brand-gradient {
+  background: var(--gradient-primary);
+}
+
+.bg-brand-gradient-vertical {
+  background: var(--gradient-primary-vertical);
+}
+
+.bg-brand-gradient-radial {
+  background: var(--gradient-primary-radial);
+}
+
+.bg-gradient-pastel {
+  background: var(--gradient-background-pastel);
+}
+
+.bg-gradient-soft {
+  background: var(--gradient-background-soft);
+}
+
+/* ===== BRAND COLOR UTILITIES ===== */
+.text-brand {
+  color: var(--color-primary);
+}
+
+.text-brand-hover {
+  color: var(--color-primary-hover);
+}
+
+.bg-brand {
+  background-color: var(--color-primary);
+}
+
+.bg-brand-light {
+  background-color: var(--color-primary-light);
+}
+
+.bg-brand-subtle {
+  background-color: var(--color-primary-subtle);
+}
+
+.border-brand {
+  border-color: var(--border-brand);
+}
+
+/* ===== SURFACE UTILITIES ===== */
+.bg-surface-base {
+  background-color: var(--surface-base);
+}
+
+.bg-surface-elevated {
+  background-color: var(--surface-elevated);
+}
+
+.bg-surface-glass {
+  background-color: var(--surface-glass-light);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.bg-surface-glass-medium {
+  background-color: var(--surface-glass-medium);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.bg-surface-glass-heavy {
+  background-color: var(--surface-glass-heavy);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* ===== BRAND SHADOW UTILITIES ===== */
+.shadow-brand-sm {
+  box-shadow: var(--shadow-brand-sm);
+}
+
+.shadow-brand-md {
+  box-shadow: var(--shadow-brand-md);
+}
+
+.shadow-brand-lg {
+  box-shadow: var(--shadow-brand-lg);
+}
+
+/* ===== INTERACTIVE STATES ===== */
+.btn-brand {
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-brand:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-brand-md);
+}
+
+.btn-brand:active {
+  transform: scale(0.98);
+}
+
+/* Card with brand selected state */
+.card-brand-selected {
+  background: var(--gradient-primary);
+  border-color: var(--border-brand);
+  box-shadow: var(--shadow-brand-md);
+}
+
+.card-glass {
+  background: var(--surface-glass-light);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-glass);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Scrollbar hidden */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  /* Enhanced smooth scrolling */
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+/* Snap scrolling for horizontal card lists */
+.snap-x {
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 1.25rem; /* 20px = px-5 */
+}
+
+.snap-center {
+  scroll-snap-align: center;
+}
+
+.snap-start {
+  scroll-snap-align: start;
+}
+
+/* Custom peach utility */
+.bg-peach-50 {
+  background-color: var(--brand-peach-50);
+}
+
+/* ===== PREMIUM GLASSMORPHISM EFFECTS ===== */
+.glass-light {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.glass-medium {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.glass-heavy {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+}
+
+/* ===== ANIMATION UTILITIES ===== */
+/* Gradient shimmer effect */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer {
+  animation: shimmer 3s infinite linear;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 1000px 100%;
+}
+
+/* Floating animation for cards */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Pulse glow effect */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(251, 113, 133, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(251, 113, 133, 0.6);
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* Gradient shift animation */
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.gradient-shift {
+  background-size: 200% 200%;
+  animation: gradient-shift 8s ease infinite;
+}
+
+/* ===== MOBILE OPTIMIZATIONS ===== */
+/* Smooth tap highlight for mobile */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Safe area for mobile */
+body {
+  overscroll-behavior: none;
+}
+
+/* Prevent text selection on buttons */
+button {
+  -webkit-user-select: none;
+  user-select: none;
+}
