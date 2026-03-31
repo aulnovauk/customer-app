@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "s8ENqUkusVzYhC1IXi1Qq"
+uri = "file://React-Native-Conversion-Plan.md"
+type = "text"
+title = "Beauté – React Native Conversion Plan"
