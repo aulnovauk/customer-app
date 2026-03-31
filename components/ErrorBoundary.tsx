@@ -1,22 +1,23 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
-import { reloadAppAsync } from 'expo';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useColors } from '@/hooks/useColors';
 
 function ErrorFallback({ error }: { error: Error }) {
-  const colors = useColors();
-  const insets = useSafeAreaInsets();
-
   return (
-    <View style={[styles.container, { backgroundColor: colors.background, paddingTop: insets.top + 40 }]}>
-      <Text style={[styles.title, { color: colors.textPrimary }]}>Something went wrong</Text>
-      <Text style={[styles.message, { color: colors.textSecondary }]}>{error.message}</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Something went wrong</Text>
+      <Text style={styles.message}>{error.message}</Text>
       <Pressable
-        style={[styles.button, { backgroundColor: colors.brandPrimary }]}
-        onPress={() => reloadAppAsync()}
+        style={styles.button}
+        onPress={() => {
+          try {
+            const { reloadAppAsync } = require('expo');
+            reloadAppAsync();
+          } catch {
+            // fallback - no-op
+          }
+        }}
       >
-        <Text style={[styles.buttonText, { color: colors.textInverse }]}>Restart App</Text>
+        <Text style={styles.buttonText}>Restart App</Text>
       </Pressable>
     </View>
   );
@@ -58,26 +59,30 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
+    backgroundColor: '#FFFFFF',
   },
   title: {
     fontSize: 22,
-    fontFamily: 'Inter_700Bold',
+    fontWeight: '700',
     marginBottom: 12,
+    color: '#111827',
   },
   message: {
     fontSize: 15,
-    fontFamily: 'Inter_400Regular',
     textAlign: 'center',
     marginBottom: 32,
     lineHeight: 22,
+    color: '#6B7280',
   },
   button: {
     paddingHorizontal: 32,
     paddingVertical: 14,
     borderRadius: 16,
+    backgroundColor: '#E85A8B',
   },
   buttonText: {
     fontSize: 16,
-    fontFamily: 'Inter_600SemiBold',
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
 });

@@ -5,7 +5,6 @@ import { useFonts, Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_7
 import * as SplashScreen from 'expo-splash-screen';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { useColors } from '@/hooks/useColors';
@@ -69,9 +68,7 @@ export default function RootLayout() {
       <SafeAreaProvider>
         <ErrorBoundary>
           <ThemeProvider>
-            <KeyboardProvider>
-              <RootLayoutNav />
-            </KeyboardProvider>
+            <RootLayoutNav />
           </ThemeProvider>
         </ErrorBoundary>
       </SafeAreaProvider>
